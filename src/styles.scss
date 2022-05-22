@@ -1,4 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+    min-height: 100% !important;
+    height: 100%;
+    width: 100%;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background: #303030; }
+body {
+    overflow-x: hidden;
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+    // background: #303030;
+    /* line-height: var(--lineHeightMd); */
+    /* font-family: "Segoe UI", "Source Sans Pro", Calibri, Candara, Arial, sans-serif !important; */
+    /* font-size: .875rem; */
+}
+
+.app-container > .app-container-left-nav{
+    min-width: 275px
+}

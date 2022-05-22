@@ -3,6 +3,7 @@ import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
 	{
@@ -10,6 +11,9 @@ const routes: Routes = [
 	},
 	{
 		path: 'signup', component: SignupComponent, pathMatch: 'full'
+	},
+	{
+		path: 'home', component: DashboardComponent, pathMatch: 'full'
 	}
 ];
 

@@ -13,12 +13,14 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ErrorStateMatcher, ShowOnDirtyErrorStateMatcher} from '@angular/material/core';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignupComponent,
-    SigninComponent
+    SigninComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
