@@ -31,10 +31,6 @@ export class SigninComponent implements OnInit {
 
     isPasswordRevealed = false
 
-    revealPassword = () =>{
-        this.isPasswordRevealed = !this.isPasswordRevealed
-    }
-
     matcher = new MyErrorStateMatcher();
 
     ngOnInit(): void {

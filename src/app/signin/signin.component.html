@@ -16,7 +16,7 @@
             <mat-form-field class="example-full-width mt-2" appearance="outline">
                 <mat-label>Password</mat-label>
                 <input class="text-white" [type]="isPasswordRevealed ? 'text' : 'password'" matInput [formControl]="passwordFormControl" [errorStateMatcher]="matcher" maxlength="20" placeholder="Password">
-                <a href="javascript:;" mat-icon-button color="accent" (click)="revealPassword()" matSuffix>
+                <a href="javascript:;" mat-icon-button color="accent" (click)="isPasswordRevealed = !isPasswordRevealed" matSuffix>
                     <mat-icon>{{isPasswordRevealed ? 'close' : 'remove_red_eye'}}</mat-icon>
                 </a>
                 <mat-error *ngIf="passwordFormControl.hasError('required')">

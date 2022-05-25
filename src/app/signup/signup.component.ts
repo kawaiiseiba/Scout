@@ -31,10 +31,6 @@ export class SignupComponent implements OnInit{
 
     isPasswordRevealed = false
 
-    revealPassword = () =>{
-        this.isPasswordRevealed = !this.isPasswordRevealed
-    }
-
     nonWhiteSpace = (val: string) => {
         return /^\S+$/g.test(val)
     }

@@ -1,0 +1,108 @@
+
+.ripe_malinka {
+    /* fallback for old browsers */
+    background: #f093fb;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(240, 147, 251, 0.5), rgba(245, 87, 108, 0.5));
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(240, 147, 251, 0.5), rgba(245, 87, 108, 0.5))
+}
+
+.plume_plate{
+    /* fallback for old browsers */
+    background: #667eea;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5));
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))
+}
+
+
+.app-logo > a{
+    font-size: 20px;
+    pointer-events: none;
+}
+
+.app-nav > a {
+    font-size: 20px;
+    text-align: start;
+}
+
+$main-content-width: 598px;
+$left: calc(46.5% - ($main-content-width / 2));
+
+.app-container-left-nav{
+    height: 100vh;
+    width: $left;
+    padding: 20px;
+}
+
+.app-container-left-nav-content{
+    width: 275px;
+}
+
+.app-main-navigation-hint{
+    background-color: #000000b0;
+    backdrop-filter: blur(1px);
+}
+
+.app-container-main{
+    width: $main-content-width;
+    min-width: $main-content-width;
+    max-width: $main-content-width;
+}
+
+::ng-deep .mat-form-field{
+    font-size: 16px;
+}
+
+
+::ng-deep .mat-form-field-appearance-fill.post-specific .mat-form-field-flex  {
+    background-color: #000000 !important;
+}
+
+.app-post-file-submit-options{
+    margin-top: -20px;
+}
+
+.app-main-post-interaction button{
+    font-size: 20px;
+}
+
+.btn-fab-display{
+    transform: scale(.8);
+}
+
+.post-specifc textarea{
+    overflow: hidden;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    position: relative;
+    white-space: pre-wrap;
+}
+
+.app-border-top{
+    border-top: solid 1px rgba(255,255,255,.12)
+}
+.app-border-left{
+    border-left: solid 1px rgba(255,255,255,.12)
+}
+.app-border-bottom{
+    border-bottom: solid 1px rgba(255,255,255,.12)
+}
+.app-border-right{
+    border-right: solid 1px rgba(255,255,255,.12)
+}
+
+.app-container-right-nav-content{
+    width: 350px;
+}
+
+
+// .app-container-right-nav{
+//     height: 100vh;
+// }

@@ -1,14 +1,201 @@
-<div class="app-container container-fluid w-100 h-100 row justify-content-center align-item-center mx-0 px-0">
-  <header class="app-container-left-nav col-2 h-100 border-end border-dark">
-    <div class="d-flex justify-content-center flex-column">
-      <button class="w-100 mx-2" mat-button>HOME</button>
-      <button class="w-100 mx-2" mat-button>HOME</button>
-      <button class="w-100 mx-2" mat-button>HOME</button>
-      <button class="w-100 mx-2" mat-button>HOME</button>
-    </div>
-  </header>
-  <main class="app-container-main-nav col-9 h-100 row">
-      <div class="col-7 h-100 border-dark border-end">left</div>
-      <div class="col-5 h-100">right</div>
-  </main>
-</div>
+<mat-drawer-container class="main-template-content d-flex h-100 bg-transparent" autosize>
+    <mat-drawer #drawer class="app-container-left-nav d-flex flex-column bg-transparent" mode="side" opened>
+        <div class="app-container-left-nav-content ml-auto d-flex flex-column h-100">
+            <div class="app-logo">
+                <a class="w-100 py-3 text-left" mat-button [disableRipple]="true">
+                    <img class="mr-2" src="../../favicon.ico" width="25" draggable="false" matSuffix>
+                    Scout
+                </a>
+            </div>
+            <div class="app-nav mb-3">
+                <a href="/" class="w-100 py-2 my-1" type="button" mat-button>
+                    <mat-icon class="mb-1 mr-3">home</mat-icon>Home
+                </a>
+                <a href="/" class="w-100 py-2 my-1" type="button" mat-button>
+                    <mat-icon class="mb-1 mr-3">graphic_eq</mat-icon>Player Stats
+                </a>
+                <a href="/" class="w-100 py-2 my-1" type="button" mat-button>
+                    <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>Organization
+                </a>
+                <a href="/" class="w-100 py-2 my-1" type="button" mat-button>
+                    <mat-icon class="mb-1 mr-3">work</mat-icon>Jobs
+                </a>
+                <a href="/" class="w-100 py-2 my-1" type="button" mat-button>
+                    <span class="mb-1 mr-3">🤝</span>Teams
+                </a>
+                <a href="/" class="w-100 py-2 my-1" type="button" mat-button>
+                    <mat-icon class="mb-1 mr-3">info</mat-icon>Support
+                </a>
+            </div>
+            <div class="app-additional-navs">
+                <a href="/" class="w-100 py-2 my-1 peach-gradient rounded-pill" type="button" mat-raised-button>
+                    <mat-icon class="mb-1 mr-3">search</mat-icon>Scout Players
+                </a>
+                <a href="/" class="w-100 py-2 my-1 plume_plate rounded-pill" type="button" mat-raised-button>
+                    <span class="mb-1 mr-3">+</span>Create Team
+                </a>
+            </div>
+            <div class='app-profile-logged-in mt-auto'>
+                <div class="row align-item-center w-100 p-1 m-0">
+                    <div class="col-2 app-profile-img m-0 p-0">
+                        <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="40">
+                    </div>
+                    <div class="col-8 d-flex flex-column app-profile-data pr-0">
+                        <div class="">kawaiiseiba</div>
+                        <div class="text-muted">@kawaiiseiba23</div>
+                    </div>
+                    <div class="col-1 d-flex app-profile-option">
+                        <mat-icon class="align-self-center">more_vert</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-drawer>
+
+    <mat-drawer-content class="app-container-right-content d-flex w-100">
+        <div class="app-container-main h-100">
+            <div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
+                Home
+            </div>
+            <div class="app-main-post row justify-content-center py-4 m-0 app-border-bottom">
+                <div class="app-main-post-profile col-1 m-0 p-0">
+                    <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
+                </div>
+                <div class="col-10">
+                    <mat-form-field class="w-100 post-specific py-1" appearance="fill">
+                        <mat-label>What's on your mind...</mat-label>
+                        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="25"></textarea>
+                    </mat-form-field>
+                    <div class="row app-post-file-submit-options">
+                        <div class="col-9 app-post-file-opt">
+                            <button class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                                <mat-icon width="15">link</mat-icon>
+                            </button>
+                            <button class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                                <mat-icon width="15">image</mat-icon>
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <button class="w-100 my-1 rounded-pill" color="primary" type="button" mat-raised-button>Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="app-main-post-update py-3 d-flex justify-content-center align-item-center app-border-bottom">
+                <a href="/">Show <span>7</span> new Post</a>
+            </div>
+            <div class="app-main-post-content w-100">
+                <div class='app-user-post row justify-content-center py-2 m-0 app-border-bottom'>
+                    <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                        <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
+                    </div>
+                    <div class="app-main-post-container col-10 h-100 py-1 pr-0">
+                        <div class="app-main-post-data d-flex flex-row w-100">
+                            <span class="mr-1"><b>kawaiiseiba</b></span>
+                            <span class="text-muted">@kawaiiseiba23</span>
+                            <span class="mx-1">•</span>
+                            <span class="text-muted">3hrs ago</span>
+                            <div class="ml-auto">
+                                <mat-icon class="align-self-center">more_horiz</mat-icon>
+                            </div>
+                        </div>
+                        <div class="app-main-post-description py-2">In the beginning there is silence...</div>
+                        <div class="app-main-post-attachment">
+                            <img class="w-100" src="../../assets/img/es-04-media-hd.jpg.asset.1611648734779.jpg">
+                        </div>
+                        <div class="app-main-post-interaction row justify-content-center align-item-center mt-1 mr-1">
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">thumb_up</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">autorenew</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">comment</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">share</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class='app-user-post row justify-content-center py-2 m-0 app-border-bottom'>
+                    <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                        <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
+                    </div>
+                    <div class="app-main-post-container col-10 h-100 py-1 pr-0">
+                        <div class="app-main-post-data d-flex flex-row w-100">
+                            <span class="mr-1"><b>kawaiiseiba</b></span>
+                            <span class="text-muted">@kawaiiseiba23</span>
+                            <span class="mx-1">•</span>
+                            <span class="text-muted">3hrs ago</span>
+                            <div class="ml-auto">
+                                <mat-icon class="align-self-center">more_horiz</mat-icon>
+                            </div>
+                        </div>
+                        <div class="app-main-post-description py-2">Testing design without attachment</div>
+                        <div class="app-main-post-interaction row justify-content-center align-item-center mt-1 mr-1">
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">thumb_up</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">autorenew</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">comment</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">share</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class='app-user-post row justify-content-center py-2 m-0 app-border-bottom'>
+                    <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                        <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
+                    </div>
+                    <div class="app-main-post-container col-10 h-100 py-1 pr-0">
+                        <div class="app-main-post-data d-flex flex-row w-100">
+                            <span class="mr-1"><b>kawaiiseiba</b></span>
+                            <span class="text-muted">@kawaiiseiba23</span>
+                            <span class="mx-1">•</span>
+                            <span class="text-muted">3hrs ago</span>
+                            <div class="ml-auto">
+                                <mat-icon class="align-self-center">more_horiz</mat-icon>
+                            </div>
+                        </div>
+                        <div class="app-main-post-description py-2">In the beginning there is silence...</div>
+                        <div class="app-main-post-attachment">
+                            <img class="w-100" src="../../assets/img/es-04-media-hd.jpg.asset.1611648734779.jpg">
+                        </div>
+                        <div class="app-main-post-interaction row justify-content-center align-item-center mt-1 mr-1">
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">thumb_up</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">autorenew</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">comment</mat-icon>
+                            </button>
+                            <button class="col-3" mat-button>
+                                <mat-icon [inline]="true" color="primary">share</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-container-right-nav col h-100 app-border-left d-flex flex-column">
+            <div class="app-container-right-nav-content mr-auto">
+                <div class="app-right-nav-search w-100 sticky-top">
+                    <mat-form-field class="mt-2 w-100 post-specific" appearance="fill">
+                        <mat-label>Search</mat-label>
+                        <input type="text" matInput>
+                        <mat-icon class="mr-2" color="accent" matPrefix>search</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>
