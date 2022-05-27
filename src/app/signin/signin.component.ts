@@ -35,5 +35,6 @@ export class SigninComponent implements OnInit {
 
     ngOnInit(): void {
         document.title = this.title
+        console.log(`Signin`)
     }
 }

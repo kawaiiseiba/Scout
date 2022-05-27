@@ -52,5 +52,6 @@ export class SignupComponent implements OnInit{
 
     ngOnInit(): void {
         document.title = this.title
+        console.log(`Signup`)
     }
 }

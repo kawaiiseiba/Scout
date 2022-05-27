@@ -23,7 +23,7 @@
                     <span [class.text-success]="this.atleastEight(passwordFormControl.value)">Must be at least 8 characters in length, max 20</span><br>
                 </mat-error>
                 <a href="javascript:;" mat-icon-button color="accent" (click)="isPasswordRevealed = !isPasswordRevealed" matSuffix>
-                    <mat-icon>{{isPasswordRevealed ? 'close' : 'remove_red_eye'}}</mat-icon>
+                    <mat-icon>{{isPasswordRevealed ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </a>
                 <mat-error *ngIf="passwordFormControl.hasError('required')">
                     Password is <strong>required</strong>
@@ -34,6 +34,7 @@
                 SIGN-UP
             </button>
             <p class='text-white text-center pt-5'>Already have an account? Sign-in <a routerLink="/">here!</a></p>
+            <p class='text-white text-center pt-5'>Already have an account? Sign-in <a routerLink="/home">here!</a></p>
         </form>
     </div>
 </div>

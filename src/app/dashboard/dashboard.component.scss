@@ -54,6 +54,8 @@
 
 .app-container-right-nav-content{
     width: 350px;
+    height: 69px;
+    background: #000000;
 }
 
 
@@ -74,8 +76,13 @@
     font-size: 16px;
 }
 
-::ng-deep .mat-form-field-appearance-fill.post-specific .mat-form-field-flex  {
+::ng-deep .mat-form-field-appearance-fill.post-specific .mat-form-field-flex,  
+::ng-deep .mat-form-field-appearance-fill.search .mat-form-field-flex  {
     background-color: #000000 !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill.search .mat-form-field-underline {
+    display: none;
 }
 
 .ripe_malinka {
