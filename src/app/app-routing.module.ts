@@ -23,12 +23,13 @@ const routes: Routes = [
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
 	},
 	{
-		path: '404', 
-        component: NotfoundComponent
+		path: 'error/404', 
+        component: NotfoundComponent,
+        pathMatch: 'full'
 	},
     {
         path: '**',
-        redirectTo: '404'
+        redirectTo: 'error/404'
     }
 ];
 

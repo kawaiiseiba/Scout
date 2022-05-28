@@ -1,76 +1,104 @@
 <mat-drawer-container class="main-template-content d-flex flex-row w-100 h-100 bg-transparent">
     <mat-drawer #drawer class="app-container-left-nav position-relative flex-grow-1 flex-column bg-transparent p-0" mode="side" opened>
-        <div class="app-container-left-nav-content d-flex flex-column ml-auto h-100 p-3">
-            <div class="app-logo">
-                <a class="w-100 py-3 text-left" mat-button [disableRipple]="true">
-                    <img class="mr-2" src="../../favicon.ico" width="25" draggable="false" matSuffix>
-                    Scout
-                </a>
-            </div>
-            <div class="app-nav mb-3">
-                <a routerLink="./home" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">home</mat-icon>Home
-                </a>
-                <a routerLink="./explore" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">travel_explore</mat-icon>Explore
-                </a>
-                <a routerLink="./organization" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>Organization
-                </a>
-                <a routerLink="./jobs" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">work</mat-icon>Jobs
-                </a>
-                <a routerLink="./teams" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">handshake</mat-icon>Teams
-                </a>
-                <!-- <a routerLink="/profile" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">notifications</mat-icon>Notification
-                </a>
-                <a routerLink="/profile" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">mail</mat-icon>Messages
-                </a>
-                <a routerLink="/profile" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">settings</mat-icon>Settings
-                </a> -->
-            </div>
-            <div class="app-additional-navs">
-                <a href="/" class="w-100 py-2 my-1 peach-gradient rounded-pill" type="button" mat-raised-button>
-                    <mat-icon class="mb-1 mr-3">search</mat-icon>Scout Players
-                </a>
-                <a href="/" class="w-100 py-2 my-1 plume_plate rounded-pill" type="button" mat-raised-button>
-                    <span class="mb-1 mr-3">+</span>Create Team
-                </a>
-            </div>
-            <div class='app-profile-logged-in mt-auto'>
-                <div role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
-                    <div class="col-2 app-profile-img m-0 p-0">
-                        <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="40">
-                    </div>
-                    <div class="col-8 d-flex flex-column app-profile-data pr-0">
-                        <div class="">kawaiiseiba</div>
-                        <div class="text-muted">@kawaiiseiba23</div>
-                    </div>
-                    <div class="col-2 d-flex app-profile-option">
-                        <mat-icon class="align-self-center">more_vert</mat-icon>
-                    </div>
+        <div class="app-container-left-nav-content d-flex justify-content-center ml-auto h-100">
+            <div class="app-container-left-nav-content-container d-flex flex-column justify-content-center h-100">
+                <div class="app-logo">
+                    <a class="w-100 py-3 text-left" mat-button [disableRipple]="true">
+                        <img class="mr-2" src="../../favicon.ico" width="25" draggable="false" matSuffix>
+                        Scout
+                    </a>
                 </div>
-                <mat-menu #profileMenu="matMenu" yPosition="above" class="bg-transparent profile-menu">
-                    <a routerLink="./kawaiiseiba23" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
-                        <mat-icon class="mb-1 mr-3" matPrefix>person</mat-icon>Profile
+                <div class="app-nav mb-3">
+                    <a routerLink="./home" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <mat-icon class="mb-1 mr-3">home</mat-icon>Home
                     </a>
-                    <a routerLink="./notifications" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
-                        <mat-icon class="mb-1 mr-3" matPrefix>notifications</mat-icon>Notification
+                    <a routerLink="./organization" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>Organization
                     </a>
-                    <a routerLink="./messsages" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
-                        <mat-icon class="mb-1 mr-3" matPrefix>email</mat-icon>Messages
+                    <a routerLink="./jobs" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <mat-icon class="mb-1 mr-3">work</mat-icon>Jobs
                     </a>
-                    <a routerLink="./settings" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
-                        <mat-icon class="mb-1 mr-3" matPrefix>settings</mat-icon>Settings
+                    <a routerLink="./teams" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <mat-icon class="mb-1 mr-3">handshake</mat-icon>Teams
                     </a>
-                    <button routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
-                        <mat-icon class="mb-1 mr-3" matPrefix>logout</mat-icon>Log out
-                    </button>
-                </mat-menu>
+                    <!-- <a routerLink="/profile" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <mat-icon class="mb-1 mr-3">notifications</mat-icon>Notification
+                    </a>
+                    <a routerLink="/profile" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <mat-icon class="mb-1 mr-3">mail</mat-icon>Messages
+                    </a>
+                    <a routerLink="/profile" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <mat-icon class="mb-1 mr-3">settings</mat-icon>Settings
+                    </a> -->
+                </div>
+                <div class="w-100 app-border-bottom"></div>
+                <div class="app-additional-navs py-2">
+                    <mat-expansion-panel class="bg-transparent py-1" expanded>
+                        <mat-expansion-panel-header class="px-1">
+                          Your Organization
+                        </mat-expansion-panel-header>
+                      
+                        <ng-template matExpansionPanelContent>
+                            <div class="row w-100">
+                                <div class="col-10"><span>You don't have an organization yet.<br> Create or Join one!</span></div>
+                                <div class="col-2">
+                                    <button mat-mini-fab color="secondary">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </mat-expansion-panel>
+                    <div class="w-100 app-border-bottom"></div>
+                    <mat-expansion-panel class="bg-transparent py-1" expanded>
+                        <mat-expansion-panel-header class="px-1">
+                          Your Teams
+                        </mat-expansion-panel-header>
+                      
+                        <ng-template matExpansionPanelContent>
+                            <div class="row w-100">
+                                <div class="col-10"><span>You don't have a team yet.<br> Create or Join one!</span></div>
+                                <div class="col-2">
+                                    <button mat-mini-fab color="secondary">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </mat-expansion-panel>
+                </div>
+                <div class="w-100 app-border-bottom"></div>
+                <div class='app-profile-logged-in mt-auto my-3'>
+                    <div role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
+                        <div class="col-2 app-profile-img m-0 p-0">
+                            <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="40">
+                        </div>
+                        <div class="col-8 d-flex flex-column app-profile-data pr-0">
+                            <div class="">kawaiiseiba</div>
+                            <div class="text-muted">@kawaiiseiba23</div>
+                        </div>
+                        <div class="col-2 d-flex app-profile-option">
+                            <mat-icon class="align-self-center">more_vert</mat-icon>
+                        </div>
+                    </div>
+                    <mat-menu #profileMenu="matMenu" yPosition="above" class="bg-dark profile-menu">
+                        <a routerLink="./kawaiiseiba23" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
+                            <mat-icon class="mb-1 mr-3" matPrefix>person</mat-icon>Profile
+                        </a>
+                        <a routerLink="./notifications" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
+                            <mat-icon class="mb-1 mr-3" matPrefix>notifications</mat-icon>Notification
+                        </a>
+                        <a routerLink="./messsages" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
+                            <mat-icon class="mb-1 mr-3" matPrefix>email</mat-icon>Messages
+                        </a>
+                        <a routerLink="./settings" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
+                            <mat-icon class="mb-1 mr-3" matPrefix>settings</mat-icon>Settings
+                        </a>
+                        <button routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
+                            <mat-icon class="mb-1 mr-3" matPrefix>logout</mat-icon>Log out
+                        </button>
+                    </mat-menu>
+                </div>
             </div>
         </div>
     </mat-drawer>
@@ -79,7 +107,9 @@
         <div class="app-container-content d-flex justify-content-between h-100">
             <!-- <router-outlet name="messages"></router-outlet> -->
             <div class="app-container-main h-100 app-border-right">
-                <router-outlet></router-outlet>
+                <router-outlet>
+                    <mat-progress-bar mode="indeterminate" *ngIf="subloader"></mat-progress-bar>
+                </router-outlet>
             </div>
             <div class="app-container-right-nav h-100 d-flex flex-column">
                 <div class="app-container-right-nav-content sticky-top mr-auto app-border-bottom">

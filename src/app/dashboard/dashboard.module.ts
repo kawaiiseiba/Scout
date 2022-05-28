@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const routes: Routes = [
 	{
@@ -17,11 +19,6 @@ const routes: Routes = [
             {
                 path: 'home',
                 loadChildren: () => import('../home/home.module').then(m => m.HomeModule),
-                pathMatch: 'full'
-            },
-            {
-                path: 'explore',
-                loadChildren: () => import('../explore/explore.module').then(m => m.ExploreModule),
                 pathMatch: 'full'
             },
             {
@@ -57,7 +54,9 @@ const routes: Routes = [
     MatIconModule,
     MatSidenavModule,
     MatMenuModule,
-    MatRippleModule
+    MatRippleModule,
+    MatExpansionModule,
+    MatProgressBarModule
   ]
 })
 export class DashboardModule { }
