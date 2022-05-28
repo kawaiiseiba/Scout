@@ -23,9 +23,6 @@
                 <a routerLink="./teams" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
                     <mat-icon class="mb-1 mr-3">handshake</mat-icon>Teams
                 </a>
-                <a routerLink="./kawaiiseiba23" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
-                    <mat-icon class="mb-1 mr-3">person</mat-icon>Profile
-                </a>
                 <!-- <a routerLink="/profile" routerLinkActive="deep-purple accent-4" class="w-100 py-2 my-1" type="button" mat-button>
                     <mat-icon class="mb-1 mr-3">notifications</mat-icon>Notification
                 </a>
@@ -45,7 +42,7 @@
                 </a>
             </div>
             <div class='app-profile-logged-in mt-auto'>
-                <div class="row align-item-center w-100 p-1 m-0">
+                <div role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
                     <div class="col-2 app-profile-img m-0 p-0">
                         <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="40">
                     </div>
@@ -53,16 +50,34 @@
                         <div class="">kawaiiseiba</div>
                         <div class="text-muted">@kawaiiseiba23</div>
                     </div>
-                    <div class="col-1 d-flex app-profile-option">
+                    <div class="col-2 d-flex app-profile-option">
                         <mat-icon class="align-self-center">more_vert</mat-icon>
                     </div>
                 </div>
+                <mat-menu #profileMenu="matMenu" yPosition="above" class="bg-transparent profile-menu">
+                    <a routerLink="./kawaiiseiba23" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
+                        <mat-icon class="mb-1 mr-3" matPrefix>person</mat-icon>Profile
+                    </a>
+                    <a routerLink="./notifications" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
+                        <mat-icon class="mb-1 mr-3" matPrefix>notifications</mat-icon>Notification
+                    </a>
+                    <a routerLink="./messsages" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
+                        <mat-icon class="mb-1 mr-3" matPrefix>email</mat-icon>Messages
+                    </a>
+                    <a routerLink="./settings" routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
+                        <mat-icon class="mb-1 mr-3" matPrefix>settings</mat-icon>Settings
+                    </a>
+                    <button routerLinkActive="deep-purple accent-4" type="button" mat-menu-item>
+                        <mat-icon class="mb-1 mr-3" matPrefix>logout</mat-icon>Log out
+                    </button>
+                </mat-menu>
             </div>
         </div>
     </mat-drawer>
 
     <mat-drawer-content class="app-container-right-content flex-grow-1 ml-0">
         <div class="app-container-content d-flex justify-content-between h-100">
+            <!-- <router-outlet name="messages"></router-outlet> -->
             <div class="app-container-main h-100 app-border-right">
                 <router-outlet></router-outlet>
             </div>
