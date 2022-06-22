@@ -106,16 +106,18 @@ export interface Organization {
 
 export interface Posts {
     attachment?: string,
-    comments?: Map<string, CommentRef>,
+    comments?: {},
     commentsCount: number,
     description?: string,
-    likes?: Map<string, LikeRef>,
+    likes?: {},
     likesCount: number,
-    shares?: Map<string, ShareRef>,
-    userRef: string
+    shares?: {},
+    sharesCount?: number,
+    user: string,
+    date: Date
 }
 
-export interface Prostring {
+export interface Profile {
     bio?: string,
     dateAdded: Date,
     gameRef: string,
@@ -173,11 +175,11 @@ export interface User {
     defaultAvatar?: string,
     email?: string,
     joined?: Date,
-    messages?: Map<string, MessageRef>,
-    notifications?: Map<string, NotificationRef>,
+    messages?: {},
+    notifications?: {},
     organizationRef?: string,
-    prostrings?: Map<string, ProstringRef>,
-    teams?: Map<string, TeamRef>,
+    postsRef?: {},
+    teams?: {}},
     selectedGame?: string,
     username?: string,
     uid?: string
