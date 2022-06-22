@@ -1,0 +1,73 @@
+
+<div class="d-flex justify-content-center align-items-center app-border-bottom" mat-dialog-title>
+    <mat-button-toggle-group (change)="isSignin = !isSignin">
+        <mat-button-toggle checked="true" value="bold">SIGN-IN</mat-button-toggle>
+        <mat-button-toggle value="italic">SIGN-UP</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+<mat-dialog-content *ngIf="isSignin" class="mat-typography d-flex justify-content-center align-items-center flex-column">
+    <img src="../favicon.ico" class="my-3" width="100" height="100">
+    <h1 class='lead h1 text-white'>Sign-in to your Account</h1>
+    <form #signInForm="ngForm" class="example-form m-3 d-flex flex-column align-items-center" autocomplete="off" (ngSubmit)="onSignIn(signinEmail.value, signinPassword.value); signInForm.resetForm()">
+        <mat-form-field class="w-100 mt-2" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input class="text-white" type="email" matInput [formControl]="signinEmail" [errorStateMatcher]="matcher" placeholder="Ex. pat@example.com" autocomplete="off">
+            <mat-error *ngIf="signinEmail.hasError('email') && !signinEmail.hasError('required')">
+                Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="signinEmail.hasError('required')">
+                Email is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-100 mt-2" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input class="text-white" [type]="isPasswordRevealed ? 'text' : 'password'" matInput [formControl]="signinPassword" [errorStateMatcher]="matcher" maxlength="20" placeholder="Password">
+            <a href="javascript:;" mat-icon-button color="accent" (click)="isPasswordRevealed = !isPasswordRevealed" matSuffix>
+                <mat-icon>{{isPasswordRevealed ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </a>
+            <mat-error *ngIf="signinPassword.hasError('required')">
+                Password is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <button type="submit" class='w-75 py-2 my-5' mat-raised-button color="red"
+            [disabled]="(signinPassword.hasError('pattern') || signinEmail.hasError('email')) || (signinPassword.hasError('required') || signinEmail.hasError('required'))">
+            SIGN-IN
+        </button>
+    </form>
+</mat-dialog-content>
+<mat-dialog-content *ngIf="!isSignin" class="mat-typography d-flex justify-content-center align-items-center flex-column">
+    <img src="../favicon.ico" class="my-3" width="100" height="100">
+    <h1 class='lead h1 text-white'>Sign-up an Account</h1>
+    <form #signUpForm="ngForm" class="example-form m-3 d-flex flex-column align-items-center" autocomplete="off" (ngSubmit)="onSignUp(signupEmail.value, signupPassword.value); signUpForm.resetForm()">
+        <mat-form-field class="w-100 mt-2" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input class="text-white" type="email" matInput [formControl]="signupEmail" [errorStateMatcher]="matcher" placeholder="Ex. pat@example.com" autocomplete="off">
+            <mat-error *ngIf="signupEmail.hasError('email') && !signupEmail.hasError('required')">
+                Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="signupEmail.hasError('required')">
+                Email is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-100 mt-2" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input class="text-white" [type]="isPasswordRevealed ? 'text' : 'password'" matInput [formControl]="signupPassword" [errorStateMatcher]="matcher" maxlength="20" placeholder="Password">
+            <mat-error *ngIf="signupPassword.hasError('pattern') && !signupPassword.hasError('required')">
+                <span [class.text-success]="this.nonWhiteSpace(signupPassword.value)">Cannot contain white spaces</span><br>
+                <span [class.text-success]="this.oneNumeric(signupPassword.value)">Must contain at least one numeric character</span><br>
+                <span [class.text-success]="this.oneUppercase(signupPassword.value)">Must contain 1 capital letter</span><br>
+                <span [class.text-success]="this.atleastEight(signupPassword.value)">Must be at least 8 characters in length, max 20</span><br>
+            </mat-error>
+            <a href="javascript:;" mat-icon-button color="accent" (click)="isPasswordRevealed = !isPasswordRevealed" matSuffix>
+                <mat-icon>{{isPasswordRevealed ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </a>
+            <mat-error *ngIf="signupPassword.hasError('required')">
+                Password is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <button class='w-75 py-2 my-5' mat-raised-button color="red"
+            [disabled]="(signupPassword.hasError('pattern') || signupEmail.hasError('email')) || (signupPassword.hasError('required') || signupEmail.hasError('required'))">
+            SIGN-UP
+        </button>
+    </form>
+</mat-dialog-content>

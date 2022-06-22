@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { DashboardComponent } from './dashboard.component';
+import { DashboardComponent, GameListDialog } from './dashboard.component';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';  
 
@@ -7,14 +7,21 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
+import { GameSelectGuard } from '../guard/game-select.guard';
 
 const routes: Routes = [
 	{
-		path: '', component: DashboardComponent,
+		path: ':game_url', component: DashboardComponent,
+        canActivate: [GameSelectGuard],
+        // canActivateChild: [GameSelectGuard],
         children: [
             {
                 path: 'home',
@@ -24,7 +31,7 @@ const routes: Routes = [
             {
                 path: 'organization',
                 loadChildren: () => import('../organization/organization.module').then(m => m.OrganizationModule),
-                pathMatch: 'full'
+                // pathMatch: 'full'
             },
             {
                 path: 'jobs',
@@ -38,14 +45,15 @@ const routes: Routes = [
             },
             {
                 path: ':username',
-                loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule)
+                loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule),
+                pathMatch: 'full'
             },
         ]
 	}
 ];
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, GameListDialog],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -53,10 +61,15 @@ const routes: Routes = [
     MatInputModule,
     MatIconModule,
     MatSidenavModule,
+    MatSelectModule,
     MatMenuModule,
     MatRippleModule,
     MatExpansionModule,
-    MatProgressBarModule
-  ]
+    MatProgressBarModule,
+    MatBadgeModule,
+    MatTooltipModule,
+    MatDialogModule
+  ],
+  providers: [DashboardComponent],
 })
 export class DashboardModule { }

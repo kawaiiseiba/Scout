@@ -1,4 +1,6 @@
+// @import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
 /* You can add global styles to this file, and also import other style files */
+
 *,
 *::before,
 *::after {
@@ -21,4 +23,139 @@ body {
     /* line-height: var(--lineHeightMd); */
     /* font-family: "Segoe UI", "Source Sans Pro", Calibri, Candara, Arial, sans-serif !important; */
     /* font-size: .875rem; */
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}
+
+$theme-color: #d81b60;
+$light-mode: #fff;
+$dark-mode: #000;
+
+.example-form {
+    min-width: 150px;
+    max-width: 400px;
+    width: 100%;
+}
+
+
+.dark-backdrop{
+    background: rgb(0 0 0 / 85%) !important;
+}
+  
+.unpassword:hover{
+    cursor: pointer;
+}
+
+.app-border{
+    border: solid 1px rgba(255,255,255,.12) !important
+}
+
+.app-border-top{
+    border-top: solid 1px rgba(255,255,255,.12)
+}
+.app-border-left{
+    border-left: solid 1px rgba(255,255,255,.12)
+}
+.app-border-bottom{
+    border-bottom: solid 1px rgba(255,255,255,.12)
+}
+.app-border-right{
+    border-right: solid 1px rgba(255,255,255,.12)
+}
+.ripe_malinka {
+    /* fallback for old browsers */
+    background: #f093fb;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(240, 147, 251, 0.5), rgba(245, 87, 108, 0.5));
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(240, 147, 251, 0.5), rgba(245, 87, 108, 0.5))
+}
+
+.plume_plate{
+    /* fallback for old browsers */
+    background: #667eea;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5));
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))
+}
+
+
+.landing-page .carousel, .landing-page .carousel-inner, .landing-page .carousel-item{
+    width: 100%;
+    height: 100%;
+}
+
+.landing-page-events-carousel .carousel-inner{
+    overflow: hidden;
+    border-top-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border: 2px solid #ffffff;
+}
+
+.landing-page-events-carousel .carousel-control-prev{
+    left: -65px !important;
+
+    .carousel-control-prev-icon{
+        background-image: none !important;
+    }
+}
+
+.landing-page-events-carousel .carousel-control-next{
+    right: -65px !important;
+
+    .carousel-control-next-icon{
+        background-image: none !important;
+    }
+}
+
+.landing-page .carousel .carousel-inner .carousel-caption{
+    width: 500px;
+    right: 10% !important;
+    top: 25%;
+    left: unset !important;
+    bottom: unset !important;
+    text-align: right;
+    text-shadow: 0 0 20px black;
+
+    h1 {
+        font-weight: bold;
+        font-size: 40px;
+        margin-bottom: 30px;
+        line-height: 50px;
+    }
+
+    p {
+        font-size: 20px;
+        line-height: 25px;
+    }
+}
+
+// .mat-dialog-container{
+//     background-color: $light-mode !important;
+//     color: #333;
+// }
+
+.mat-button-toggle-group-appearance-standard .mat-button-toggle+.mat-button-toggle{
+    border-left: none;
+}
+
+.mat-button-toggle{
+    border-bottom: 2px solid transparent;
+}
+
+.mat-button-toggle-checked{
+    border-bottom: 2px solid $theme-color;
 }

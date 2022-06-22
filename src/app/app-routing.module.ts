@@ -5,22 +5,12 @@ import { NotfoundComponent } from './notfound/notfound.component';
 const routes: Routes = [
 	{
         path: '',
-        pathMatch: 'full',
-        redirectTo: 'signin'
-	},
-    {
-        path: 'signin',
-        loadChildren: () => import('./signin/signin.module').then(m => m.SigninModule),
+        loadChildren: () => import('./landing/landing.module').then(m => m.LandingModule),
         pathMatch: 'full',
     },
 	{
-		path: 'signup',
-        loadChildren: () => import('./signup/signup.module').then(m => m.SignupModule),
-        pathMatch: 'full',
-	},
-	{
 		path: '', 
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
 	},
 	{
 		path: 'error/404', 

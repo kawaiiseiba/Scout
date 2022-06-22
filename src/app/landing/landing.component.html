@@ -1,0 +1,124 @@
+<mdb-carousel *ngIf="gamesContainer" class="landing-page w-100 h-100" [interval]="10000" [controls]="false" [animation]="'fade'" [pause]="false" [indicators]="true">
+    <mdb-carousel-item *ngFor="let game of gamesContainer;">
+        <div class="landing-page-item w-100 h-100" [style.background-image]="'url('+game.banner+')'"></div>
+        <div class="carousel-caption d-none d-md-block">
+            <h1>{{game.name}}</h1>
+            <p>{{game.description}}</p>
+        </div>
+    </mdb-carousel-item>
+  </mdb-carousel>
+
+  <div class="landing-page-container row justify-content-between w-100 h-100 mx-0 py-3">
+        <div class="landing-page-nav d-flex justify-content-between align-items-center px-5">
+            <div class="landing-page-logo d-flex">
+                <img src="./../../favicon.ico" width="50" draggable="false" matSuffix> 
+                <span class="landing-page-text align-self-center mx-3">Scout</span>
+            </div>
+            <div class="landing-page-auth-opt">
+                <div *ngIf="authService.user$ | async as user; else signin">
+                    <button class="py-2 rounded-pill btn-dark pl-2 pr-3" color="accent" mat-button [matMenuTriggerFor]="authMenu">
+                        <img class="mr-2" [src]="user.avatar ? user.avatar : user.defaultAvatar" draggable="false" matPrefix>
+                        {{user.username}}
+                    </button>
+                    <mat-menu class="auth-menu" #authMenu="matMenu" xPosition="before">
+                        <button [routerLink]="user?.selectedGame ? './'+user.selectedGame+'/home' : './game'" mat-menu-item class="pl-3 pr-5">
+                            <mat-icon class="mb-1 mr-3">home</mat-icon>Home
+                        </button>
+                        <button [routerLink]="'./'+user.username" mat-menu-item class="pl-3 pr-5">
+                            <mat-icon class="mb-1 mr-3">person</mat-icon>Profile
+                        </button>
+                        <button mat-menu-item class="pl-3 pr-5" (click)="onLogout()">
+                            <mat-icon class="mb-1 mr-3">logout</mat-icon>Logout
+                        </button>
+                    </mat-menu>
+                </div>
+                <ng-template #signin>
+                    <button class="py-2 rounded-pill btn-dark" color="accent" mat-button (click)="openAuthDialog()">SIGN-IN | SIGN-UP</button>
+                </ng-template>
+            </div>
+        </div>
+        <div class="landing-page-content row w-100 px-5 pb-5">
+            <div class="landing-page-news col-6 align-self-center d-flex px-5 mb-5">
+                <div class="landing-page-news-container d-flex justify-content-between flex-column bg-white">
+                    <div class="landing-page-news-caption py-2 px-4 h5 w-100 mb-0">
+                        News
+                    </div>
+                    <div class="landing-page-news-items d-flex align-items-center px-3" (click)="openDialog('23')">
+                        <div class="news-icon">
+                            <img src="../../favicon.ico" width="65">
+                        </div>
+                        <div class="news-content d-flex justify-content-between h-100 flex-column px-3 py-2 ">
+                            <div class="news-title h5 text-weight-bold text-truncate">Valorant</div>
+                            <div class="news-description text-truncate">Patch notes 4.11saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                        </div>
+                    </div>
+                    <div class="landing-page-news-items d-flex align-items-center px-3">
+                        <div class="news-icon">
+                            <img src="../../favicon.ico" width="65">
+                        </div>
+                        <div class="news-content d-flex justify-content-between h-100 flex-column px-3 py-2 ">
+                            <div class="news-title h5 text-weight-bold text-truncate">Valorant</div>
+                            <div class="news-description text-truncate">Patch notes 4.11saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                        </div>
+                    </div>
+                    <div class="landing-page-news-items d-flex align-items-center px-3">
+                        <div class="news-icon">
+                            <img src="../../favicon.ico" width="65">
+                        </div>
+                        <div class="news-content d-flex justify-content-between h-100 flex-column px-3 py-2 ">
+                            <div class="news-title h5 text-weight-bold text-truncate">Valorant</div>
+                            <div class="news-description text-truncate">Patch notes 4.11saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                        </div>
+                    </div>
+                    <div class="landing-page-news-items d-flex align-items-center px-3">
+                        <div class="news-icon">
+                            <img src="../../favicon.ico" width="65">
+                        </div>
+                        <div class="news-content d-flex justify-content-between h-100 flex-column px-3 py-2 ">
+                            <div class="news-title h5 text-weight-bold text-truncate">Valorant</div>
+                            <div class="news-description text-truncate">Patch notes 4.11saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                        </div>
+                    </div>
+                    <div class="landing-page-news-items d-flex align-items-center px-3">
+                        <div class="news-icon">
+                            <img src="../../favicon.ico" width="65">
+                        </div>
+                        <div class="news-content d-flex justify-content-between h-100 flex-column px-3 py-2 ">
+                            <div class="news-title h5 text-weight-bold text-truncate">Valorant</div>
+                            <div class="news-description text-truncate">Patch notes 4.11saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                        </div>
+                    </div>
+                    <div class="landing-page-news-items d-flex align-items-center px-3">
+                        <div class="news-icon">
+                            <img src="../../favicon.ico" width="65">
+                        </div>
+                        <div class="news-content d-flex justify-content-between h-100 flex-column px-3 py-2 ">
+                            <div class="news-title h5 text-weight-bold text-truncate">Valorant</div>
+                            <div class="news-description text-truncate">Patch notes 4.11saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                        </div>
+                    </div>
+                    <div class="landing-page-news-items d-flex align-items-center px-3">
+                        <div class="news-icon">
+                            <img src="../../favicon.ico" width="65">
+                        </div>
+                        <div class="news-content d-flex justify-content-between h-100 flex-column px-3 py-2 ">
+                            <div class="news-title h5 text-weight-bold text-truncate">Valorant</div>
+                            <div class="news-description text-truncate">Patch notes 4.11saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                        </div>
+                    </div>
+                    <div class="landing-page-news-footer py-2 px-4 h5 w-100 mb-0"></div>
+                </div>
+            </div>
+            <div class="landing-page-events col-6 d-flex flex-column justify-content-end align-items-end align-self-end pr-5 mb-5 pb-5">
+                <div class="landing-page-events-content pr-5">
+                    <mdb-carousel class="landing-page-events-carousel mr-5 mb-2" [controls]="true" [animation]="'fade'" [pause]="false" [indicators]="true">
+                        <mdb-carousel-item *ngFor="let game of events">
+                            <div class="landing-page-item w-100 h-100" [style.background-image]="'url('+game.url+')'"></div>
+                        </mdb-carousel-item>
+                    </mdb-carousel>
+                    <p class="h4 text-white">@ Scout</p>
+                    <p class="h4 text-white">All Rights Reserved</p>
+                </div>
+            </div>
+        </div>
+  </div>

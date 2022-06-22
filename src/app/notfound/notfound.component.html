@@ -1,3 +1,9 @@
-<div class="not-found row w-100 h-100 justify-content-center align-item-center m-0 p-0">
-    <img class="align-self-center" src="../../assets/img/404.gif" width="500" height="500">
+<div class="not-found d-flex flex-column text-center w-100 h-100 justify-content-center align-items-center m-0 p-0 noselect">
+    <img class="align-self-center" src="../../assets/img/404.gif" width="500" height="500" draggable="false">
+    <div class="w-50 py-3 px-5 search-bar">
+        <ngx-typed-js [strings]="[previousUrl]" [typeSpeed]="50" [loop]="true" [startDelay]="1000">
+            <span class="h4 typing"></span>
+        </ngx-typed-js>
+    </div>
+      
 </div>-center

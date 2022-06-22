@@ -2,55 +2,34 @@
     <mat-drawer #drawer class="app-container-left-nav position-relative flex-grow-1 flex-column bg-transparent p-0" mode="side" opened>
         <div class="app-container-left-nav-content d-flex justify-content-center ml-auto h-100">
             <div class="app-container-left-nav-content-container d-flex flex-column justify-content-center h-100">
-                <div class="app-logo">
+                <div class="app-logo" (click)="router.navigate(['/'])">
                     <a class="w-100 py-3 text-left" mat-button [disableRipple]="true">
                         <img class="mr-2" src="../../favicon.ico" width="25" draggable="false" matSuffix>
                         Scout
                     </a>
                 </div>
                 <div class="app-nav mb-3">
-                    <a routerLink="./home" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                    <button *ngIf="selectedGame" class="w-100 py-3 my-1 text-truncate" mat-button [disabled]="!user" [disableRipple]="true" [style.background-color]="selectedGame?.bgColor">
+                        <img class="select-game-icon mr-2" [src]="selectedGame.icon" matSuffix>
+                        <span>{{selectedGame.name}}</span>
+                    </button>
+                    <div class="w-100 app-border-bottom my-2"></div>
+                    <a [disabled]="!user" routerLink="./home" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
                         <mat-icon class="mb-1 mr-3">home</mat-icon>Home
                     </a>
-                    <a routerLink="./organization" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                    <a [disabled]="!user" routerLink="./organization" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
                         <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>Organization
                     </a>
-                    <a routerLink="./jobs" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                    <a [disabled]="!user" routerLink="./jobs" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
                         <mat-icon class="mb-1 mr-3">work</mat-icon>Jobs
-                    </a>
-                    <a routerLink="./teams" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                    </a>    
+                    <a [disabled]="!user" routerLink="./teams"  routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
                         <mat-icon class="mb-1 mr-3">handshake</mat-icon>Teams
                     </a>
-                    <!-- <a routerLink="/profile" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <mat-icon class="mb-1 mr-3">notifications</mat-icon>Notification
-                    </a>
-                    <a routerLink="/profile" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <mat-icon class="mb-1 mr-3">mail</mat-icon>Messages
-                    </a>
-                    <a routerLink="/profile" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <mat-icon class="mb-1 mr-3">settings</mat-icon>Settings
-                    </a> -->
                 </div>
                 <div class="w-100 app-border-bottom"></div>
                 <div class="app-additional-navs py-2">
-                    <mat-expansion-panel class="bg-transparent py-1" expanded>
-                        <mat-expansion-panel-header class="px-1">
-                          Your Organization
-                        </mat-expansion-panel-header>
-                      
-                        <ng-template matExpansionPanelContent>
-                            <div class="row w-100">
-                                <div class="col-10"><span>You don't have an organization yet.<br> Create or Join one!</span></div>
-                                <div class="col-2">
-                                    <button mat-mini-fab color="secondary">
-                                        <mat-icon>add</mat-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </mat-expansion-panel>
-                    <div class="w-100 app-border-bottom"></div>
-                    <mat-expansion-panel class="bg-transparent py-1" expanded>
+                    <mat-expansion-panel class="bg-transparent py-1" [expanded]="_routeURL !== 'game'">
                         <mat-expansion-panel-header class="px-1">
                           Your Teams
                         </mat-expansion-panel-header>
@@ -69,13 +48,14 @@
                 </div>
                 <div class="w-100 app-border-bottom"></div>
                 <div class='app-profile-logged-in mt-auto my-3'>
-                    <div role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
-                        <div class="col-2 app-profile-img m-0 p-0">
-                            <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="40">
+                    <button routerLink="/" *ngIf="!user" class="btn-danger pink darken-1 w-100 p-2 m-0 rounded-pill" mat-stroked-button>SIGN-IN | SIGN-UP</button>
+                    <div *ngIf="user !== null && user !== undefined" role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
+                        <div class="col-2 app-profile-img m-0 p-0" matTooltip="You have 9 Notification" matTooltipClass="btn-danger pink darken-1" matBadge="8" matBadgeSize="medium" matBadgePosition="after" matBadgeColor="primary" matBadgeOverlap="true">
+                            <img class="rounded-circle" [src]="user.avatar ? user.avatar : user.defaultAvatar" width="40">
                         </div>
                         <div class="col-8 d-flex flex-column app-profile-data pr-0">
-                            <div class="">kawaiiseiba</div>
-                            <div class="text-muted">@kawaiiseiba23</div>
+                            <div>{{user.username}}</div>
+                            <div class="text-muted">@{{user.username}}</div>
                         </div>
                         <div class="col-2 d-flex app-profile-option">
                             <mat-icon class="align-self-center">more_vert</mat-icon>
@@ -94,7 +74,7 @@
                         <a routerLink="./settings" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
                             <mat-icon class="mb-1 mr-3" matPrefix>settings</mat-icon>Settings
                         </a>
-                        <button routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
+                        <button (click)="onLogout()" type="button" mat-menu-item>
                             <mat-icon class="mb-1 mr-3" matPrefix>logout</mat-icon>Log out
                         </button>
                     </mat-menu>
@@ -119,6 +99,21 @@
                             <input type="text" matInput>
                             <mat-icon class="mr-2" color="accent" matPrefix>search</mat-icon>
                         </mat-form-field>
+                    </div>
+                    <div *ngIf="selectedGame" class="app-right-game-list">
+                        <div *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-3" [style.background-image]="'url('+game.banner+')'" (click)="selectGame(game.baseURL)">
+                            <div class="game-select-background d-flex w-100 h-50 align-self-end px-3" [style.background-color]="game?.bgColor">
+                                <img class="game-select-icon mr-3" [style.border-color]="game?.bgColor" [src]="game.icon" width="50" height="50">
+                                <div class="game-select-data w-100">
+                                    <h1 class="game-select-title text-truncate">{{game.name}}</h1>
+                                    <div class="game-select-info text-white">
+                                        <span class="mr-1">Users: 30k</span>•
+                                        <span class="mr-1">Organizations: 500</span>•
+                                        <span class="mr-1">Teams: 10k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

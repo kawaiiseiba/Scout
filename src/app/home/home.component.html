@@ -1,32 +1,35 @@
 
 <div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
-    Home
+    <b>{{title}}</b>
 </div>
 <div class="app-main-post row justify-content-center py-4 m-0 app-border-bottom">
     <div class="app-main-post-profile col-1 m-0 p-0">
         <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
     </div>
     <div class="col-10">
-        <mat-form-field class="w-100 post-specific py-1" appearance="fill">
-            <mat-label>What's on your mind...</mat-label>
-            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="25"></textarea>
-        </mat-form-field>
-        <div class="row app-post-file-submit-options">
-            <div class="col-9 app-post-file-opt">
-                <button class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-                    <mat-icon width="15">link</mat-icon>
-                </button>
-                <button class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-                    <mat-icon width="15">image</mat-icon>
-                </button>
-                <button class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-                    <mat-icon width="15">add_reaction</mat-icon>
-                </button>
+        <form #postForm="ngForm" autocomplete="off" autocapitalize="off">
+            <mat-form-field class="w-100 post-specific py-1" appearance="fill">
+                <mat-label>What's on your mind...</mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="25"></textarea>
+            </mat-form-field>
+            <div class="row app-post-file-submit-options">
+                <div *ngIf="filePrev" class="w-100 my-1">
+                    <img class="app-post-file-preview w-100" [src]="filePrev">
+                    <button (click)="file.value=''; filePrev=''" class="app-post-file-preview-remove btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                        <mat-icon width="15">close</mat-icon>
+                    </button>
+                </div>
+                <div class="col-9 app-post-file-opt">
+                    <input #file class="d-none" type="file" (change)="upload($event)" accept="*.png.jpg">
+                    <button (click)="file.click()" class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                        <mat-icon width="15">image</mat-icon>
+                    </button>
+                </div>
+                <div class="col-3">
+                    <button class="w-100 my-1 rounded-pill" color="primary" type="button" mat-raised-button>Post</button>
+                </div>
             </div>
-            <div class="col-3">
-                <button class="w-100 my-1 rounded-pill" color="primary" type="button" mat-raised-button>Post</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 <div class="app-main-post-update py-3 d-flex justify-content-center align-item-center app-border-bottom">
@@ -67,69 +70,5 @@
             </div>
         </div>
     </div>
-    <div class='app-user-post row justify-content-center py-2 m-0 app-border-bottom'>
-        <div class="app-main-post-profile h-100 col-1 m-0 p-0">
-            <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
-        </div>
-        <div class="app-main-post-container col-10 h-100 py-1 pr-0">
-            <div class="app-main-post-data d-flex flex-row w-100">
-                <span class="mr-1"><b>kawaiiseiba</b></span>
-                <span class="text-muted">@kawaiiseiba23</span>
-                <span class="mx-1">•</span>
-                <span class="text-muted">3hrs ago</span>
-                <div class="ml-auto">
-                    <mat-icon class="align-self-center">more_horiz</mat-icon>
-                </div>
-            </div>
-            <div class="app-main-post-description py-2">Testing design without attachment</div>
-            <div class="app-main-post-interaction row justify-content-center align-item-center mt-1 mr-1">
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">thumb_up</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">autorenew</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">comment</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">share</mat-icon>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class='app-user-post row justify-content-center py-2 m-0 app-border-bottom'>
-        <div class="app-main-post-profile h-100 col-1 m-0 p-0">
-            <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
-        </div>
-        <div class="app-main-post-container col-10 h-100 py-1 pr-0">
-            <div class="app-main-post-data d-flex flex-row w-100">
-                <span class="mr-1"><b>kawaiiseiba</b></span>
-                <span class="text-muted">@kawaiiseiba23</span>
-                <span class="mx-1">•</span>
-                <span class="text-muted">3hrs ago</span>
-                <div class="ml-auto">
-                    <mat-icon class="align-self-center">more_horiz</mat-icon>
-                </div>
-            </div>
-            <div class="app-main-post-description py-2">In the beginning there is silence...</div>
-            <div class="app-main-post-attachment">
-                <img class="w-100" src="../../assets/img/es-04-media-hd.jpg.asset.1611648734779.jpg">
-            </div>
-            <div class="app-main-post-interaction row justify-content-center align-item-center mt-1 mr-1">
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">thumb_up</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">autorenew</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">comment</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">share</mat-icon>
-                </button>
-            </div>
-        </div>
-    </div>
+    
 </div>

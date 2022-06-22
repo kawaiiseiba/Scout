@@ -1,12 +1,54 @@
 .app-logo > a{
     font-size: 20px;
-    pointer-events: none;
+    cursor: pointer;
 }
 
-.app-nav > a {
+.app-nav > a, .app-nav > button {
     font-size: 20px;
     text-align: start;
 }
+
+.select-game-icon{
+    width: 35px;
+    height: 35px;
+    border-radius: 3px;
+}
+
+.game-select-item{
+    height: 120px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px transparent !important;
+
+    &:hover{
+        box-shadow: 0px 0px 5px black !important;
+        cursor: pointer;
+    }
+
+    .game-select-icon{
+        position: relative;
+        top: -25px;
+        border-radius: 10px;
+        border: 3px solid;
+        border-color: #583030;
+
+    }
+
+    .game-select-title{
+        margin-top: -35px;
+        font-size: 25px;
+        font-weight: bold;
+        text-shadow: 0 0 10px black;
+    }
+
+    .game-select-info{
+        text-shadow: 0 0 10px black;
+    }
+}
+
 
 .mat-drawer-inner-container{
     -webkit-box-align: end !important;
@@ -21,7 +63,6 @@
     width: 251px;
 }
 
-
 .app-additional-navs::ng-deep .mat-expansion-panel .mat-expansion-panel-body{
     padding-left: 10px;
     padding-right: 10px;
@@ -29,6 +70,10 @@
 
 .app-profile-button{
     user-select: none;
+}
+
+::ng-deep .mat-badge.app-profile-img .mat-badge-content{
+    top: -3px;
 }
 
 .app-container-content{
@@ -72,22 +117,6 @@
     background: #000000;
 }
 
-.app-border{
-    border: solid 1px rgba(255,255,255,.12) !important
-}
-
-.app-border-top{
-    border-top: solid 1px rgba(255,255,255,.12)
-}
-.app-border-left{
-    border-left: solid 1px rgba(255,255,255,.12)
-}
-.app-border-bottom{
-    border-bottom: solid 1px rgba(255,255,255,.12)
-}
-.app-border-right{
-    border-right: solid 1px rgba(255,255,255,.12)
-}
 
 ::ng-deep .mat-menu-panel.profile-menu{
     margin-bottom: 15px;
@@ -110,27 +139,6 @@
     display: none;
 }
 
-.ripe_malinka {
-    /* fallback for old browsers */
-    background: #f093fb;
-  
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, rgba(240, 147, 251, 0.5), rgba(245, 87, 108, 0.5));
-  
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, rgba(240, 147, 251, 0.5), rgba(245, 87, 108, 0.5))
-}
-
-.plume_plate{
-    /* fallback for old browsers */
-    background: #667eea;
-  
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5));
-  
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))
-}
 
 ::ng-deep .mat-menu-panel.bg-dark{
     background-color: #000000 !important

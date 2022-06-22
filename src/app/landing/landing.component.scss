@@ -1,0 +1,92 @@
+
+
+.landing-page{
+    position: absolute;
+
+    .landing-page-item{
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top;
+    }
+}
+
+.landing-page-events-content{
+    width: fit-content;
+    
+    .landing-page-events-carousel{
+        width: 500px !important;
+    
+        .landing-page-item{
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: top;
+            height: 220px !important;
+        }
+    }
+}
+
+.landing-page-container {
+    background-image: radial-gradient(transparent, transparent, rgba(0, 0, 0, 0.904) 85%);
+    position: absolute;
+    z-index: 1;
+
+    .landing-page-nav{
+        height: 80px;
+    
+        .landing-page-text{
+            font-size: 35px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px black;
+        }
+        
+        .landing-page-auth-opt img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer
+        }
+        
+    }
+
+    .landing-page-content{
+
+        height: 100%;
+
+        .landing-page-news-container{
+            width: 500px;
+            min-height: 300px;
+            border-radius: 10px;
+        }
+
+        .landing-page-news-caption{
+            border-bottom: solid 1px rgb(100 97 97 / 39%) !important;
+        }
+        .landing-page-news-footer{
+            border-top: solid 1px rgb(100 97 97 / 39%) !important;
+        }
+
+        .landing-page-news-items{
+            height: 75px;
+            // border-bottom: solid 1px rgb(100 97 97 / 70%) !important;
+            cursor: pointer;
+
+            .news-content{
+                overflow: hidden;
+            }
+        }
+
+        .landing-page-news-items:hover::before{
+            content: "";
+            border-left: 5px solid #d70322;
+            position: absolute;
+            /* z-index: 1; */
+            height: inherit;
+            margin-left: -16px;
+        }
+    }
+}
+
+::ng-deep .mat-menu-panel.auth-menu{
+    width: 200px;
+}

@@ -20,6 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["crypto"],
             "outputPath": "dist/teams",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -38,6 +39,7 @@
                 "node_modules/@fortawesome/fontawesome-free/scss/regular.scss",
                 "node_modules/@fortawesome/fontawesome-free/scss/brands.scss",
                 "node_modules/angular-bootstrap-md/assets/scss/bootstrap/bootstrap.scss",
+                "node_modules/mdb-angular-ui-kit/assets/scss/mdb.scss",
                 "node_modules/angular-bootstrap-md/assets/scss/mdb.scss",
                 "node_modules/animate.css/animate.css"
             ],

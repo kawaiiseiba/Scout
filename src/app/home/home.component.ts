@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AbstractControl, Form, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -6,11 +7,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+    title = 'Home'
 
-  constructor() { }
+    filePath: Blob
+    filePrev: string | ArrayBuffer | null
 
-  ngOnInit(): void {
-      console.log(`should be working`)
-  }
+    constructor() { }
+
+    upload($event: any) {
+        this.filePath = $event.target.files[0]
+
+        const reader = new FileReader();
+        reader.onload = e => this.filePrev = reader.result;
+
+        reader.readAsDataURL(this.filePath)
+    }
+
+    ngOnInit(): void {
+        console.log(`should be working`)
+    }
 
 }

@@ -1,1 +1,11 @@
 @import url(../dashboard/dashboard.component.scss);
+
+.app-post-file-preview{
+    border-radius: 15px;
+}
+
+.app-post-file-preview-remove{
+    position: absolute;
+    margin-top: 5px;
+    left: 20px;
+}

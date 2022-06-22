@@ -1,0 +1,34 @@
+.game-select-item{
+    height: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px transparent !important;
+
+    &:hover{
+        box-shadow: 0px 0px 5px black !important;
+        cursor: pointer;
+    }
+
+    .game-select-icon{
+        position: relative;
+        top: -50px;
+        border-radius: 10px;
+        border: 3px solid;
+        border-color: #583030;
+
+    }
+
+    .game-select-title{
+        margin-top: -35px;
+        font-size: 25px;
+        font-weight: bold;
+        text-shadow: 0 0 10px black;
+    }
+
+    .game-select-info{
+        text-shadow: 0 0 10px black;
+    }
+}
