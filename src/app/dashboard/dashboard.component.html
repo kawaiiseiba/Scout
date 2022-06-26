@@ -9,10 +9,10 @@
                     </a>
                 </div>
                 <div class="app-nav mb-3">
-                    <button *ngIf="(selectedGame$ | async) as game" class="w-100 py-3 my-1 text-truncate" mat-button [disableRipple]="true" [style.background-color]="game?.bgColor">
+                    <!-- <button *ngIf="(selectedGame$ | async) as game" class="w-100 py-3 my-1 text-truncate" mat-button [disableRipple]="true" [style.background-color]="game?.bgColor">
                         <img class="select-game-icon mr-2" [src]="game.icon" matSuffix>
                         <span>{{game.name}}</span>
-                    </button>
+                    </button> -->
                     <div class="w-100 app-border-bottom my-2"></div>
                     <a [disabled]="!user" routerLink="./home" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
                         <mat-icon class="mb-1 mr-3">home</mat-icon>Home
@@ -83,7 +83,7 @@
         </div>
     </mat-drawer>
 
-    <mat-drawer-content class="app-container-right-content flex-grow-1 ml-0" (scroll)="fixSelectGame($event)">
+    <mat-drawer-content class="app-container-right-content flex-grow-1 ml-0">
         <div class="app-container-content d-flex justify-content-between h-100">
             <!-- <router-outlet name="messages"></router-outlet> -->
             <div class="app-container-main app-border-right">
@@ -92,7 +92,7 @@
                 </router-outlet>
             </div>
             <div #rightContent class="app-container-right-nav d-flex flex-column">
-                <div class="app-container-right-nav-content sticky-top mr-auto app-border-bottom">
+                <div #searchBar class="app-container-right-nav-content sticky-top mr-auto app-border-bottom">
                     <div class="app-right-nav-search w-100">
                         <mat-form-field class="mt-2 w-100 search" appearance="fill">
                             <mat-label>Search</mat-label>
@@ -101,9 +101,9 @@
                         </mat-form-field>
                     </div>
                 </div>
-                
-                <div #gameSelectList *ngIf="(selectedGame$ | async)" class="app-container-right-nav-content app-right-game-list mr-auto">
-                    <div *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-3" [style.background-image]="'url('+game.banner+')'" (click)="selectGame(game.baseURL)">
+                <!-- *ngIf (selectedGame$ | async) -->
+                <div #gameSelectList *ngIf="false" class="app-container-right-nav-content app-right-game-list mr-auto">
+                    <div *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-2" [style.background-image]="'url('+game.banner+')'" (click)="selectGame(game.baseURL)">
                         <div class="game-select-background d-flex w-100 h-50 align-self-end px-3" [style.background-color]="game?.bgColor">
                             <img class="game-select-icon mr-3" [style.border-color]="game?.bgColor" [src]="game.icon" width="50" height="50">
                             <div class="game-select-data w-100">

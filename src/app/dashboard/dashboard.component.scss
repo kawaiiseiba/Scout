@@ -114,7 +114,7 @@
 }
 
 .app-container-right-nav{
-    height: fit-content;
+    height: 100%;
 }
 
 .app-container-right-nav-content{
@@ -124,6 +124,8 @@
 }
 
 .app-right-game-list{
+    position: sticky;
+    top: 69px;
     height: fit-content;
 }
 
