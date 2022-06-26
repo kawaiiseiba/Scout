@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { NgDatePipesModule } from 'ngx-pipes';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatMenuModule } from '@angular/material/menu';
 
 const routes: Routes = [
 	{
@@ -23,7 +25,9 @@ const routes: Routes = [
       MatButtonModule,
       MatInputModule,
       MatIconModule,
-      NgDatePipesModule
+      NgDatePipesModule,
+      MatChipsModule,
+      MatMenuModule
     ]
 })
 

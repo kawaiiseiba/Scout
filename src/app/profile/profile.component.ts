@@ -3,11 +3,13 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { RouterModule, Routes, ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { User } from '../services/models/data.model';
+import { Games, Likes, Posts, User } from '../services/models/data.model';
 import { AuthService } from '../services/auth.service';
 import { of, Subscription, switchMap, take, Timestamp } from 'rxjs';
 import { AccountService } from '../services/account.service';
 import * as moment from 'moment-timezone';
+import { PostsService } from '../services/posts.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +22,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     user: User | null | undefined
     profile: User | null | undefined
 
-    $userSubscription: Subscription
+    posts: Posts[]
 
     constructor(
         private titleService: Title, 
@@ -28,16 +30,61 @@ export class ProfileComponent implements OnInit, OnDestroy {
         public _router: Router,
         public global: DashboardComponent,
         private auth: AuthService,
-        private account: AccountService
+        private account: AccountService,
+        private postRef: PostsService,
+        private db: AngularFirestore
     ) { 
-        this.$userSubscription = this.auth.user$.subscribe(userAuthenticated => {
+        this.auth.user$.pipe(take(1)).subscribe(userAuthenticated => {
             this.user = userAuthenticated
             this.account.getAccountByUsername(this.route.snapshot.params['username']).pipe(take(1), switchMap(x => of(...x.map(user => user))))
             .subscribe(data => {
                 this.profile = userAuthenticated?.uid === data.uid ? userAuthenticated : data
+
+                this.db.collection<Posts>('posts', ref => ref.where('user', '==', this.profile?.uid)).valueChanges()
+                .pipe(
+                    switchMap(x => {
+                        return of(x.map(post => {
+                            this.db.collection('users').doc<User>(post.user).valueChanges()
+                            .pipe(
+                                take(1),
+                                switchMap(x => of(x))
+                            ).subscribe(user => {
+                                post.userRef$ = user
+                            })
+
+                            this.db.doc<Likes>('likes/'+post.pid+'_'+post.user).valueChanges()
+                            .pipe(
+                                take(1),
+                                switchMap(x => of(x))
+                            ).subscribe(likes => {
+                                post.likeRef$ = likes
+                            })
+
+                            this.db.collection<Games>('games', ref => ref.where('baseURL', "==", post.contentFrom).limit(1)).valueChanges()
+                            .pipe(
+                                take(1),
+                                switchMap(x => of(...x.map(x => x)))
+                            ).subscribe(games => {
+                                post.gameRef$ = games
+                            })
+                            return post
+                        })
+                        .sort((a, b) => Number(b.date) - Number(a.date)))
+                    })
+                ).subscribe(data => {
+                    this.posts = data
+                })
             })
         })
         
+    }
+
+    postIdentity(index: number, post: Posts) {
+        return post.pid
+    }
+
+    likeUnlikePost(id: string){
+        this.postRef.likeUnlike(id)
     }
 
     dateJoined(date: number){
@@ -49,6 +96,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.$userSubscription.unsubscribe()
     }
 }

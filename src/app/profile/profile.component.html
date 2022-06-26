@@ -1,8 +1,8 @@
 
 <div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
-    <b>{{title}}</b>
+    <b>{{profile?.username || this.route.snapshot.params['username']}}'s Profile</b>
 </div>
-<div class="app-profile-container">
+<div class="app-profile-container app-border-bottom">
     <a class="app-profile-header w-100">
         <div class="app-profile-header-container">
             <div class="app-profile-header-banner" [style.background-image]="'url(https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/users%2Fbanner.png?alt=media&token=23218500-7914-4932-92ce-55fbcf2716eb)'"></div>
@@ -34,8 +34,66 @@
             <mat-icon class="mr-1" matSuffix>calendar_month</mat-icon> Joined {{dateJoined(date)}}
         </div>
     </div>
-    <div *ngIf="" class="app-profile-user-not-found text-center my-5">
-        <h1 class="lead font-weight-bold">User Not Found!</h1>
-        <p class="lead">Ty searching another.</p>
-    </div>
 </div>
+<div *ngIf="profile == null && profile == undefined" class="app-profile-user-not-found text-center my-5">
+    <h1 class="lead font-weight-bold">User Not Found!</h1>
+    <p class="lead">Try searching another.</p>
+</div>
+<ng-container *ngIf="posts as posts">
+    <div *ngIf="posts.length > 0; else nonepost" class="app-main-post-content w-100">
+        <div *ngFor="let post of posts; trackBy: postIdentity" class='app-user-post row justify-content-center pt-3 pb-1 m-0 app-border-bottom'>
+            <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                <img class="rounded-circle" [src]="post.userRef$?.avatar ? post.userRef$?.avatar : post.userRef$?.defaultAvatar" width="50">
+            </div>
+            <div class="app-main-post-container col-10 h-100 pb-1 pr-0">
+                <div class="app-main-post-data d-flex flex-row align-items-center w-100">
+                    <span class="mr-1 text-truncate"><b>{{post.userRef$?.displayName ? post.userRef$?.displayName : post.userRef$?.username}}</b></span>
+                    <mat-chip-list>
+                        <mat-chip class="app-post-game" [style.background-color]="post.gameRef$?.bgColor">
+                            <img matChipAvatar [src]="post.gameRef$?.icon">{{post.gameRef$?.name}}
+                        </mat-chip>
+                    </mat-chip-list>
+                    <!-- <span class="text-muted text-truncate">@{{post.userRef$?.username}}</span> -->
+                    <span class="mx-1 text-muted">—</span>
+                    <span class="text-muted">{{global.refDate(post?.date!) | timeAgo}}</span>
+                    <div *ngIf="post.userRef$?.uid === global.user?.uid" class="ml-auto">
+                        <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted">more_horiz</mat-icon>
+                        <mat-menu class="post-menu" #postMenu="matMenu" xPosition="before">
+                            <button (click)="global.openPostDeleteDialog(post)" class="text-muted" mat-menu-item>
+                                <mat-icon class="material-icons-rounded" [inline]="true" matPrefix>delete</mat-icon> Delete
+                            </button>
+                        </mat-menu>
+                    </div>
+                </div>
+                <div *ngIf="post?.description" class="app-main-post-description pt-1 pb-1">{{post?.description}}</div>
+                <div *ngIf="post?.attachment" class="app-main-post-attachment mt-1">
+                    <img draggable="true" [src]="post?.attachment">
+                </div>
+                <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-3">
+                    <button (click)="likeUnlikePost(post?.pid!)" class="bg-transparent mx-2" mat-mini-fab>
+                        <mat-icon [ngClass]="post.likeRef$ ? 'material-icons-rounded' : 'material-icons-outlined'" [inline]="true" color="primary" matPrefix>thumb_up</mat-icon><span>{{post?.likesCount! > 0 ? global.abbrNum(post?.likesCount, 2) : ''}}</span>
+                    </button>
+                    <button [autofocus]="false" (click)="global.openCommentDialog(post, global?.user!)" class="bg-transparent mx-2" mat-mini-fab>
+                        <mat-icon class="material-icons-outlined" [inline]="true" color="primary">mode_comment</mat-icon><span>{{post?.commentsCount! > 0 ? global.abbrNum(post?.commentsCount, 2) : ''}}</span>
+                    </button>
+                    <button class="bg-transparent mx-2" mat-mini-fab>
+                        <mat-icon [inline]="true" color="primary">share</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 app-border-bottom"></div>
+    <div *ngIf="posts.length > 5" class="w-100 text-center my-5">
+        <h1 class="text-muted lead">You're all Caught Up</h1>
+        <p class="text-muted">You've seen all new post from the past 48 hours.</p>
+    </div>
+</ng-container>
+
+<ng-template #nonepost class="app-main-post-content w-100">
+    <img class="w-100 mt-5 mb-3" src="./../../assets/placeholders/no-content.png" draggable="false">
+    <div class="w-100 text-center">    
+        <h1 class="text-muted">Nothing!!</h1>
+        <p>Create your first posts!</p>
+    </div>
+</ng-template>
