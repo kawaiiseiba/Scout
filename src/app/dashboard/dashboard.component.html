@@ -83,7 +83,7 @@
         </div>
     </mat-drawer>
 
-    <mat-drawer-content class="app-container-right-content flex-grow-1 ml-0">
+    <mat-drawer-content class="app-container-right-content flex-grow-1 ml-0" (scroll)="fixSelectGame($event)">
         <div class="app-container-content d-flex justify-content-between h-100">
             <!-- <router-outlet name="messages"></router-outlet> -->
             <div class="app-container-main app-border-right">
@@ -91,7 +91,7 @@
                     <mat-progress-bar mode="indeterminate" *ngIf="subloader"></mat-progress-bar>
                 </router-outlet>
             </div>
-            <div class="app-container-right-nav h-100 d-flex flex-column">
+            <div #rightContent class="app-container-right-nav d-flex flex-column">
                 <div class="app-container-right-nav-content sticky-top mr-auto app-border-bottom">
                     <div class="app-right-nav-search w-100">
                         <mat-form-field class="mt-2 w-100 search" appearance="fill">
@@ -100,17 +100,18 @@
                             <mat-icon class="mr-2" color="accent" matPrefix>search</mat-icon>
                         </mat-form-field>
                     </div>
-                    <div *ngIf="(selectedGame$ | async)" class="app-right-game-list">
-                        <div *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-3" [style.background-image]="'url('+game.banner+')'" (click)="selectGame(game.baseURL)">
-                            <div class="game-select-background d-flex w-100 h-50 align-self-end px-3" [style.background-color]="game?.bgColor">
-                                <img class="game-select-icon mr-3" [style.border-color]="game?.bgColor" [src]="game.icon" width="50" height="50">
-                                <div class="game-select-data w-100">
-                                    <h1 class="game-select-title text-truncate">{{game.name}}</h1>
-                                    <div class="game-select-info text-white">
-                                        <span class="mr-1">Users: 30k</span>•
-                                        <span class="mr-1">Organizations: 500</span>•
-                                        <span class="mr-1">Teams: 10k</span>
-                                    </div>
+                </div>
+                
+                <div #gameSelectList *ngIf="(selectedGame$ | async)" class="app-container-right-nav-content app-right-game-list mr-auto">
+                    <div *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-3" [style.background-image]="'url('+game.banner+')'" (click)="selectGame(game.baseURL)">
+                        <div class="game-select-background d-flex w-100 h-50 align-self-end px-3" [style.background-color]="game?.bgColor">
+                            <img class="game-select-icon mr-3" [style.border-color]="game?.bgColor" [src]="game.icon" width="50" height="50">
+                            <div class="game-select-data w-100">
+                                <h1 class="game-select-title text-truncate">{{game.name}}</h1>
+                                <div class="game-select-info text-white">
+                                    <span class="mr-1">Users: 30k</span>•
+                                    <span class="mr-1">Organizations: 500</span>•
+                                    <span class="mr-1">Teams: 10k</span>
                                 </div>
                             </div>
                         </div>

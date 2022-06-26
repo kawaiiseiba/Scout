@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef, HostListener } from '@angular/core';
 import {AbstractControl, Form, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { Router, RouterEvent, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription, switchMap, take } from 'rxjs';
@@ -16,6 +16,23 @@ import { PostsService } from '../services/posts.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+
+    @ViewChild('rightContent') rightContent: ElementRef
+    @ViewChild('gameSelectList') gameSelectList: ElementRef
+
+    @HostListener("scroll", ['$event'])
+    fixSelectGame($event: Event) {
+        const scrollContent = ($event.target as Element)
+        const scrollPosition = scrollContent.scrollTop
+        const contentHeight = scrollContent.clientHeight
+
+        const rightNav = this.rightContent.nativeElement.offsetHeight
+
+        const gameContent = this.gameSelectList.nativeElement
+
+        if(contentHeight >= rightNav) return
+        console.log(scrollPosition === Math.abs(scrollPosition-rightNav))
+    }
 
     
     subloader: boolean
