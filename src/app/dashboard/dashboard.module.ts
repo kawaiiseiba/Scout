@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { DashboardComponent, GameListDialog } from './dashboard.component';
+import { CommentDialog, DashboardComponent, GameListDialog, PostDeleteDialog } from './dashboard.component';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';  
 
@@ -16,6 +16,9 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { GameSelectGuard } from '../guard/game-select.guard';
+import { NgDatePipesModule } from 'ngx-pipes';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
 
 const routes: Routes = [
 	{
@@ -23,6 +26,11 @@ const routes: Routes = [
         canActivate: [GameSelectGuard],
         // canActivateChild: [GameSelectGuard],
         children: [
+            {
+                path: '',
+                redirectTo: 'home',
+                pathMatch: 'full'
+            },
             {
                 path: 'home',
                 loadChildren: () => import('../home/home.module').then(m => m.HomeModule),
@@ -53,7 +61,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [DashboardComponent, GameListDialog],
+  declarations: [DashboardComponent, GameListDialog, PostDeleteDialog, CommentDialog],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -68,7 +76,11 @@ const routes: Routes = [
     MatProgressBarModule,
     MatBadgeModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    NgDatePipesModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatChipsModule
   ],
   providers: [DashboardComponent],
 })

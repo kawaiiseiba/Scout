@@ -9,9 +9,9 @@
                     </a>
                 </div>
                 <div class="app-nav mb-3">
-                    <button *ngIf="selectedGame" class="w-100 py-3 my-1 text-truncate" mat-button [disabled]="!user" [disableRipple]="true" [style.background-color]="selectedGame?.bgColor">
-                        <img class="select-game-icon mr-2" [src]="selectedGame.icon" matSuffix>
-                        <span>{{selectedGame.name}}</span>
+                    <button *ngIf="(selectedGame$ | async) as game" class="w-100 py-3 my-1 text-truncate" mat-button [disableRipple]="true" [style.background-color]="game?.bgColor">
+                        <img class="select-game-icon mr-2" [src]="game.icon" matSuffix>
+                        <span>{{game.name}}</span>
                     </button>
                     <div class="w-100 app-border-bottom my-2"></div>
                     <a [disabled]="!user" routerLink="./home" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
@@ -48,8 +48,8 @@
                 </div>
                 <div class="w-100 app-border-bottom"></div>
                 <div class='app-profile-logged-in mt-auto my-3'>
-                    <button routerLink="/" *ngIf="!user" class="btn-danger pink darken-1 w-100 p-2 m-0 rounded-pill" mat-stroked-button>SIGN-IN | SIGN-UP</button>
-                    <div *ngIf="user !== null && user !== undefined" role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
+                    <button routerLink="/" *ngIf="!(user$ | async)" class="btn-danger pink darken-1 w-100 p-2 m-0 rounded-pill" mat-stroked-button>SIGN-IN | SIGN-UP</button>
+                    <div *ngIf="(user$ | async) as user" role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
                         <div class="col-2 app-profile-img m-0 p-0" matTooltip="You have 9 Notification" matTooltipClass="btn-danger pink darken-1" matBadge="8" matBadgeSize="medium" matBadgePosition="after" matBadgeColor="primary" matBadgeOverlap="true">
                             <img class="rounded-circle" [src]="user.avatar ? user.avatar : user.defaultAvatar" width="40">
                         </div>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <mat-menu #profileMenu="matMenu" yPosition="above" class="bg-dark profile-menu">
-                        <a routerLink="./kawaiiseiba23" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
+                        <a [routerLink]="'./'+user?.username" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
                             <mat-icon class="mb-1 mr-3" matPrefix>person</mat-icon>Profile
                         </a>
                         <a routerLink="./notifications" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
@@ -86,7 +86,7 @@
     <mat-drawer-content class="app-container-right-content flex-grow-1 ml-0">
         <div class="app-container-content d-flex justify-content-between h-100">
             <!-- <router-outlet name="messages"></router-outlet> -->
-            <div class="app-container-main h-100 app-border-right">
+            <div class="app-container-main app-border-right">
                 <router-outlet>
                     <mat-progress-bar mode="indeterminate" *ngIf="subloader"></mat-progress-bar>
                 </router-outlet>
@@ -100,7 +100,7 @@
                             <mat-icon class="mr-2" color="accent" matPrefix>search</mat-icon>
                         </mat-form-field>
                     </div>
-                    <div *ngIf="selectedGame" class="app-right-game-list">
+                    <div *ngIf="(selectedGame$ | async)" class="app-right-game-list">
                         <div *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-3" [style.background-image]="'url('+game.banner+')'" (click)="selectGame(game.baseURL)">
                             <div class="game-select-background d-flex w-100 h-50 align-self-end px-3" [style.background-color]="game?.bgColor">
                                 <img class="game-select-icon mr-3" [style.border-color]="game?.bgColor" [src]="game.icon" width="50" height="50">

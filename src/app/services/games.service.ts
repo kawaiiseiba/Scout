@@ -37,12 +37,16 @@ export class GamesService {
         return (await this.db.collection<Games>('games').ref.where('baseURL', '==', url).get()).docs.length > 0
     }
 
-    async findByURL(id: string) {
-        return await this.db.collection<Games>('games').ref.where('baseURL', '==', id).get().then(data => data.docs)
+    findByURL(id: string) {
+        return this.db.collection<Games>('games', ref => ref.where('baseURL', '==', id)).valueChanges()
+    }
+
+    findById(id: string) {
+        return this.db.doc<Games>('games/'+id).valueChanges()
     }
     
     addGame(data: Games){
-        this.gameList = this.db.collection('games')
+        this.gameList = this.db.collection<Games>('games')
         this.gameList.add(data)
     }
 

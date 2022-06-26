@@ -1,8 +1,8 @@
 
 <div class="d-flex justify-content-center align-items-center app-border-bottom" mat-dialog-title>
     <mat-button-toggle-group (change)="isSignin = !isSignin">
-        <mat-button-toggle checked="true" value="bold">SIGN-IN</mat-button-toggle>
-        <mat-button-toggle value="italic">SIGN-UP</mat-button-toggle>
+        <mat-button-toggle class="bg-transparent" checked="true" value="bold">SIGN-IN</mat-button-toggle>
+        <mat-button-toggle class="bg-transparent" value="italic">SIGN-UP</mat-button-toggle>
     </mat-button-toggle-group>
 </div>
 <mat-dialog-content *ngIf="isSignin" class="mat-typography d-flex justify-content-center align-items-center flex-column">

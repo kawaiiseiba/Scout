@@ -17,6 +17,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 
 import { AuthService } from './services/auth.service';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomReuseStrategy } from './app-reuse-strategy';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { AuthService } from './services/auth.service';
   ],
   providers: [
     AuthService,
-    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
+    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher},
+    // {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
   ],
   bootstrap: [AppComponent]
 })

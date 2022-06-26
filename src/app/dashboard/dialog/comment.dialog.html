@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>Comment</h2>
+<mat-dialog-content class="mat-typography">
+</mat-dialog-content>
+<div class='app-user-post row justify-content-center pt-3 pb-1 m-0'>
+    <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+        <img class="rounded-circle" [src]="data.post.userRef$?.avatar ? data.post.userRef$?.avatar : data.post.userRef$?.defaultAvatar" width="50">
+    </div>
+    <div class="app-main-post-container col-11 h-100 pl-3 py-1 pr-0">
+        <div class="app-main-post-data d-flex flex-row w-100">
+            <span class="mr-1 text-truncate"><b>{{data.post.userRef$?.displayName ? data.post.userRef$?.displayName : data.post.userRef$?.username}}</b></span>
+            <mat-chip-list>
+                <mat-chip class="app-post-game">
+                    <img matChipAvatar [src]="data.post.gameRef$?.icon">{{data.post.gameRef$?.name}}
+                </mat-chip>
+            </mat-chip-list>
+            <!-- <span class="text-muted text-truncate">@{{$any(post.userRef$ | async)?.username}}</span> -->
+            <span class="mx-1 text-muted">—</span>
+            <span class="text-muted">{{refDate(data.post?.date) | timeAgo}}</span>
+        </div>
+        <div class="app-main-post-description pt-1 pb-1 text-truncate"><span *ngIf="data.post?.description">{{data.post?.description}}</span> <a target="_blank" *ngIf="data.post?.attachment" [href]="data.post?.attachment" [matTooltip]="data.post?.attachment">{{data.post?.attachment}}</a></div>
+    </div>
+    <div class="app-comoment-reference row align-items-center">
+        <div class="col-1 h-100">
+            <div class="app-comment-vertical-line"></div>
+        </div>
+        <div class="col-11">
+            <span>Adding comments to <a [href]="(data.route.url | async)+'/'+data.post.userRef$?.username" target="_blank" class="link-danger">@{{data.post.userRef$?.username}}</a></span> 
+        </div>
+    </div>
+</div>
+<div class="app-main-post row justify-content-center m-0 app-border-bottom">
+    <div class="app-main-post-profile col-1 m-0 p-0">
+        <img class="rounded-circle" [src]="data.user?.avatar ? data.user?.avatar : data.user?.defaultAvatar" width="50">
+    </div>
+    <div class="col-11">
+        <form #postForm="ngForm" autocomplete="off" autocapitalize="off">
+            <mat-form-field class="w-100 post-specific py-1" appearance="fill">
+                <mat-label>What's on your mind...</mat-label>
+                <textarea [(ngModel)]="description" [ngModelOptions]="{standalone: true}" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="25"></textarea>
+            </mat-form-field>
+            <div class="row app-post-file-submit-options">
+                <div *ngIf="filePrev" class="w-100 my-1">
+                    <img class="app-post-file-preview" [src]="filePrev">
+                    <button (click)="file.value=''; filePrev='';" class="app-post-file-preview-remove btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                        <mat-icon width="15">close</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<mat-dialog-actions align="end">
+    <div class="app-post-file-opt d-flex justify-content-between">
+        <div>
+            <input #file class="d-none" type="file" (change)="upload($event)" accept="*.png.jpg">
+            <button (click)="file.click()" [disabled]="isPosting" class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                <mat-icon width="15">image</mat-icon>
+            </button>
+        </div>
+        <button (click)="addComment(data.post?.pid); isPosting = true" [disabled]="(!description && !file.value) || isPosting" class="my-1 rounded-pill" color="primary" type="button" mat-raised-button>Comment</button>
+    </div>
+</mat-dialog-actions>

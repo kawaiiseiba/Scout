@@ -1,1 +1,41 @@
-<p>profile works!</p>
+
+<div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
+    <b>{{title}}</b>
+</div>
+<div class="app-profile-container">
+    <a class="app-profile-header w-100">
+        <div class="app-profile-header-container">
+            <div class="app-profile-header-banner" [style.background-image]="'url(https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/users%2Fbanner.png?alt=media&token=23218500-7914-4932-92ce-55fbcf2716eb)'"></div>
+        </div>
+    </a>
+    <div class="app-profile-content p-3">
+        <div class="app-profile-field d-flex justify-content-center">
+            <a class="app-profile-avatar-container w-25">
+                <img class="app-profile-avatar w-100 h-100" [src]="profile?.avatar ? profile?.avatar : '../../../assets/placeholders/default.png'" alt="">
+            </a>
+            <!-- <button class="rounded-pill px-4" type="button" mat-raised-button>Edit Profile</button> -->
+        </div>
+        <div class="app-profile-user-info my-3 d-flex justify-content-center text-center">
+            <div class="mr-1">
+                <div>{{profile?.displayName ? profile?.displayName : profile?.username}}</div>
+                <div class="lead">@{{profile?.username || this.route.snapshot.params['username']}}</div>
+            </div>
+            <button *ngIf="user?.uid === profile?.uid" class="text-dark" mat-mini-fab><mat-icon matSuffix>edit</mat-icon></button>
+        </div>
+        <div *ngIf="profile?.bio as bio; else noBio" class="app-profile-user-bio my-3 d-flex justify-content-center">
+            <div #bio class="lead w-100 text-center p-2" role="textarea">{{bio}}</div> 
+        </div>
+        <ng-template #noBio>
+            <div class="app-profile-user-bio my-3 d-flex justify-content-center">
+                <a class="lead text-danger">Add bio</a>
+            </div>
+        </ng-template>
+        <div *ngIf="profile?.joined as date" class="app-profile-user-date text-muted d-flex align-items-center justify-content-center">
+            <mat-icon class="mr-1" matSuffix>calendar_month</mat-icon> Joined {{dateJoined(date)}}
+        </div>
+    </div>
+    <div *ngIf="" class="app-profile-user-not-found text-center my-5">
+        <h1 class="lead font-weight-bold">User Not Found!</h1>
+        <p class="lead">Ty searching another.</p>
+    </div>
+</div>

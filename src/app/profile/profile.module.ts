@@ -7,6 +7,7 @@ import { RouterModule, Routes, ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { NgDatePipesModule } from 'ngx-pipes';
 
 const routes: Routes = [
 	{
@@ -21,7 +22,8 @@ const routes: Routes = [
       RouterModule.forChild(routes),
       MatButtonModule,
       MatInputModule,
-      MatIconModule
+      MatIconModule,
+      NgDatePipesModule
     ]
 })
 

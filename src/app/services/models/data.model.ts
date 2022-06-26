@@ -1,3 +1,5 @@
+import { Observable } from "rxjs"
+
 type MessageRef = { messageRef: string }
 type NotificationRef = { notificationRef: string }
 type ProstringRef = { prostringRef: string }
@@ -15,7 +17,7 @@ type NewsRef = { newRef: string }
 type TierRef = { icon: string, mark: number}
 
 export interface Admins {
-    dateGranted: Date,
+    dateGranted: number,
     isAdmin: boolean,
     userRef:string 
 }
@@ -29,7 +31,16 @@ export interface Chats {
 }
 
 export interface Comments {
-    userRef: string
+    cid?: string,
+    attachment?: Blob | string | undefined,
+    commentsCount?: number,
+    contentFrom?: string,
+    description?: string | undefined,
+    likesCount?: number,
+    user?: string,
+    reference?: string,
+    referenceType?: string,
+    date?: number
 }
 
 export interface Games {
@@ -56,7 +67,7 @@ export interface Games {
 }
 
 export interface Likes {
-    userRef: string
+    user: string | undefined
 }
 
 export interface Members {
@@ -67,7 +78,7 @@ export interface Members {
 }
 
 export interface Messages {
-    dateSent: Date,
+    dateSent: number,
     description: string,
     userRef: string 
 }
@@ -75,7 +86,7 @@ export interface Messages {
 export interface News {
     banner?: string,
     content: string,
-    dateAdded: Date,
+    dateAdded: number,
     description?: string,
     gameRef: string,
     publishedBy: string,
@@ -83,7 +94,7 @@ export interface News {
 }
 
 export interface Notifications {
-    dateNotified: Date,
+    dateNotified: number,
     type: string,
     userRef: string
 }
@@ -105,21 +116,38 @@ export interface Organization {
 }
 
 export interface Posts {
-    attachment?: string,
-    comments?: {},
-    commentsCount: number,
-    description?: string,
-    likes?: {},
-    likesCount: number,
-    shares?: {},
+    pid?: string,
+    attachment?: Blob | string | undefined,
+    commentsCount?: number,
+    contentFrom?: string,
+    description?: string | undefined,
+    likesCount?: number,
     sharesCount?: number,
-    user: string,
-    date: Date
+    user?: string,
+    userRef$?: User | undefined,
+    likeRef$?: Likes | undefined,
+    gameRef$?: Games | undefined,
+    date?: number
+}
+
+export interface PostClarity {
+    pid?: string,
+    attachment?: Blob | string | undefined,
+    commentsCount?: number,
+    contentFrom?: string,
+    description?: string | undefined,
+    likesCount?: number,
+    sharesCount?: number,
+    user?: string,
+    userRef$?: User | undefined,
+    likeRef$?: Likes | undefined,
+    gameRef$?: Games | undefined,
+    date?: number,
 }
 
 export interface Profile {
     bio?: string,
-    dateAdded: Date,
+    dateAdded: number,
     gameRef: string,
     ign: string,
     rankRef: string
@@ -149,14 +177,14 @@ export interface Shares {
 }
 
 export interface Teamates {
-    dateJoined: Date,
+    dateJoined: number,
     teamRef: string,
     userRef: string
 }
 
 export interface Teams {
     bio?: string,
-    createdAt: Date,
+    createdAt: number,
     description?: string,
     gameRef: string,
     icon?: string,
@@ -173,13 +201,14 @@ export interface User {
     bio?: string,
     contactNumber?: string,
     defaultAvatar?: string,
+    displayName?: string,
     email?: string,
-    joined?: Date,
+    joined?: number,
     messages?: {},
     notifications?: {},
     organizationRef?: string,
     postsRef?: {},
-    teams?: {}},
+    teams?: {},
     selectedGame?: string,
     username?: string,
     uid?: string

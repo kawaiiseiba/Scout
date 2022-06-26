@@ -2,73 +2,94 @@
 <div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
     <b>{{title}}</b>
 </div>
-<div class="app-main-post row justify-content-center py-4 m-0 app-border-bottom">
+<div *ngIf="global.user" class="app-main-post row justify-content-center py-4 m-0 app-border-bottom">
     <div class="app-main-post-profile col-1 m-0 p-0">
-        <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
+        <img class="rounded-circle" [src]="global.user.avatar ? global.user?.avatar : global.user?.defaultAvatar" width="50">
     </div>
     <div class="col-10">
         <form #postForm="ngForm" autocomplete="off" autocapitalize="off">
             <mat-form-field class="w-100 post-specific py-1" appearance="fill">
                 <mat-label>What's on your mind...</mat-label>
-                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="25"></textarea>
+                <textarea [(ngModel)]="description" [ngModelOptions]="{standalone: true}" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="25"></textarea>
             </mat-form-field>
             <div class="row app-post-file-submit-options">
                 <div *ngIf="filePrev" class="w-100 my-1">
-                    <img class="app-post-file-preview w-100" [src]="filePrev">
-                    <button (click)="file.value=''; filePrev=''" class="app-post-file-preview-remove btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                    <img class="app-post-file-preview" [src]="filePrev">
+                    <button (click)="file.value=''; filePrev='';" class="app-post-file-preview-remove btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
                         <mat-icon width="15">close</mat-icon>
                     </button>
                 </div>
                 <div class="col-9 app-post-file-opt">
                     <input #file class="d-none" type="file" (change)="upload($event)" accept="*.png.jpg">
-                    <button (click)="file.click()" class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                    <button (click)="file.click()" [disabled]="isPosting" class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
                         <mat-icon width="15">image</mat-icon>
                     </button>
                 </div>
                 <div class="col-3">
-                    <button class="w-100 my-1 rounded-pill" color="primary" type="button" mat-raised-button>Post</button>
+                    <button (click)="postContent(); isPosting = true" [disabled]="(!description && !file.value) || isPosting" class="w-100 my-1 rounded-pill" color="primary" type="button" mat-raised-button>Post</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<div class="app-main-post-update py-3 d-flex justify-content-center align-item-center app-border-bottom">
+<div *ngIf="false" class="app-main-post-update py-3 d-flex justify-content-center align-item-center app-border-bottom">
     <a href="/">Show <span>7</span> new Post</a>
 </div>
-<div class="app-main-post-content w-100">
-    <div class='app-user-post row justify-content-center py-2 m-0 app-border-bottom'>
-        <div class="app-main-post-profile h-100 col-1 m-0 p-0">
-            <img class="rounded-circle" src="../../assets/img/image_2021-10-21_201723.png" width="50">
-        </div>
-        <div class="app-main-post-container col-10 h-100 py-1 pr-0">
-            <div class="app-main-post-data d-flex flex-row w-100">
-                <span class="mr-1"><b>kawaiiseiba</b></span>
-                <span class="text-muted">@kawaiiseiba23</span>
-                <span class="mx-1">•</span>
-                <span class="text-muted">3hrs ago</span>
-                <div class="ml-auto">
-                    <mat-icon class="align-self-center">more_horiz</mat-icon>
+<ng-container *ngIf="posts$ as posts">
+    <div *ngIf="posts.length > 0; else nonepost" class="app-main-post-content w-100">
+        <div *ngFor="let post of posts; trackBy: postIdentity" class='app-user-post row justify-content-center pt-3 pb-1 m-0 app-border-bottom'>
+            <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                <img class="rounded-circle" [src]="post.userRef$?.avatar ? post.userRef$?.avatar : post.userRef$?.defaultAvatar" width="50">
+            </div>
+            <div class="app-main-post-container col-10 h-100 pb-1 pr-0">
+                <div class="app-main-post-data d-flex flex-row align-items-center w-100">
+                    <span class="mr-1 text-truncate"><b>{{post.userRef$?.displayName ? post.userRef$?.displayName : post.userRef$?.username}}</b></span>
+                    <mat-chip-list>
+                        <mat-chip class="app-post-game" [style.background-color]="post.gameRef$?.bgColor">
+                            <img matChipAvatar [src]="post.gameRef$?.icon">{{post.gameRef$?.name}}
+                        </mat-chip>
+                    </mat-chip-list>
+                    <!-- <span class="text-muted text-truncate">@{{post.userRef$?.username}}</span> -->
+                    <span class="mx-1 text-muted">—</span>
+                    <span class="text-muted">{{global.refDate(post?.date!) | timeAgo}}</span>
+                    <div *ngIf="post.userRef$?.uid === global.user?.uid" class="ml-auto">
+                        <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted">more_horiz</mat-icon>
+                        <mat-menu class="post-menu" #postMenu="matMenu" xPosition="before">
+                            <button (click)="global.openPostDeleteDialog(post)" class="text-muted" mat-menu-item>
+                                <mat-icon class="material-icons-rounded" [inline]="true" matPrefix>delete</mat-icon> Delete
+                            </button>
+                        </mat-menu>
+                    </div>
                 </div>
-            </div>
-            <div class="app-main-post-description py-2">In the beginning there is silence...</div>
-            <div class="app-main-post-attachment">
-                <img class="w-100" src="../../assets/img/es-04-media-hd.jpg.asset.1611648734779.jpg">
-            </div>
-            <div class="app-main-post-interaction row justify-content-center align-item-center mt-1 mr-1">
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">thumb_up</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">autorenew</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">comment</mat-icon>
-                </button>
-                <button class="col-3" mat-button>
-                    <mat-icon [inline]="true" color="primary">share</mat-icon>
-                </button>
+                <div *ngIf="post?.description" class="app-main-post-description pt-1 pb-1">{{post?.description}}</div>
+                <div *ngIf="post?.attachment" class="app-main-post-attachment mt-1">
+                    <img draggable="true" [src]="post?.attachment">
+                </div>
+                <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-3">
+                    <button (click)="likeUnlikePost(post?.pid!)" class="bg-transparent mx-2" mat-mini-fab>
+                        <mat-icon [ngClass]="post.likeRef$ ? 'material-icons-rounded' : 'material-icons-outlined'" [inline]="true" color="primary" matPrefix>thumb_up</mat-icon><span>{{post?.likesCount! > 0 ? global.abbrNum(post?.likesCount, 2) : ''}}</span>
+                    </button>
+                    <button [autofocus]="false" (click)="global.openCommentDialog(post, global?.user!)" class="bg-transparent mx-2" mat-mini-fab>
+                        <mat-icon class="material-icons-outlined" [inline]="true" color="primary">mode_comment</mat-icon><span>{{post?.commentsCount! > 0 ? global.abbrNum(post?.commentsCount, 2) : ''}}</span>
+                    </button>
+                    <button class="bg-transparent mx-2" mat-mini-fab>
+                        <mat-icon [inline]="true" color="primary">share</mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    
-</div>
+    <div class="w-100 app-border-bottom"></div>
+    <div *ngIf="posts.length > 5" class="w-100 text-center my-5">
+        <h1 class="text-muted lead">You're all Caught Up</h1>
+        <p class="text-muted">You've seen all new post from the past 48 hours.</p>
+    </div>
+</ng-container>
+
+<ng-template #nonepost class="app-main-post-content w-100">
+    <img class="w-100 mt-5 mb-3" src="./../../assets/placeholders/no-content.png" draggable="false">
+    <div class="w-100 text-center">    
+        <h1 class="text-muted">Nothing!!</h1>
+        <p>Create your first posts!</p>
+    </div>
+</ng-template>

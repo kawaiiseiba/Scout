@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
-import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { Observable, of, Subscription, switchMap, take } from 'rxjs';
 import { AccountService } from '../services/account.service';
 
 import { AuthService } from '../services/auth.service';
@@ -34,9 +34,8 @@ export class GameSelectGuard implements CanActivate, CanActivateChild, CanLoad {
             const baseURL = router.params['game_url']
             const matchURL = await this.gameRef.findMatch(baseURL)
             if(baseURL !== 'game' && !matchURL) return this.route.navigate(['/'])
-            this.$userSubscription = this.auth.user$.subscribe(data =>{
-                if(!data) return resolve(true)
-                if(baseURL !== 'game' && (baseURL === data?.selectedGame) && matchURL) return resolve(true)
+            this.auth.user$.pipe(take(1)).subscribe(data =>{
+                if(data === null && data === undefined) return resolve(true)
                 if(baseURL !== 'game' && (baseURL != data?.selectedGame) && matchURL) this.accountRef.selectedGame({ uid: data?.uid, selectedGame: baseURL})
             })
             return resolve(true)

@@ -47,7 +47,14 @@ $dark-mode: #000;
 
 
 .dark-backdrop{
-    background: rgb(0 0 0 / 85%) !important;
+    background: rgb(86 97 116 / 52%) !important;
+}
+
+.dark-panel{
+    mat-dialog-container {
+        background-color: black;
+        border-radius: 20px;
+    }
 }
   
 .unpassword:hover{

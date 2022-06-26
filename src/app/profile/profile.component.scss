@@ -1,0 +1,58 @@
+$theme-color: #d81b60;
+
+.app-profile-header-container, .app-profile-header-banner{
+    height: 200px;
+}
+
+.app-profile-header-banner{
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.app-profile-avatar-container{
+    margin-top: -15%;
+    
+    img{
+        border-radius: 50%;
+        border: 4px solid black;
+        box-shadow: rgb(255 255 255 / 3%) 0px 0px 2px inset;
+    }
+}
+
+.app-profile-user-info{
+    :nth-child(1){
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    :nth-child(2) {
+        color: rgb(113, 118, 123);
+        font-size: 16px;
+    }
+}
+
+.app-profile-user-bio, .app-profile-user-date{
+    font-size: 14px;
+}
+
+.app-profile-user-info{
+    button{
+        transform: scale(.75);
+        margin-right: -50px;
+    }
+}
+
+.app-profile-user-bio {
+    font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+
+    & > div{
+        white-space: pre-wrap;
+    }
+
+    & > div.edited[contenteditable]:focus, & > div.edited[contenteditable]:focus-within, & > div.edited[contenteditable]:focus-visible {
+        border-radius: 5px;
+        outline: $theme-color solid 1px !important;
+    }
+}

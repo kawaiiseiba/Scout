@@ -16,7 +16,11 @@ export class AccountService {
     ) {
     }
 
-    async createAccount({ uid, email, banned = false, joined = new Date()}: User) {
+    getAccountByUsername(username: string) {
+        return this.db.collection<User>('users', ref => ref.where('username', "==", username).limit(1)).valueChanges()
+    }
+
+    async createAccount({ uid, email, banned = false, joined = Date.now()}: User) {
         try{
             const data = {
                 uid, email, banned, joined,

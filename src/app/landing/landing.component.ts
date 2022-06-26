@@ -118,7 +118,8 @@ export class LandingComponent implements OnInit, OnDestroy {
         this.dialog.open(SigninSignupDialog, {
             width: '500px',
             // height: '60%',
-            backdropClass: 'dark-backdrop'
+            backdropClass: 'dark-backdrop',
+            panelClass: 'dark-panel'
         })
     }
 
