@@ -204,7 +204,6 @@ export interface User {
     avatar?: string,
     banned?: boolean,
     banner?: string,
-    bio?: string,
     contactNumber?: string,
     defaultAvatar?: string,
     displayName?: string,

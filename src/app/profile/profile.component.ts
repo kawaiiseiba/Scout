@@ -3,7 +3,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { RouterModule, Routes, ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { Games, Likes, Posts, User } from '../services/models/data.model';
+import { Games, Likes, Posts, Profile, User } from '../services/models/data.model';
 import { AuthService } from '../services/auth.service';
 import { of, Subscription, switchMap, take, Timestamp } from 'rxjs';
 import { AccountService } from '../services/account.service';
@@ -24,6 +24,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     posts: Posts[]
 
+    gameProfile: Profile
+
     constructor(
         private titleService: Title, 
         public route: ActivatedRoute, 
@@ -39,6 +41,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.account.getAccountByUsername(this.route.snapshot.params['username']).pipe(take(1), switchMap(x => of(...x.map(user => user))))
             .subscribe(data => {
                 this.profile = userAuthenticated?.uid === data.uid ? userAuthenticated : data
+
+                this.db.collection<Games>('games', ref => ref.where('baseURL', '==', global._routeURL)).valueChanges()
+                .pipe(
+                    take(1),
+                    switchMap(x => of(...x.map(x => x)))
+                ).subscribe(game=> {
+                    console.log(game.id+'_'+this.profile?.uid)
+                    this.db.doc<Profile>('profiles/'+game.id+'_'+this.profile?.uid).valueChanges()
+                    .pipe(
+                        take(1),
+                        switchMap(x => of(x))
+                    ).subscribe(gameProfile => {
+                        console.log(gameProfile)
+                        this.gameProfile = gameProfile!
+                    })
+                })
 
                 this.db.collection<Posts>('posts', ref => ref.where('user', '==', this.profile?.uid).where('contentFrom', "==", global._routeURL)).valueChanges()
                 .pipe(

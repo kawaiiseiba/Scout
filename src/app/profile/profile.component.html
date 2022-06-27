@@ -22,9 +22,19 @@
             </div>
             <button *ngIf="user?.uid === profile?.uid" class="text-dark" mat-mini-fab><mat-icon matSuffix>edit</mat-icon></button>
         </div>
-        <div *ngIf="profile?.bio as bio; else noBio" class="app-profile-user-bio my-3 d-flex justify-content-center">
-            <div #bio class="lead w-100 text-center p-2" role="textarea">{{bio}}</div> 
-        </div>
+        <!-- <div class="app-profile-user-bio my-3 d-flex justify-content-center">
+            <div class="lead w-100 text-center p-2" role="textarea">{{bio.bio}}</div> 
+        </div> -->
+        <mat-card *ngIf="gameProfile as bio; else noBio" class="bg-transparent border">
+            <mat-card-title-group>
+              <mat-card-title>IGN: {{bio.ign}}</mat-card-title>
+              <!-- <mat-card-subtitle>Small</mat-card-subtitle> -->
+              <img class="rounded-circle" mat-card-sm-image [src]="global.selectedGame.icon" >
+            </mat-card-title-group>
+            <mat-card-content #bio class="app-profile-user-bio">
+              {{bio.bio}}
+            </mat-card-content>
+        </mat-card>
         <ng-template #noBio>
             <div *ngIf="user?.uid === profile?.uid" class="app-profile-user-bio my-3 d-flex justify-content-center">
                 <a class="lead text-danger">Add bio</a>
