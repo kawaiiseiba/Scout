@@ -163,4 +163,30 @@ export class PostsService {
         })
     }
 
+    async likeUnlikeComment(pid: string, cid: string){
+        this.commentRef = this.comments.doc<Comments>(cid)
+        
+
+        this.commentRef.valueChanges().pipe(
+            take(1),
+            switchMap(x => {
+                return of(x)
+            })
+        ).subscribe(post => {
+            const likeId = pid+'_'+post?.cid
+            this.likeRef = this.likes.doc<Likes>(likeId)
+
+            this.likeRef.ref.get().then(doc => {
+                
+                const data = <Comments> {
+                    likesCount: doc.exists ? post?.likesCount!- 1 : post?.likesCount! + 1
+                }
+
+                this.commentRef.set(data, { merge: true })
+                !doc.exists ? this.likeRef.set({ user: this.user?.uid }) : this.likeRef.delete()
+            })
+            
+        })
+    }
+
 }

@@ -110,7 +110,11 @@ export class LandingComponent implements OnInit, OnDestroy {
     ]
 
     openDialog(id: string) {
-        this.dialog.open(NewsDialog);
+        this.dialog.open(NewsDialog, {
+            width: '900px',
+            backdropClass: 'dark-backdrop',
+            panelClass: 'dark-panel'
+        })
     }
 
     openAuthDialog(){

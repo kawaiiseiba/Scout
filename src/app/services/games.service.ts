@@ -6,8 +6,9 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreCollectio
 
 import { AccountService } from './account.service';
 import { AuthService } from './auth.service';
-import { User, Games } from './models/data.model';
-import { Observable, of, switchMap } from 'rxjs';
+import { User, Games, Profile } from './models/data.model';
+import { Observable, of, switchMap, take } from 'rxjs';
+import { userInfo } from 'os';
 
 
 @Injectable({
@@ -19,6 +20,8 @@ export class GamesService {
     gameList: AngularFirestoreCollection<Games>
     gameRef: AngularFirestoreDocument<Games>
 
+    gameProfile: AngularFirestoreCollection<Profile>
+
     constructor(
         private auth: AngularFireAuth,
         private accService: AccountService,
@@ -26,6 +29,7 @@ export class GamesService {
         private storageRef: AngularFireStorage
     ) {
         this.gameList = this.db.collection<Games>('games')
+        this.gameProfile = this.db.collection<Profile>('profiles')
         
     }
 
@@ -62,6 +66,25 @@ export class GamesService {
     async bannerURL(id: string){
         return this.storageRef.storage.ref(`games/${id}/banner.png`).getDownloadURL().then(url => url)
 
+    }
+
+    saveProfile(profile: Profile){
+        this.gameList.doc<Games>(profile.gameRef).valueChanges()
+        .pipe(
+            take(1),
+            switchMap(x => of(x))
+        ).subscribe(
+            data => {
+                if(data === undefined) return
+                const game = <Games>{
+                    teamCount: data.userCount ? data.userCount + 1 : 1
+                }
+
+                this.db.doc<Games>(data.id!).set(game, { merge: true })
+            }
+        )
+
+        return this.gameProfile.doc<Profile>(profile.gameRef+'_'+profile.user).set(profile, { merge: true})
     }
 
 }

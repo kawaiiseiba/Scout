@@ -6,6 +6,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     posts$: Posts[]
 
     constructor(
+        private router: Router,
         private db: AngularFirestore,
         public global: DashboardComponent,
         private postRef: PostsService,
@@ -29,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     ) { 
 
         this.auth.user$.pipe(take(1)).subscribe(user => {
-            this.postRef.posts.valueChanges().pipe(
+            this.db.collection<Posts>('posts', ref => ref.where('contentFrom', "==", global._routeURL)).valueChanges().pipe(
                 switchMap(x => {
                     return of(
                         x.map(post => {
@@ -58,7 +60,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                             })
                             return post
                         })
-                        .filter(x => x.contentFrom === global._routeURL)
                         .sort((a, b) => Number(b.date) - Number(a.date))
                     )
                 })
@@ -71,6 +72,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     isDisable = true
     isPosting = false
     description: string
+
+    navigatePost(url: string) {
+        this.router.navigate([url])
+    }
 
     postIdentity(index: number, post: Posts) {
         return post.pid

@@ -26,7 +26,7 @@
             <div #bio class="lead w-100 text-center p-2" role="textarea">{{bio}}</div> 
         </div>
         <ng-template #noBio>
-            <div class="app-profile-user-bio my-3 d-flex justify-content-center">
+            <div *ngIf="user?.uid === profile?.uid" class="app-profile-user-bio my-3 d-flex justify-content-center">
                 <a class="lead text-danger">Add bio</a>
             </div>
         </ng-template>
@@ -41,7 +41,7 @@
 </div>
 <ng-container *ngIf="posts as posts">
     <div *ngIf="posts.length > 0; else nonepost" class="app-main-post-content w-100">
-        <div *ngFor="let post of posts; trackBy: postIdentity" class='app-user-post row justify-content-center pt-3 pb-1 m-0 app-border-bottom'>
+        <div *ngFor="let post of posts; trackBy: postIdentity" class='app-user-post row justify-content-center pt-3 pb-1 m-0 app-border-bottom' (click)="navigatePost(post?.contentFrom!+'/'+post.userRef$?.username+'/posts/'+post.pid)">
             <div class="app-main-post-profile h-100 col-1 m-0 p-0">
                 <img class="rounded-circle" [src]="post.userRef$?.avatar ? post.userRef$?.avatar : post.userRef$?.defaultAvatar" width="50">
             </div>

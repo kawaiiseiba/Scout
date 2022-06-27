@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommentDialog, DashboardComponent, GameListDialog, PostDeleteDialog } from './dashboard.component';
+import { AddProfileDialog, CommentDialog, DashboardComponent, GameListDialog, PostDeleteDialog } from './dashboard.component';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';  
 
@@ -19,6 +19,8 @@ import { GameSelectGuard } from '../guard/game-select.guard';
 import { NgDatePipesModule } from 'ngx-pipes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatButtonToggle, MatButtonToggleModule } from '@angular/material/button-toggle';
 
 const routes: Routes = [
 	{
@@ -53,15 +55,25 @@ const routes: Routes = [
             },
             {
                 path: ':username',
-                loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule),
-                pathMatch: 'full'
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule),
+                        pathMatch: 'full',
+                    },
+                    {
+                        path: 'posts/:id',
+                        loadChildren: () => import('../posts/posts.module').then(m => m.PostsModule),
+                        pathMatch: 'full',
+                    },
+                ]
             },
         ]
 	}
 ];
 
 @NgModule({
-  declarations: [DashboardComponent, GameListDialog, PostDeleteDialog, CommentDialog],
+  declarations: [DashboardComponent, GameListDialog, PostDeleteDialog, CommentDialog, AddProfileDialog],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -80,7 +92,9 @@ const routes: Routes = [
     NgDatePipesModule,
     FormsModule,
     ReactiveFormsModule,
-    MatChipsModule
+    MatChipsModule,
+    MatStepperModule,
+    MatButtonToggleModule
   ],
   providers: [DashboardComponent],
 })

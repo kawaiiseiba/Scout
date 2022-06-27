@@ -1,5 +1,5 @@
 .game-select-item{
-    height: 150px;
+    height: 120px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -7,14 +7,14 @@
     overflow: hidden;
     box-shadow: 0px 0px 5px transparent !important;
 
-    &:hover{
-        box-shadow: 0px 0px 15px 0px white !important;
-        cursor: pointer;
-    }
+    // &:hover{
+    //     box-shadow: 0px 0px 15px 0px white !important;
+    //     cursor: pointer;
+    // }
 
     .game-select-icon{
         position: relative;
-        top: -50px;
+        top: -60px;
         border-radius: 10px;
         border: 3px solid;
         border-color: #583030;
@@ -31,4 +31,21 @@
     .game-select-info{
         text-shadow: 0 0 10px black;
     }
+}
+
+.mat-horizontal-stepper-content{
+    overflow-y: hidden;
+}
+
+::ng-deep .mat-button-toggle-label-content{
+    display: flex !important;
+    width: 100%;
+    height: 100%;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+
+.game-list{
+    height: 450px;
+    overflow: auto;
 }

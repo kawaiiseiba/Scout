@@ -36,6 +36,7 @@ export class GameSelectGuard implements CanActivate, CanActivateChild, CanLoad {
             if(baseURL !== 'game' && !matchURL) return this.route.navigate(['/'])
             this.auth.user$.pipe(take(1)).subscribe(data =>{
                 if(data === null && data === undefined) return resolve(true)
+                if(baseURL === 'game' && data?.selectedGame) return window.location.href = '/'+data.selectedGame
                 if(baseURL !== 'game' && (baseURL != data?.selectedGame) && matchURL) this.accountRef.selectedGame({ uid: data?.uid, selectedGame: baseURL})
             })
             return resolve(true)

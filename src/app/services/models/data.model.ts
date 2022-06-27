@@ -38,6 +38,8 @@ export interface Comments {
     description?: string | undefined,
     likesCount?: number,
     user?: string,
+    userRef$?: User | undefined,
+    likeRef$?: Likes | undefined,
     reference?: string,
     referenceType?: string,
     date?: number
@@ -56,7 +58,7 @@ export interface Games {
     organizationCount?: number,
     posts?: Map<string, PostRef>,
     publisher?: string,
-    ranks?: Map<string, RankRef>,
+    ranks?: string,
     roles?: Map<string, RoleRef>,
     teams?: Map<string, TeamRef>,
     teamCount?: number,
@@ -147,24 +149,28 @@ export interface PostClarity {
 
 export interface Profile {
     bio?: string,
-    dateAdded: number,
-    gameRef: string,
-    ign: string,
-    rankRef: string
-}
-
-export interface Ranking {
-    gameRef: string,
-    ranks: Map<string, RankRef>
+    date?: number,
+    gameRef?: string,
+    ign?: string,
+    rankRef?: string,
+    user?: string
 }
 
 export interface Ranks {
-    divisions: {
-        name: string
-    },
-    gameRef: string,
-    stage: number,
-    tiers: Map<string, TierRef>
+    id?: string,
+    ranks: [{
+        divisions?: Divisions,
+        icon?: string,
+        name?: string,
+        tier?: string
+    }]
+}
+
+export interface Divisions {
+    game?: string,
+    icon?: string,
+    name?: string,
+    tier?: number
 }
 
 export interface Roles {

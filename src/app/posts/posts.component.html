@@ -1,0 +1,100 @@
+<div class="app-main-navigation-hint w-100 p-3 d-flex align-items-center sticky-top">
+    <button (click)="prevLocation()" class="bg-transparent text-light mr-2" mat-mini-fab>
+        <mat-icon class="material-icons-rounded">arrow_back</mat-icon>
+    </button><b>Posts</b>
+</div>
+<ng-container *ngIf="post as posts; else postnotfound">
+    <div class="app-main-post-content w-100">
+        <div class='app-user-post row justify-content-center align-items-center pt-3 pb-1 m-0'>
+            <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                <img class="rounded-circle" [src]="post.userRef$?.avatar ? post.userRef$?.avatar : post.userRef$?.defaultAvatar" width="50">
+            </div>
+            <div class="app-main-post-container col-10 pr-0">
+                <div class="app-main-post-data d-flex flex-row align-items-center w-100">
+                    <div class="w-100">
+                        <div class="app-post-name text-truncate d-flex flex-row w-100">
+                            <b>{{post.userRef$?.displayName ? post.userRef$?.displayName : post.userRef$?.username}}</b>
+                            <mat-chip-list class="ml-2">
+                                <mat-chip class="app-post-game" [style.background-color]="post.gameRef$?.bgColor">
+                                    <img matChipAvatar [src]="post.gameRef$?.icon">{{post.gameRef$?.name}}
+                                </mat-chip>
+                            </mat-chip-list>
+                            <div *ngIf="post.userRef$?.uid === global.user?.uid" class="ml-auto">
+                                <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted">more_horiz</mat-icon>
+                                <mat-menu class="post-menu" #postMenu="matMenu" xPosition="before">
+                                    <button (click)="global.openPostDeleteDialog(post)" class="text-muted" mat-menu-item>
+                                        <mat-icon class="material-icons-rounded" [inline]="true" matPrefix>delete</mat-icon> Delete
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                        <div class="text-muted">@{{post.userRef$?.username}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex-align-items-center px-4 mt-2 app-border-bottom">
+            <div *ngIf="post?.description" class="app-main-post-description pt-1 pb-1">{{post?.description}}</div>
+            <div *ngIf="post?.attachment" class="app-main-post-attachment mt-2">
+                <img draggable="true" [src]="post?.attachment">
+            </div>
+            <div class="app-post-timestamp text-muted py-3">{{toDate(post?.date!)}}</div>
+        </div>
+        <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-5 pb-1">
+            <button (click)="likeUnlikePost(post?.pid!)" class="bg-transparent mx-2" mat-mini-fab>
+                <mat-icon [ngClass]="post.likeRef$ ? 'material-icons-rounded' : 'material-icons-outlined'" [inline]="true" color="primary" matPrefix>thumb_up</mat-icon><span>{{post?.likesCount! > 0 ? global.abbrNum(post?.likesCount, 2) : ''}}</span>
+            </button>
+            <button [autofocus]="false" (click)="global.openCommentDialog(post, global?.user!)" class="bg-transparent mx-2" mat-mini-fab>
+                <mat-icon class="material-icons-outlined" [inline]="true" color="primary">mode_comment</mat-icon><span>{{post?.commentsCount! > 0 ? global.abbrNum(post?.commentsCount, 2) : ''}}</span>
+            </button>
+            <button class="bg-transparent mx-2" mat-mini-fab>
+                <mat-icon [inline]="true" color="primary">share</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="w-100 app-border-bottom"></div>
+    <ng-container *ngIf="(comments$ | async) as comments">
+        <div *ngFor="let comment of comments; trackBy: identity" class='app-user-post-comments row justify-content-center pt-3 pb-2 m-0 app-border-bottom px-3'>
+            <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                <img class="rounded-circle" [src]="comment.userRef$?.avatar ? comment.userRef$?.avatar : comment.userRef$?.defaultAvatar" width="50">
+            </div>
+            <div class="app-main-post-container col-8 h-100 pb-1 pr-0">
+                <div class="app-main-post-data d-flex flex-row align-items-center w-100">
+                    <span class="mr-1 text-truncate"><b>{{comment.userRef$?.displayName ? comment.userRef$?.displayName : comment.userRef$?.username}}</b></span>
+                    <span class="text-muted text-truncate">@{{comment.userRef$?.username}}</span>
+                    <span class="mx-1 text-muted">·</span>
+                    <span class="text-muted">{{global.refDate(comment?.date!) | timeAgo}}</span>
+                </div>
+                <div *ngIf="post?.description" class="app-main-comment-description pt-1 pb-1">{{comment?.description}}</div>
+                <div *ngIf="post?.attachment" class="app-main-post-attachment mt-1">
+                    <img draggable="true" [src]="comment?.attachment">
+                </div>
+            </div>
+            <div class="app-comment-buttons col-3 d-flex justify-content-end align-items-center m-0">
+                <div *ngIf="post.userRef$?.uid === global.user?.uid" class="ml-auto mt-2">
+                    <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted">more_horiz</mat-icon>
+                    <mat-menu class="post-menu" #postMenu="matMenu" xPosition="before">
+                        <button (click)="global.openPostDeleteDialog(comment)" class="text-muted" mat-menu-item>
+                            <mat-icon class="material-icons-rounded" [inline]="true" matPrefix>delete</mat-icon> Delete
+                        </button>
+                    </mat-menu>
+                </div>
+                <button (click)="likeUnlikeComment(post?.pid, comment?.cid)" class="bg-transparent ml-1" mat-mini-fab>
+                    <mat-icon [ngClass]="comment.likeRef$ ? 'material-icons-rounded' : 'material-icons-outlined'" [inline]="true" color="primary" matPrefix>thumb_up</mat-icon>
+                </button>
+                <div *ngIf="comment?.likesCount! > 0" class="text-muted">{{global.abbrNum(comment?.likesCount, 2)}}</div>
+            </div>
+        </div>
+    </ng-container>
+    
+</ng-container>
+
+<ng-template #postnotfound>
+    <div class="app-main-post-content w-100 d-flex align-items-center flex-column">
+        <img class="w-50 mt-5 mb-3" src="./../../assets/img/404.gif" draggable="false">
+        <div class="w-100 text-center">    
+            <h1 class="text-muted">Nothing!!</h1>
+            <p>Post not found!</p>
+        </div>
+    </div>
+</ng-template>

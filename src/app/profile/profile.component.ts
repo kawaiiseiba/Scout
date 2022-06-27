@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             .subscribe(data => {
                 this.profile = userAuthenticated?.uid === data.uid ? userAuthenticated : data
 
-                this.db.collection<Posts>('posts', ref => ref.where('user', '==', this.profile?.uid)).valueChanges()
+                this.db.collection<Posts>('posts', ref => ref.where('user', '==', this.profile?.uid).where('contentFrom', "==", global._routeURL)).valueChanges()
                 .pipe(
                     switchMap(x => {
                         return of(x.map(post => {
@@ -78,6 +78,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
         })
         
     }
+    
+    navigatePost(url: string) {
+        this._router.navigate([url])
+    }
 
     postIdentity(index: number, post: Posts) {
         return post.pid
@@ -92,7 +96,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        console.log(this.user)
     }
 
     ngOnDestroy(): void {

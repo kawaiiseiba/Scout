@@ -37,13 +37,14 @@
 </div>
 <ng-container *ngIf="posts$ as posts">
     <div *ngIf="posts.length > 0; else nonepost" class="app-main-post-content w-100">
-        <div *ngFor="let post of posts; trackBy: postIdentity" class='app-user-post row justify-content-center pt-3 pb-1 m-0 app-border-bottom'>
+        <!-- '../'+post.userRef$?.username+'/posts/'+post.pid -->
+        <div *ngFor="let post of posts; trackBy: postIdentity" class='app-user-post row justify-content-center pt-3 pb-1 m-0 app-border-bottom' (click)="navigatePost(post?.contentFrom!+'/'+post.userRef$?.username+'/posts/'+post.pid)">
             <div class="app-main-post-profile h-100 col-1 m-0 p-0">
-                <img class="rounded-circle" [src]="post.userRef$?.avatar ? post.userRef$?.avatar : post.userRef$?.defaultAvatar" width="50">
+                <img (click)="$event.stopPropagation()" class="rounded-circle" [src]="post.userRef$?.avatar ? post.userRef$?.avatar : post.userRef$?.defaultAvatar" width="50">
             </div>
             <div class="app-main-post-container col-10 h-100 pb-1 pr-0">
                 <div class="app-main-post-data d-flex flex-row align-items-center w-100">
-                    <span class="mr-1 text-truncate"><b>{{post.userRef$?.displayName ? post.userRef$?.displayName : post.userRef$?.username}}</b></span>
+                    <span (click)="$event.stopPropagation()" class="mr-1 text-truncate"><b>{{post.userRef$?.displayName ? post.userRef$?.displayName : post.userRef$?.username}}</b></span>
                     <mat-chip-list>
                         <mat-chip class="app-post-game" [style.background-color]="post.gameRef$?.bgColor">
                             <img matChipAvatar [src]="post.gameRef$?.icon">{{post.gameRef$?.name}}
@@ -53,7 +54,7 @@
                     <span class="mx-1 text-muted">—</span>
                     <span class="text-muted">{{global.refDate(post?.date!) | timeAgo}}</span>
                     <div *ngIf="post.userRef$?.uid === global.user?.uid" class="ml-auto">
-                        <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted">more_horiz</mat-icon>
+                        <mat-icon [matMenuTriggerFor]="postMenu" role="button" (click)="$event.stopPropagation()" class="align-self-center text-muted">more_horiz</mat-icon>
                         <mat-menu class="post-menu" #postMenu="matMenu" xPosition="before">
                             <button (click)="global.openPostDeleteDialog(post)" class="text-muted" mat-menu-item>
                                 <mat-icon class="material-icons-rounded" [inline]="true" matPrefix>delete</mat-icon> Delete
@@ -65,7 +66,7 @@
                 <div *ngIf="post?.attachment" class="app-main-post-attachment mt-1">
                     <img draggable="true" [src]="post?.attachment">
                 </div>
-                <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-3">
+                <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-3" (click)="$event.stopPropagation()">
                     <button (click)="likeUnlikePost(post?.pid!)" class="bg-transparent mx-2" mat-mini-fab>
                         <mat-icon [ngClass]="post.likeRef$ ? 'material-icons-rounded' : 'material-icons-outlined'" [inline]="true" color="primary" matPrefix>thumb_up</mat-icon><span>{{post?.likesCount! > 0 ? global.abbrNum(post?.likesCount, 2) : ''}}</span>
                     </button>

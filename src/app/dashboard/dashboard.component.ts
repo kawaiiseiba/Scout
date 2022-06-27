@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef, HostListener } from '@angular/core';
-import {AbstractControl, Form, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {AbstractControl, Form, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { Router, RouterEvent, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription, switchMap, take } from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { GamesService } from '../services/games.service';
-import { Comments, Games, PostClarity, Posts, User } from '../services/models/data.model';
+import { Comments, Games, PostClarity, Posts, Profile, Ranks, User } from '../services/models/data.model';
 import { AuthService } from '../services/auth.service';
 import { AccountService } from '../services/account.service';
 import { PostsService } from '../services/posts.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,14 +33,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     gameSelectDialog$: MatDialogRef<GameListDialog>
     $gameSelectSubscription: Subscription
 
-    selectedGame$: Observable<Games>
+    gameProfile: Profile | null
+
+    selectedGame: Games
 
     constructor(
         public router: Router,
         private activatedRoute: ActivatedRoute,
         private gameRef: GamesService,
         public dialog: MatDialog,
-        private authRef: AuthService
+        private authRef: AuthService,
+        private db: AngularFirestore
     ) {
         this.subloader = false
 
@@ -68,20 +72,52 @@ export class DashboardComponent implements OnInit, OnDestroy {
             switchMap(x => of(x))
         )
 
-        this.user$.subscribe(data=> {
-            this.user = data
+        this.user$.pipe(take(1)).subscribe(user=> {
+            this.user = user
+
+            this.gameRef.findByURL(this._routeURL).pipe(
+                take(1),
+                switchMap(x => {
+                    return of(x.map(game => game)[0])
+                })
+            ).subscribe(game => {
+                this.selectedGame = game
+
+                if(!game) return
+    
+                this.db.collection<Profile>('profiles', ref => ref.where('gameRef', '==', game.id!).where('user', '==', user?.uid)).valueChanges()
+                .pipe(
+                    take(1),
+                    switchMap(x => {
+                        if(x.length > 0) return of(...x.map(x=>x))
+                        return of(null)
+                    })
+                ).subscribe(profile => {
+                    // if(profile === null) return this.addProfileDialog(game)
+                    this.gameProfile = profile
+                })
+            })
         })
 
-        this.selectedGame$ = this.gameRef.findByURL(this._routeURL).pipe(
-            take(1),
-            switchMap(x => {
-                return of(x.map(game => game)[0])
-            })
-        )
+        
 
 
         this.openGameSelectDialog()
         
+    }
+
+    addProfileDialog(game: Games) {
+        if(this.user === null && this.user === undefined) return
+
+        this.dialog.open(AddProfileDialog, {
+            backdropClass: 'dark-backdrop',
+            panelClass: 'dark-panel',
+            width: '600px',
+            position: {
+                top: '50px'
+            },
+            data: game
+        })
     }
 
     selectGame(url: string | undefined){
@@ -129,12 +165,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             width: '550px',
             // height: '650px',
             backdropClass: 'dark-backdrop',
-            panelClass: 'dark-panel'
+            panelClass: 'game-list-container',
+            disableClose: true
         })
-
-        this.$gameSelectSubscription = this.gameSelectDialog$.afterClosed().subscribe(
-            () => this.router.navigate(['/'])
-        )
     }
 
     onLogout(){
@@ -181,21 +214,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
             // icon: await this.gameRef.iconURL("Pt6RVNlDRVxieRbxI102"),
             // banner: await this.gameRef.bannerURL("Pt6RVNlDRVxieRbxI102"),
             baseURL: 'mobilelegends',
-            bgColor: '#231F1C',
-            textColor: '#CC911C',
-            publisher: 'Moonton Games',
-            name: 'Mobile Legends: Bang Bang',
-            description: 'Mobile Legends is a 5v5 MOBA for handheld devices that offers a variety of playable heroes, game modes, and intense, fast-paced gameplay.'
+            // bgColor: '#231F1C',
+            // textColor: '#CC911C',
+            // publisher: 'Moonton Games',
+            // name: 'Mobile Legends: Bang Bang',
+            description: 'Mobile Legends is a 5v5 MOBA for handheld devices that offers a variety of playable heroes, game modes, and intense, fast-paced gameplay.',
+            // ranks: new Map()
         }
 
         // this.gameRef.addGame(data)
-        // this.gameRef.updateGameData(data, "Pt6RVNlDRVxieRbxI102")
+        // this.gameRef.updateGameData(data, "I63118D0ZYusC3BNwxl0")
 
         // this.gameList$.forEach(console.log)
     }
 
     ngOnDestroy(): void {
-        this.$gameSelectSubscription?.unsubscribe()
+        // this.$gameSelectSubscription?.unsubscribe()
     }
 }
 
@@ -210,9 +244,14 @@ export class GameListDialog {
     games: Games[]
     gameList$: Observable<Games[]>
 
+    ign = new FormControl('', [Validators.required])
+    bio = new FormControl('')
+
     constructor(
         private gameRef: GamesService,
-        private authRef: AuthService
+        private authRef: AuthService,
+        public global: DashboardComponent,
+        private dialogRef: MatDialogRef<GameListDialog>
     ){
         this.gameList$ = this.gameRef.gameArchive().valueChanges().pipe(
             switchMap(x => {
@@ -223,6 +262,38 @@ export class GameListDialog {
         this.gameList$.subscribe(game => {
             this.games = game
         })
+    }
+    
+    isSelected = false
+    stepperGameSelectName: string
+    stepperGameSelectIcon: string
+    stepperGameSelectUrl: string
+    stepperGameSelectId: string
+    activeUser: string
+
+    saveGameProfile(ign: string, bio: string, rank: string, url: string){
+        const data = <Profile>{
+            ign: ign,
+            bio: bio,
+            rankRef: rank,
+            user: this.activeUser,
+            date: Date.now(),
+            gameRef: this.stepperGameSelectId
+        }
+        this.gameRef.saveProfile(data)
+        .then(() => {
+            this.dialogRef.close()
+            window.location.href = './'+url+'/home'
+        })
+    }
+
+    gameSelected(value: any) {
+        this.stepperGameSelectName = value.name
+        this.stepperGameSelectIcon = value.icon
+        this.stepperGameSelectUrl = value.url
+        this.stepperGameSelectId = value.id
+        this.activeUser = value.user
+        this.isSelected = true
     }
 
     selectGame(url: string | undefined){
@@ -235,7 +306,7 @@ export class GameListDialog {
 }
 
 @Component({
-    selector: 'game-list-dialog',
+    selector: 'post-delete-dialog',
     templateUrl: './dialog/post-delete.dialog.html',
     styleUrls: ['./dialog/post-delete.dialog.scss']
 })
@@ -308,5 +379,20 @@ export class CommentDialog {
             this.fileInput.nativeElement.value = ''
             this.dialogRef.close()
         })
+    }
+}
+
+@Component({
+    selector: 'add-profile-dialog',
+    templateUrl: './dialog/add-profile.dialog.html',
+    styleUrls: ['./dialog/add-profile.dialog.scss']
+})
+
+export class AddProfileDialog {
+    
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public game: Games,
+        public global: DashboardComponent
+    ) {
     }
 }

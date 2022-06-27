@@ -1,19 +1,55 @@
-<h2 mat-dialog-title>Game Select</h2>
-<mat-dialog-content *ngIf="gameList$" class="mat-typography">
-    <div *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-3" [style.background-image]="'url('+game.banner+')'" (click)="selectGame(game.baseURL)">
-        <div class="game-select-background d-flex w-100 h-50 align-self-end px-3" [style.background-color]="game?.bgColor">
-            <img class="game-select-icon mr-3" [style.border-color]="game?.bgColor" [src]="game.icon" width="100" height="100">
-            <div class="game-select-data w-100">
-                <h1 class="game-select-title text-truncate">{{game.name}}</h1>
-                <div class="game-select-info text-white">
-                    <span class="mr-1">Users: 30k</span>•
-                    <span class="mr-1">Organizations: 500</span>•
-                    <span class="mr-1">Teams: 10k</span>
-                </div>
+
+<mat-dialog-content class="py-0 my-0 px-1">
+    <mat-stepper class="bg-transparent" [linear]="true" #stepper>
+        <mat-step label="Game Select">
+            <div class="game-list my-2 px-2">
+                <mat-button-toggle-group #select class="d-flex flex-column border-0" (change)="gameSelected($event.value)">
+                    <mat-button-toggle matStepperNext *ngFor="let game of games" class="game-select-item d-flex border-radius shadow my-1" [style.background-image]="'url('+game.banner+')'" [value]="{ id: game?.id, url: game?.baseURL, name: game?.name, icon: game?.icon, user: global.user?.uid}">
+                        <div matStepperNext class="game-select-background d-flex w-100 h-25 align-self-end px-3" [style.background-color]="game?.bgColor">
+                            <img class="game-select-icon mr-3" [style.border-color]="game?.bgColor" [src]="game.icon" width="70" height="70">
+                            <div class="game-select-data w-100 ">
+                                <h1 class="game-select-title text-left text-truncate">{{game.name}}</h1>
+                            </div>
+                        </div>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
             </div>
-        </div>
-    </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button class="btn-danger" [disabled]="!isSelected" mat-button matStepperNext>Next</button>
+            </div>
+        </mat-step>
+        <mat-step label="Fill out game profile">
+            <h1>
+                <img class="rounded-circle mr-3" [src]="stepperGameSelectIcon" width="40" height="40">
+                <b>{{(stepperGameSelectName)}}</b>
+            </h1>
+            <div class="input-group d-flex justify-content-between">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Enter your IGN</mat-label>
+                    <input matInput [formControl]="ign" placeholder="your_awesome_ign" autocomplete="false">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Rank</mat-label>
+                    <mat-select #rank>
+                        <mat-option value="unranked">Unranked</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <mat-form-field class="w-100 post-specific py-1" appearance="fill">
+                <mat-label>Enter your bio...</mat-label>
+                <textarea [formControl]="bio" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="12"></textarea>
+            </mat-form-field>
+            <div class="d-flex justify-content-end align-content-center">
+                <div class="d-flex align-items-center mr-2">
+                    <a>Continue as guest</a>
+                </div>
+                <button class="btn-dark" class="mr-2" mat-button matStepperPrevious>Back</button>
+                <button 
+                [disabled]="(ign.value.length < 1 || bio.value.length < 1) || rank.value?.length < 1" class="btn-danger" 
+                mat-button 
+                matStepperNext 
+                (click)="saveGameProfile(ign.value,bio.value,rank.value, stepperGameSelectUrl)">Join</button>
+            </div>
+        </mat-step>
+      </mat-stepper>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Close</button>
-</mat-dialog-actions>
