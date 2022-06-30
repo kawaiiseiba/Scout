@@ -93,7 +93,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     postContent() {
         const content = {
             attachment: this.filePrev ? this.filePath : undefined,
-            description: this.description
+            description: this.description,
+            contentFrom: this.global._routeURL
         }
         this.postRef.createPost(content).then(data => {
             this.isPosting = false

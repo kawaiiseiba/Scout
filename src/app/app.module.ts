@@ -19,6 +19,7 @@ import { environment } from '../environments/environment';
 import { AuthService } from './services/auth.service';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './app-reuse-strategy';
+import { OrganizationContentComponent } from './organization-content/organization-content.component';
 
 @NgModule({
   declarations: [

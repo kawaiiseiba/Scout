@@ -40,8 +40,25 @@ const routes: Routes = [
             },
             {
                 path: 'organization',
-                loadChildren: () => import('../organization/organization.module').then(m => m.OrganizationModule),
-                // pathMatch: 'full'
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () => import('../organization/organization.module').then(m => m.OrganizationModule),
+                    },
+                    {
+                        path: ':organization_id',
+                        children: [
+                            {
+                                path: '',
+                                loadChildren: () => import('../organization-content/organization-content.module').then(m => m.OrganizationContentModule)
+                            },
+                            {
+                                path: 'settings',
+                                pathMatch: 'full'
+                            },
+                        ]
+                    }
+                ]
             },
             {
                 path: 'jobs',

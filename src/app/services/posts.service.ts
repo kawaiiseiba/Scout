@@ -57,7 +57,7 @@ export class PostsService {
                 attachment: attachment ? attachment : '', 
                 description: content.description ? content.description : '', 
                 date: Date.now(),
-                contentFrom: this.user.selectedGame,
+                contentFrom: content.contentFrom,
                 user: this.user.uid,
                 commentsCount: 0, 
                 likesCount: 0, 

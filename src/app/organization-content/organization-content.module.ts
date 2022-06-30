@@ -1,6 +1,5 @@
-
 import { NgModule } from '@angular/core';
-import { OrganizationComponent } from './organization.component';
+import { OrganizationContentComponent } from './organization-content.component';
 
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
@@ -15,30 +14,36 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatChipsModule } from '@angular/material/chips';
+import { NgDatePipesModule } from 'ngx-pipes';
 
 const routes: Routes = [
 	{
-		path: '', component: OrganizationComponent,
-        children: [
+		path: '', component: OrganizationContentComponent,
+        children:[
             {
-                path: '',
-                pathMatch: 'full',
-                redirectTo: 'list'
-            },
-            {
-                path: 'list',
+                path: 'events',
                 pathMatch: 'full'
             },
             {
-                path: 'create',
+                path: 'chat',
                 pathMatch: 'full'
-            }
+            },
+            {
+                path: 'members',
+                pathMatch: 'full'
+            },
+            {
+                path: 'jobs',
+                pathMatch: 'full'
+            },
         ]
-	}
+    }
 ];
 
 @NgModule({
-    declarations: [OrganizationComponent],
+    declarations: [OrganizationContentComponent],
     imports: [
       CommonModule,
       RouterModule.forChild(routes),
@@ -52,9 +57,12 @@ const routes: Routes = [
       MatExpansionModule,
       MatMenuModule,
       FormsModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      ClipboardModule,
+      MatChipsModule,
+      NgDatePipesModule
     ]
 })
-export class OrganizationModule { 
+export class OrganizationContentModule { 
     constructor(private route: ActivatedRoute){}
 }

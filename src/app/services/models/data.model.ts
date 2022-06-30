@@ -102,19 +102,31 @@ export interface Notifications {
 }
 
 export interface Organization {
-    banner?: string,
+    banner?: Blob | string | undefined,
     description?: string,
     gameRef: string,
-    icon?: string,
-    memberCount: number,
-    members?: Map<string, MemberRef>,
+    icon?: Blob | string | undefined,
+    memberCount?: number,
     name: string,
     owner: string,
-    postCount: number,
-    posts?: Map<string, PostRef>,
-    roles?: Map<string, RoleRef>,
-    teamCount: number,
-    teams?: Map<string, TeamRef>
+    oid?: string,
+    postCount?: number,
+    teamCount?: number,
+    snsLink?: [{
+        name: string,
+        url: string,
+        class: string,
+        color: string
+    }],
+    settings?: {
+        'direct-join'?: false,
+        'default-role'?: Roles,
+        'lf-player'?: false,
+        'lf-team'?: false,
+        'lf-coach'?: false,
+        'lf-manager'?: false,
+    },
+    date?: number
 }
 
 export interface Posts {

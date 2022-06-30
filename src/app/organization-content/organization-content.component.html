@@ -1,0 +1,199 @@
+<ng-container *ngIf="organization">
+    <div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
+        <b>{{organization?.name!}}</b>
+    </div>
+    <div class="app-profile-header-container mb-5">
+        <!-- (click)="banner.click()" -->
+        <a class="app-profile-header w-100" >
+            <div class="app-profile-header-container">
+                <input #banner class="d-none" type="file" accept="image/" (change)="addBannerFile($event)">
+                <div class="app-profile-header-banner" 
+                [style.background-image]="organization.banner !== undefined ? 'url('+organization.banner+')' : 'url(https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/users%2Fbanner.png?alt=media&token=23218500-7914-4932-92ce-55fbcf2716eb)'"
+                ></div>
+            </div>
+            <!-- <a *ngIf="bannerPrev" (click)="$event.stopPropagation(); banner.value=''; bannerPrev=''" class="cancel-banner-preview" mat-icon-button>
+                <mat-icon class="material-icons-round">close</mat-icon>
+            </a> -->
+        </a>
+        <div class="app-profile-content">
+            <div class="app-profile-field d-flex justify-content-end align-items-center">
+                <!-- (click)="icon.click()" -->
+                <a class="app-profile-avatar-container w-25 mx-auto">
+                    <input #icon class="d-none" type="file" accept="image/" (change)="addIconFile($event)">
+                    <img class="app-profile-avatar w-100 h-100" [src]="organization.icon ? organization.icon : '../../../assets/placeholders/default.png'" alt="">
+                    <!-- <a *ngIf="iconPrev" class="cancel-icon-preview"  (click)="$event.stopPropagation(); icon.value=''; iconPrev='';" mat-icon-button>
+                        <mat-icon class="material-icons-round">close</mat-icon>
+                    </a> -->
+                </a>
+                <button class="position-absolute" color="primary" mat-stroked-button>
+                    <mat-icon>group_add</mat-icon> Invite members
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex text-center px-3 py-2 justify-content-between">
+        <span class="h3 font-weight-bold">{{organization.name}}</span>
+        <div class="d-flex">
+            <div *ngFor="let link of organization.snsLink">
+                <a class="btn-white btn-small mx-1"
+                #tooltip="matTooltip"
+                matTooltipClass="btn-danger pink darken-1"
+                matTooltip="Copy link to clipboard"
+                matTooltipPosition="below"
+                (click)="tooltip.disabled = false; tooltip.toggle()"
+                matTooltipDisabled="true"
+                (mouseleave)="tooltip.disabled = true"
+                [cdkCopyToClipboard]="link.url"
+                matTooltipHideDelay="2000"
+                mat-icon-button> 
+                    <i [attr.class]="link.class" [style.color]="link.color"></i>
+                </a>
+            </div>
+            <a class="ml-2" color="primary" mat-icon-button>
+                <mat-icon>more_horiz</mat-icon>
+            </a>
+        </div>
+    </div>
+    <div *ngIf="organization.description" class="mb-3 w-100 px-3 font-weight-light h6">
+        {{organization.description}}
+    </div>
+</ng-container>
+
+<ng-template #noorg>
+    <div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
+        <b>Organization not found</b>
+    </div>
+    <div class="app-profile-header-container mb-5">
+        <!-- (click)="banner.click()" -->
+        <a class="app-profile-header w-100" >
+            <div class="app-profile-header-container">
+                <input #banner class="d-none" type="file" accept="image/">
+                <div class="app-profile-header-banner" 
+                [style.background-image]="'url(https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/users%2Fbanner.png?alt=media&token=23218500-7914-4932-92ce-55fbcf2716eb)'"
+                ></div>
+            </div>
+            <!-- <a *ngIf="bannerPrev" (click)="$event.stopPropagation(); banner.value=''; bannerPrev=''" class="cancel-banner-preview" mat-icon-button>
+                <mat-icon class="material-icons-round">close</mat-icon>
+            </a> -->
+        </a>
+        <div class="app-profile-content p-3">
+            <div class="app-profile-field d-flex justify-content-center">
+                <!-- (click)="icon.click()" -->
+                <a class="app-profile-avatar-container w-25" >
+                    <input #icon class="d-none" type="file" accept="image/">
+                    <img class="app-profile-avatar w-100 h-100" [src]="'../../../assets/placeholders/default.png'" alt="">
+                    <!-- <a *ngIf="iconPrev" class="cancel-icon-preview"  (click)="$event.stopPropagation(); icon.value=''; iconPrev='';" mat-icon-button>
+                        <mat-icon class="material-icons-round">close</mat-icon>
+                    </a> -->
+                </a>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- [(selectedIndex)]="selectedIndex" -->
+<mat-tab-group animationDuration="0ms" [(selectedIndex)]="routeId">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./">Home</div>
+        </ng-template>
+        <div *ngIf="global.user" class="app-main-post row justify-content-center pb-2 pt-4 m-0 app-border-bottom">
+            <div class="app-main-post-profile col-1 m-0 p-0">
+                <img class="rounded-circle" [src]="global.user.avatar ? global.user?.avatar : global.user?.defaultAvatar" width="50">
+            </div>
+            <div class="col-10">
+                <form #postForm="ngForm" autocomplete="off" autocapitalize="off">
+                    <mat-form-field class="w-100 post-specific py-1" appearance="fill">
+                        <mat-label>What's on your mind...</mat-label>
+                        <textarea [(ngModel)]="description" [ngModelOptions]="{standalone: true}" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="25"></textarea>
+                    </mat-form-field>
+                    <div class="row app-post-file-submit-options">
+                        <div *ngIf="filePrev" class="w-100 my-1">
+                            <img class="app-post-file-preview" [src]="filePrev">
+                            <button (click)="file.value=''; filePrev='';" class="app-post-file-preview-remove btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                                <mat-icon width="15">close</mat-icon>
+                            </button>
+                        </div>
+                        <div class="col-9 app-post-file-opt">
+                            <input #file class="d-none" type="file" (change)="upload($event)" accept="*.png.jpg">
+                            <button (click)="file.click()" [disabled]="isPosting" class="btn-fab-display" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                                <mat-icon width="15">image</mat-icon>
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <button (click)="postContent(); isPosting = true" [disabled]="(!description && !file.value) || isPosting" class="w-100 my-1 rounded-pill" color="primary" type="button" mat-raised-button>Post</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <ng-container *ngIf="(orgPost$ | async) as posts">
+            <div *ngIf="posts.length > 0" class="app-main-post-content w-100">
+                <div *ngFor="let post of posts; trackBy: postIdentity" class='app-user-post row justify-content-center pt-3 pb-1 m-0 app-border-bottom' (click)="navigatePost(post?.contentFrom!+'/'+post.userRef$?.username+'/posts/'+post.pid)">
+                    <div class="app-main-post-profile h-100 col-1 m-0 p-0">
+                        <img class="rounded-circle" [src]="post.userRef$?.avatar ? post.userRef$?.avatar : post.userRef$?.defaultAvatar" width="50">
+                    </div>
+                    <div class="app-main-post-container col-10 h-100 pb-1 pr-0">
+                        <div class="app-main-post-data d-flex flex-row align-items-center w-100">
+                            <span class="mr-1 text-truncate"><b>{{post.userRef$?.displayName ? post.userRef$?.displayName : post.userRef$?.username}}</b></span>
+                            <!-- <span class="text-muted text-truncate">@{{post.userRef$?.username}}</span> -->
+                            <span class="mx-1 text-muted">—</span>
+                            <span class="text-muted">{{global.refDate(post?.date!) | timeAgo}}</span>
+                            <div *ngIf="post.userRef$?.uid === global.user?.uid" class="ml-auto">
+                                <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted" (click)="$event.stopPropagation()">more_horiz</mat-icon>
+                                <mat-menu class="post-menu" #postMenu="matMenu" xPosition="before">
+                                    <button (click)="global.openPostDeleteDialog(post)" class="text-muted" mat-menu-item>
+                                        <mat-icon class="material-icons-rounded" [inline]="true" matPrefix>delete</mat-icon> Delete
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                        <div *ngIf="post?.description" class="app-main-post-description pt-1 pb-1">{{post?.description}}</div>
+                        <div *ngIf="post?.attachment" class="app-main-post-attachment mt-1">
+                            <img draggable="true" [src]="post?.attachment">
+                        </div>
+                        <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-3" (click)="$event.stopPropagation()">
+                            <button (click)="likeUnlikePost(post?.pid!)" class="mx-2" mat-icon-button>
+                                <mat-icon [ngClass]="post.likeRef$ ? 'material-icons-rounded' : 'material-icons-outlined'" [inline]="true" color="primary" matPrefix>thumb_up</mat-icon><span>{{post?.likesCount! > 0 ? global.abbrNum(post?.likesCount, 2) : ''}}</span>
+                            </button>
+                            <button [autofocus]="false" (click)="global.openCommentDialog(post, global?.user!)" class="mx-2" mat-icon-button>
+                                <mat-icon class="material-icons-outlined" [inline]="true" color="primary">mode_comment</mat-icon><span>{{post?.commentsCount! > 0 ? global.abbrNum(post?.commentsCount, 2) : ''}}</span>
+                            </button>
+                            <button class="mx-2" mat-icon-button>
+                                <mat-icon [inline]="true" color="primary">share</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-100 app-border-bottom"></div>
+            <div *ngIf="posts.length > 5" class="w-100 text-center my-5">
+                <h1 class="text-muted lead">You're all Caught Up</h1>
+                <p class="text-muted">You've seen all new post from the past 48 hours.</p>
+            </div>
+        </ng-container>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./events">Events</div>
+        </ng-template>
+        <h1>Events</h1>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./chat">Chat</div>
+        </ng-template>
+        <h1>Chat</h1>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./members">Members</div>
+        </ng-template>
+        <h1>Members</h1>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./jobs">Job</div>
+        </ng-template>
+        <h1>Job</h1>
+    </mat-tab>
+</mat-tab-group>

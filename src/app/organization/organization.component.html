@@ -1,9 +1,135 @@
 <div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
     <b>{{title}}</b>
 </div>
-<div class="app-main-content-header w-100 d-flex justify-content-between px-2 py-3 app-border-bottom">
-    <div>
-        <button mat-button>List</button>
-        <button mat-button>Owned</button>
-    </div>
-</div>
+<mat-tab-group animationDuration="0ms" [(selectedIndex)]="selectedIndex">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./list">List</div>
+        </ng-template>
+        <!-- $any(organizationList$ | async)?.length > 0 as organization -->
+        <ng-container *ngIf="false; else nodata">
+            <div class="d-flex justify-content-end w-100 pt-2 px-3">
+                <button mat-icon-button class="text-muted mr-1">
+                    <mat-icon class="material-icons-round">filter_alt</mat-icon>
+                </button>
+                <button mat-icon-button class="text-muted">
+                    <mat-icon class="material-icons-round">sort</mat-icon>
+                </button>
+            </div>
+        </ng-container>
+        
+        <ng-template #nodata>
+            <div class="d-flex justify-content-center w-100 mt-5">
+                <h2 class="text-muted font-weight-light mt-5">No organization available yet! <a (click)="selectedIndex = 1" routerLink="./create" class="text-danger">Create one here!</a></h2>
+            </div>
+        </ng-template>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./create">Create</div>
+        </ng-template>
+        <div class="d-flex flex-column w-100 pb-5">
+            <div class="app-profile-header-container mb-5">
+                <a class="app-profile-header w-100" (click)="banner.click()">
+                    <div class="app-profile-header-container">
+                        <input #banner class="d-none" type="file" accept="image/" (change)="addBannerFile($event)">
+                        <div class="app-profile-header-banner" 
+                        [style.background-image]="bannerPrev ? 'url('+bannerPrev+')' : 'url(https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/users%2Fbanner.png?alt=media&token=23218500-7914-4932-92ce-55fbcf2716eb)'"
+                        ></div>
+                    </div>
+                    <a *ngIf="bannerPrev" (click)="$event.stopPropagation(); banner.value=''; bannerPrev=''" class="cancel-banner-preview" mat-icon-button>
+                        <mat-icon class="material-icons-round">close</mat-icon>
+                    </a>
+                </a>
+                <div class="app-profile-content p-3">
+                    <div class="app-profile-field d-flex justify-content-center">
+                        <a class="app-profile-avatar-container w-25" (click)="icon.click()">
+                            <input #icon class="d-none" type="file" accept="image/" (change)="addIconFile($event)">
+                            <img class="app-profile-avatar w-100 h-100" [src]="iconPrev ? iconPrev : '../../../assets/placeholders/default.png'" alt="">
+                            <a *ngIf="iconPrev" class="cancel-icon-preview"  (click)="$event.stopPropagation(); icon.value=''; iconPrev='';" mat-icon-button>
+                                <mat-icon class="material-icons-round">close</mat-icon>
+                            </a>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group px-3 mt-5">
+                <mat-form-field class="w-50" appearance="outline">
+                    <mat-label>Organization Name</mat-label>
+                    <input oninput="this.value = this.value.toUpperCase()" #orgNameRef [(ngModel)]="orgName" [ngModelOptions]="{standalone: true}" class="font-weight-light" matInput autocomplete="off" required>
+                </mat-form-field>
+                <div class="org-sns-link d-flex w-50 mt-3 justify-content-between px-3">
+                    <div *ngFor="let link of sns_links">
+                        <a [matMenuTriggerFor]="snsMenu" #trigger="matMenuTrigger" mat-icon-button
+                        [style.background-color]="checkValidUrl(snsInput.value) ? 'white' : ''"> 
+                            <i [attr.class]="link.class" 
+                            [style.color]="checkValidUrl(snsInput.value) ? link.color : ''"></i>
+                        </a>
+                        <mat-menu class="sns-menu px-2" #snsMenu="matMenu" yPosition="above" xPosition="before">
+                            <mat-form-field class="w-100" appearance="fill" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" (keyup.enter)="trigger.closeMenu()">
+                                <mat-label>
+                                    <i [attr.class]="link.class" [style.color]="link.color" matPrefix></i><span class="ml-2">{{link.name}}</span>
+                                </mat-label>
+                                <input [(ngModel)]="link.url" [ngModelOptions]="{standalone: true}" class="text-white font-weight-light" #snsInput type="url" matInput autocomplete="off">
+                                <mat-hint>Ex: https://{{link.name}}.com/yourorgname</mat-hint>
+                            </mat-form-field>
+                        </mat-menu>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group px-3">
+                <mat-form-field class="w-100 post-specific py-1" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea [(ngModel)]="orgDesc" [ngModelOptions]="{standalone: true}" class="font-weight-light" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="12"></textarea>
+                </mat-form-field>
+            </div>
+            <mat-selection-list #orgOptions class="org-options px-3">
+                <mat-list>
+                    <mat-accordion>
+                        <mat-expansion-panel class="bg-transparent">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <span class="font-weight-light">
+                                        <span class="pr-2" matBadge="?" matBadgeSize="small"
+                                        #tooltip="matTooltip"
+                                        matTooltipClass="btn-danger pink darken-1"
+                                        matTooltip="If enabled, it will allow users to join your organization without submitting their application. 
+                                        They'll automatically gain the selected role."
+                                        matTooltipPosition="above"><u>Enable direct join</u></span>
+                                    </span>
+                                </mat-panel-title>
+                                <mat-panel-description>Assign default role to enable.</mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <mat-selection-list multiple="false" #role (selectionChange)="roleVal()">
+                                <mat-list-option selected="true">
+                                    <span class="font-weight-light">Disable</span>
+                                </mat-list-option>
+                                <mat-list-option *ngFor="let role of $any(roles$ | async)" [value]="role">
+                                    <span class="font-weight-light">{{role.type}}</span>
+                                </mat-list-option>
+                            </mat-selection-list>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </mat-list>
+                <mat-list-option class="px-2" value="lf-player">
+                    <span class="font-weight-light">Enable LF Player</span>
+                </mat-list-option>
+                <mat-list-option class="px-2" value="lf-team">
+                    <span class="font-weight-light">Enable LF Team</span>
+                </mat-list-option>
+                <mat-list-option class="px-2" value="lf-coach">
+                    <span class="font-weight-light">Enable LF Coach</span>
+                </mat-list-option>
+                <mat-list-option class="px-2" value="lf-manager">
+                    <span class="font-weight-light">Enable LF Manager</span>
+                </mat-list-option>
+            </mat-selection-list>
+            <div class="align-self-end mr-4 mt-5">
+                <button #create (click)="createOrg()" [disabled]="orgNameRef.value === ''" class="btn-large" color="primary" mat-flat-button>Create</button>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
+
+
+

@@ -8,7 +8,7 @@
     <div class="app-main-post-container col-11 h-100 pl-3 py-1 pr-0">
         <div class="app-main-post-data d-flex flex-row w-100">
             <span class="mr-1 text-truncate"><b>{{data.post.userRef$?.displayName ? data.post.userRef$?.displayName : data.post.userRef$?.username}}</b></span>
-            <mat-chip-list>
+            <mat-chip-list *ngIf="data.post.gameRef$">
                 <mat-chip class="app-post-game">
                     <img matChipAvatar [src]="data.post.gameRef$?.icon">{{data.post.gameRef$?.name}}
                 </mat-chip>

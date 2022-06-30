@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "teams": {
+    "scout": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -21,7 +21,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": ["crypto"],
-            "outputPath": "dist/teams",
+            "outputPath": "dist/scout",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -85,10 +85,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "teams:build:production"
+              "browserTarget": "scout:build:production"
             },
             "development": {
-              "browserTarget": "teams:build:development"
+              "browserTarget": "scout:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -96,7 +96,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "teams:build"
+            "browserTarget": "scout:build"
           }
         },
         "test": {
@@ -121,5 +121,5 @@
       }
     }
   },
-  "defaultProject": "teams"
+  "defaultProject": "scout"
 }

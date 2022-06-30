@@ -67,7 +67,7 @@
                     <span class="mx-1 text-muted">—</span>
                     <span class="text-muted">{{global.refDate(post?.date!) | timeAgo}}</span>
                     <div *ngIf="post.userRef$?.uid === global.user?.uid" class="ml-auto">
-                        <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted">more_horiz</mat-icon>
+                        <mat-icon [matMenuTriggerFor]="postMenu" role="button" class="align-self-center text-muted" (click)="$event.stopPropagation()">more_horiz</mat-icon>
                         <mat-menu class="post-menu" #postMenu="matMenu" xPosition="before">
                             <button (click)="global.openPostDeleteDialog(post)" class="text-muted" mat-menu-item>
                                 <mat-icon class="material-icons-rounded" [inline]="true" matPrefix>delete</mat-icon> Delete
@@ -79,7 +79,7 @@
                 <div *ngIf="post?.attachment" class="app-main-post-attachment mt-1">
                     <img draggable="true" [src]="post?.attachment">
                 </div>
-                <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-3">
+                <div class="app-main-post-interaction row justify-content-between align-item-center w-100 m-0 px-3" (click)="$event.stopPropagation()">
                     <button (click)="likeUnlikePost(post?.pid!)" class="bg-transparent mx-2" mat-mini-fab>
                         <mat-icon [ngClass]="post.likeRef$ ? 'material-icons-rounded' : 'material-icons-outlined'" [inline]="true" color="primary" matPrefix>thumb_up</mat-icon><span>{{post?.likesCount! > 0 ? global.abbrNum(post?.likesCount, 2) : ''}}</span>
                     </button>

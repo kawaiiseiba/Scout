@@ -5,7 +5,7 @@ import { Observable, of, Subscription, switchMap, take } from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { GamesService } from '../services/games.service';
-import { Comments, Games, PostClarity, Posts, Profile, Ranks, User } from '../services/models/data.model';
+import { Comments, Games, Organization, PostClarity, Posts, Profile, Ranks, User } from '../services/models/data.model';
 import { AuthService } from '../services/auth.service';
 import { AccountService } from '../services/account.service';
 import { PostsService } from '../services/posts.service';
@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     gameProfile: Profile | null
 
     selectedGame: Games
+
+    hasOrganization$: Observable<Organization | undefined>
 
     constructor(
         public router: Router,
@@ -84,6 +86,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.selectedGame = game
 
                 if(!game) return
+
+                this.hasOrganization$ = this.db.collection<Organization>('organizations').doc(game.id+'_'+user?.uid).valueChanges({ idField: 'oid'})
+                .pipe(
+                    take(1),
+                    switchMap(x => {
+                        if(x) return of(x)
+                        return of(undefined)
+                    })
+                )
     
                 this.db.collection<Profile>('profiles', ref => ref.where('gameRef', '==', game.id!).where('user', '==', user?.uid)).valueChanges()
                 .pipe(

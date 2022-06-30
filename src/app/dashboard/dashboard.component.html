@@ -17,9 +17,19 @@
                     <a [disabled]="!user" routerLink="./home" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
                         <mat-icon class="mb-1 mr-3">home</mat-icon>Home
                     </a>
-                    <a [disabled]="!user" routerLink="./organization" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>Organization
+                    <a *ngIf="$any(hasOrganization$ | async) as org; else hasOrg" [disabled]="!user" [routerLink]="'./organization/'+org.oid" routerLinkActive="btn-danger pink darken-1" 
+                    class="org-button w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                        <img width="30" height="30" *ngIf="org.icon; else orgIcon" [src]="org.icon!" 
+                        class="rounded-circle mb-1 mr-2">{{org.name}}
+                        <ng-template #orgIcon>
+                            <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>
+                        </ng-template>
                     </a>
+                    <ng-template #hasOrg>
+                        <a [disabled]="!user" routerLink="./organization" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
+                            <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>Organization
+                        </a>
+                    </ng-template>
                     <a [disabled]="!user" routerLink="./jobs" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
                         <mat-icon class="mb-1 mr-3">work</mat-icon>Jobs
                     </a>    
