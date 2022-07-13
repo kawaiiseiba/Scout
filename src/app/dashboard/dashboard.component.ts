@@ -5,11 +5,12 @@ import { Observable, of, Subscription, switchMap, take } from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { GamesService } from '../services/games.service';
-import { Comments, Games, Organization, PostClarity, Posts, Profile, Ranks, User } from '../services/models/data.model';
+import { Comments, Events, Games, Members, Organization, PostClarity, Posts, Profile, Ranks, User } from '../services/models/data.model';
 import { AuthService } from '../services/auth.service';
 import { AccountService } from '../services/account.service';
 import { PostsService } from '../services/posts.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { OrganizationService } from '../services/organization.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,7 +38,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     selectedGame: Games
 
-    hasOrganization$: Observable<Organization | undefined>
+    member$: Observable<any | undefined>
+
+    // hasOrganization$: Observable<Organization | undefined>
 
     constructor(
         public router: Router,
@@ -87,16 +90,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
                 if(!game) return
 
-                this.hasOrganization$ = this.db.collection<Organization>('organizations').doc(game.id+'_'+user?.uid).valueChanges({ idField: 'oid'})
+                this.member$ = this.db.collection<Members>('members', ref => ref.where('user', '==', user?.uid)).valueChanges()
                 .pipe(
                     take(1),
                     switchMap(x => {
-                        if(x) return of(x)
-                        return of(undefined)
+                        if(!x) return of(undefined)
+                        return x.map(member => {
+                            return {
+                                ...member,
+                                organizationRef$: this.db.collection<Organization>('organizations').doc(member.organization).valueChanges({ idField: 'oid'})
+                            }
+                        })
                     })
                 )
     
-                this.db.collection<Profile>('profiles', ref => ref.where('gameRef', '==', game.id!).where('user', '==', user?.uid)).valueChanges()
+                this.db.collection<Profile>('profiles', ref => ref.where('gameRef', '==', game.baseURL!).where('user', '==', user?.uid)).valueChanges()
                 .pipe(
                     take(1),
                     switchMap(x => {
@@ -154,6 +162,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 user: user,
                 route: this.activatedRoute
             }
+        })
+    }
+
+    openEventCancelDialog(event: Events) {
+        if(this.user === null && this.user === undefined) return
+
+        this.dialog.open(EventCancelDialog, {
+            backdropClass: 'dark-backdrop',
+            panelClass: 'dark-panel',
+            width: '250px',
+            data: event
         })
     }
 
@@ -289,7 +308,7 @@ export class GameListDialog {
             rankRef: rank,
             user: this.activeUser,
             date: Date.now(),
-            gameRef: this.stepperGameSelectId
+            gameRef: this.stepperGameSelectUrl
         }
         this.gameRef.saveProfile(data)
         .then(() => {
@@ -313,6 +332,23 @@ export class GameListDialog {
         } catch (e) {
             console.log(e)
         }
+    }
+}
+
+@Component({
+    selector: 'event-cancel-dialog',
+    templateUrl: './dialog/event-cancel.dialog.html',
+    styleUrls: ['./dialog/event-cancel.dialog.scss']
+})
+
+export class EventCancelDialog {
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: Events,
+        private org: OrganizationService
+    ) {}
+
+    confirmCancel(){
+        this.org.cancelEvent(this.data)
     }
 }
 

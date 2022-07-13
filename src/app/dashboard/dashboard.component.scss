@@ -77,12 +77,13 @@
 }
 
 .app-container-content{
+    height: max-content;
+    min-height: 100%;
     width: 990px;
 }
 
 .app-container-main{
     min-height: 100%;
-    height: max-content;
     width: 598px;
     min-width: 598px;
     max-width: 598px;

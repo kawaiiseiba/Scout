@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Cancel Event?</h2>
+<mat-dialog-content class="mat-typography">
+</mat-dialog-content>
+    <p>This can’t be undone and it will be removed from your organization events.</p>
+<mat-dialog-actions align="end">
+  <button mat-button color="primary" (click)="confirmCancel()" mat-dialog-close>Continue</button>
+  <button mat-button [mat-dialog-close]="true">Close</button>
+</mat-dialog-actions>

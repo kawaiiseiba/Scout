@@ -6,8 +6,7 @@
         <ng-template mat-tab-label>
             <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./list">List</div>
         </ng-template>
-        <!-- $any(organizationList$ | async)?.length > 0 as organization -->
-        <ng-container *ngIf="false; else nodata">
+        <ng-container *ngIf="(organizationList$ | async) as organizations">
             <div class="d-flex justify-content-end w-100 pt-2 px-3">
                 <button mat-icon-button class="text-muted mr-1">
                     <mat-icon class="material-icons-round">filter_alt</mat-icon>
@@ -16,13 +15,49 @@
                     <mat-icon class="material-icons-round">sort</mat-icon>
                 </button>
             </div>
+            <ng-container *ngIf="organizations.length > 0; else nodata">
+                <div class="px-2" *ngFor="let organization of organizations">
+                    <div class="d-flex rounded app-border py-2">
+                        <div class="col-2">
+                            <img class="rounded-circle" [src]="organization.icon" width="70" height="70">
+                        </div>
+                        <div class="col px-2 d-flex align-items-center">
+                            <div>
+                                <div class="font-weight-bold h5">{{organization.name}}</div>
+                                <span class="text-muted text-truncate">{{organization.description}}</span>
+                            </div>
+                            <a *ngIf="organization.isApplied; else notapplied" disabled="true" (click)="$event.stopPropagation()" class="ml-auto" mat-raised-button>Applied</a>
+                            <ng-template #notapplied>
+                                <button (click)="$event.stopPropagation()" [matMenuTriggerFor]="orgList" class="ml-auto" mat-icon-button>
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu class="post-menu" #orgList="matMenu" xPosition="before">
+                                    <button *ngIf="organization.settings!['direct-join']" mat-menu-item (click)="joinOrg(organization)">
+                                        <mat-icon>meeting_room</mat-icon> Join
+                                    </button>
+                                    <button (click)="openApplyDialog(organization)" *ngIf="!organization.settings!['direct-join']" mat-menu-item>
+                                        <mat-icon>note_alt</mat-icon> Apply
+                                    </button>
+                                    <button disabled="true" *ngIf="organization.settings!['lf-team']" mat-menu-item>
+                                        <mat-icon>group_add</mat-icon> Apply Team
+                                    </button>
+                                    <button [routerLink]="'./'+organization.oid" mat-menu-item>
+                                        <mat-icon>preview</mat-icon> Visit
+                                    </button>
+                                  </mat-menu>
+                            </ng-template>
+                            
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #nodata>
+                <div class="d-flex justify-content-center w-100 mt-5">
+                    <h2 class="text-muted font-weight-light mt-5">No organization available yet! <a (click)="selectedIndex = 1" routerLink="./create" class="text-danger">Create one here!</a></h2>
+                </div>
+            </ng-template>
         </ng-container>
-        
-        <ng-template #nodata>
-            <div class="d-flex justify-content-center w-100 mt-5">
-                <h2 class="text-muted font-weight-light mt-5">No organization available yet! <a (click)="selectedIndex = 1" routerLink="./create" class="text-danger">Create one here!</a></h2>
-            </div>
-        </ng-template>
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>
@@ -56,7 +91,13 @@
             <div class="input-group px-3 mt-5">
                 <mat-form-field class="w-50" appearance="outline">
                     <mat-label>Organization Name</mat-label>
-                    <input oninput="this.value = this.value.toUpperCase()" #orgNameRef [(ngModel)]="orgName" [ngModelOptions]="{standalone: true}" class="font-weight-light" matInput autocomplete="off" required>
+                    <input oninput="this.value = this.value.toUpperCase();" (keyup)="checkOrgName(orgNameRef.value)" #orgNameRef [(ngModel)]="orgName" [ngModelOptions]="{standalone: true}" class="font-weight-light" matInput autocomplete="off" required>
+                    <mat-hint *ngIf="!isNameExist && orgNameRef.value.length > 0" align="start" class="text-success">
+                        Available <mat-icon matSuffix>check_circle</mat-icon>
+                    </mat-hint>
+                    <mat-hint *ngIf="isNameExist" align="start" class="text-danger align-middle">
+                        Already exist <mat-icon matSuffix>close</mat-icon>
+                    </mat-hint>
                 </mat-form-field>
                 <div class="org-sns-link d-flex w-50 mt-3 justify-content-between px-3">
                     <div *ngFor="let link of sns_links">
@@ -78,13 +119,36 @@
                 </div>
             </div>
             <div class="input-group px-3">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <input oninput="this.value = this.value.toLowerCase()" (keydown.space)="$event.preventDefault()" (keyup)="checkOrgUrl(orgUrlRef.value)" #orgUrlRef [(ngModel)]="orgUrl" [ngModelOptions]="{standalone: true}" placeholder="" class="font-weight-light" matInput autocomplete="off" required>
+                    <mat-hint align="start"><strong>This will be the organization public address/url [Unchangable]</strong></mat-hint>
+                    <mat-hint *ngIf="!isUrlExist && orgUrlRef.value.length > 0" align="end" class="text-success">
+                        Available <mat-icon matSuffix>check_circle</mat-icon>
+                    </mat-hint>
+                    <mat-hint *ngIf="isUrlExist" align="end" class="text-danger align-middle">
+                        Already exist <mat-icon matSuffix>close</mat-icon>
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="input-group px-3">
                 <mat-form-field class="w-100 post-specific py-1" appearance="outline">
                     <mat-label>Description</mat-label>
                     <textarea [(ngModel)]="orgDesc" [ngModelOptions]="{standalone: true}" class="font-weight-light" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="12"></textarea>
                 </mat-form-field>
             </div>
             <mat-selection-list #orgOptions class="org-options px-3">
-                <mat-list>
+                <mat-list-option class="px-2" value="direct-join">
+                    <span class="font-weight-light">
+                        <span class="pr-2" matBadge="?" matBadgeSize="small"
+                        #tooltip="matTooltip"
+                        matTooltipClass="btn-danger pink darken-1"
+                        matTooltip="If enabled, it will allow users to join your organization without submitting their application. 
+                        They'll automatically gain the ~Member~ role."
+                        matTooltipPosition="above"><u>Enable direct join</u></span>
+                    </span>
+                </mat-list-option>
+                <!-- <mat-list>
                     <mat-accordion>
                         <mat-expansion-panel class="bg-transparent">
                             <mat-expansion-panel-header>
@@ -110,7 +174,7 @@
                             </mat-selection-list>
                         </mat-expansion-panel>
                     </mat-accordion>
-                </mat-list>
+                </mat-list> -->
                 <mat-list-option class="px-2" value="lf-player">
                     <span class="font-weight-light">Enable LF Player</span>
                 </mat-list-option>
@@ -125,7 +189,7 @@
                 </mat-list-option>
             </mat-selection-list>
             <div class="align-self-end mr-4 mt-5">
-                <button #create (click)="createOrg()" [disabled]="orgNameRef.value === ''" class="btn-large" color="primary" mat-flat-button>Create</button>
+                <button #create (click)="createOrg()" [disabled]="(orgNameRef.value === '' || isNameExist) || (orgUrlRef.value === '' || isUrlExist)" class="btn-large" color="primary" mat-flat-button>Create</button>
             </div>
         </div>
     </mat-tab>

@@ -1,0 +1,42 @@
+<h2 class="text-capitalize" mat-dialog-title>{{position.id}} Permission</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-list role="list">
+        <mat-list-item>
+            Create Posts <mat-slide-toggle [(ngModel)]="position.canCreatePost" color="primary" class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Delete Posts <mat-slide-toggle [(ngModel)]="position.canDeletePost" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Chat enabled <mat-slide-toggle [(ngModel)]="position.canChat" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Manage Chat <mat-slide-toggle [(ngModel)]="position.canDeleteChatMessages" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Create Event <mat-slide-toggle [(ngModel)]="position.canCreateEvent" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Manage Event <mat-slide-toggle [(ngModel)]="position.canDeleteEvent" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Create Roles <mat-slide-toggle [(ngModel)]="position.canCreateRoles" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Manage Roles <mat-slide-toggle [(ngModel)]="position.canRemoveRoles" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Add Members<mat-slide-toggle [(ngModel)]="position.canAddMembers" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Kick Members <mat-slide-toggle [(ngModel)]="position.canKickMembers" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Ban Members <mat-slide-toggle [(ngModel)]="position.canBanMembers" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+      </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button (click)="savePosition(position)" mat-button color="primary">Save</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

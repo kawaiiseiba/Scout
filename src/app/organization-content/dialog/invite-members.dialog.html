@@ -1,0 +1,54 @@
+<!-- <h2 class="text-capitalize" mat-dialog-title>Invite members</h2> -->
+<div class="d-flex flex-row justify-content-between align-items-center" mat-dialog-title>
+    <h2 class="text-capitalize">Invite members</h2>
+    <!-- <mat-form-field class="w-50" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input  matInput placeholder="Name">
+    </mat-form-field> -->
+</div>
+<mat-dialog-content class="mat-typography py-5">
+    <ng-container *ngIf="users && users.length > 0; else nodata">
+        <div class="px-2" *ngFor="let profile of users">
+            <ng-container *ngIf="!profile.isMember">
+                <div class="d-flex rounded app-border py-2">
+                    <div class="col-2">
+                        <img class="rounded-circle" [src]="profile.userRef?.avatar ? profile.userRef?.avatar : profile.userRef?.defaultAvatar" width="70" height="70">
+                    </div>
+                    <div class="col px-2 d-flex align-items-center">
+                        <div>
+                            <div class="font-weight-bold h5"><a [href]="profile.gameRef+'/'+profile.userRef?.username" target="_blank" class="text-danger">{{profile.ign}}</a></div>
+                            <span class="text-muted text-truncate">{{profile.bio}}</span>
+                        </div>
+                        <!-- [matMenuTriggerFor]="orgList" -->
+                        <button (click)="addMember(organization, profile.userRef!)"  class="ml-auto" mat-button>
+                            <mat-icon>add</mat-icon> Add
+                        </button>
+                        <!-- <mat-menu class="post-menu" #orgList="matMenu" xPosition="before">
+                            <button *ngIf="organization.settings!['direct-join']" mat-menu-item (click)="joinOrg(organization)">
+                                <mat-icon>meeting_room</mat-icon> Join
+                            </button>
+                            <button *ngIf="!organization.settings!['direct-join']" mat-menu-item>
+                                <mat-icon>note_alt</mat-icon> Apply
+                            </button>
+                            <button *ngIf="organization.settings!['lf-team']" mat-menu-item>
+                                <mat-icon>group_add</mat-icon> Apply Team
+                            </button>
+                            <button [routerLink]="'./'+organization.oid" mat-menu-item>
+                                <mat-icon>preview</mat-icon> Visit
+                            </button>
+                          </mat-menu> -->
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <ng-template #nodata>
+        <div class="d-flex justify-content-center w-100 mt-5">
+            <h2 class="text-muted font-weight-light mt-5">No users found!</h2>
+        </div>
+    </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

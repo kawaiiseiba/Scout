@@ -1,0 +1,117 @@
+
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css");
+
+app-organization-settings{
+
+    .app-profile-header-container, .app-profile-header-banner{
+        height: 200px;
+    }
+    
+    .app-profile-header-banner{
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    
+        -moz-user-select: -moz-none;    
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    .app-profile-header-banner:hover:before{
+        content: "Add Banner";
+        position: absolute;
+        width: 100%;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #83838329;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    
+    .app-profile-avatar-container{
+        position: relative;
+        z-index: 1;
+        margin-top: -15%;
+    
+        -moz-user-select: -moz-none;    
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        
+        .app-profile-avatar{
+            border-radius: 50%;
+            border: 4px solid black;
+            box-shadow: rgb(255 255 255 / 3%) 0px 0px 2px inset;
+            max-width: 141.25px;
+            max-height: 141.25px;
+            min-width: 141.25px;
+            min-height: 141.25px;
+        }
+    }
+    
+    
+    
+    .app-profile-avatar-container:hover:before{
+        content: "Add Icon";
+        position: absolute;
+        width: 141px;
+        height: 141px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: #83838329;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    
+    .cancel-banner-preview{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background-color: #00000075;
+    }
+    
+    .cancel-icon-preview{
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: #00000075;
+    }
+    
+    .mat-selection-list .mat-list-item .mat-list-item-content .mat-list-text,
+    .mat-accordion .mat-expansion-panel .mat-expansion-panel-header .mat-content{
+        overflow: inherit;
+    }
+    
+    .app-main-navigation-hint{
+        background-color: #000000b0;
+        backdrop-filter: blur(1px);
+    }
+    
+    .org-sns-link{
+        i {
+            font-size: 1.7rem; 
+        }
+    }
+
+    .mat-list .mat-list-item{
+        text-transform: capitalize;
+        user-select: none;
+        &>:hover{
+            background: #2826236b;
+            cursor: pointer;
+        }
+    }
+}
+
+
+    
+.mat-menu-panel{
+    width: 280px;
+}

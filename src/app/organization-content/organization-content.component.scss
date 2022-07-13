@@ -1,154 +1,258 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css");
 
-.app-post-file-preview{
-    max-height: 510px;
-    max-width: 100%;
-    border-radius: 15px;
-}
+app-organization-content{
 
-.app-post-file-preview-remove{
-    position: absolute;
-    margin-top: 5px;
-    left: 20px;
-}
-
-.app-user-post{
-    cursor: pointer
-}
-
-.app-main-post-attachment{
-    img{
+    .app-post-file-preview{
         max-height: 510px;
-        border-radius: 5px;
         max-width: 100%;
+        border-radius: 15px;
     }
-}
-
-.app-main-post-interaction{
-    span{
-        font-size: 12px;
-        color: #877a7a;
-        padding: 0px 10px;
-    }
-}
-
-.app-main-post{
-    .btn-fab-display{
-        transform: scale(.8);
-    }
-}
-
-
-
-.app-main-post-description{
-    white-space: pre-wrap;
-}
-
-.app-post-game{
-    font-size: 10px;
-    min-height: 25px;
-    img{
-        width: 19px;
-        height: 19px;
-    }
-}
-
-.app-profile-header-container, .app-profile-header-banner{
-    height: 200px;
-}
-
-.app-profile-header-banner{
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-
-    -moz-user-select: -moz-none;    
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-// .app-profile-header-banner:hover:before{
-//     content: "Add Banner";
-//     position: absolute;
-//     width: 100%;
-//     height: 200px;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     background-color: #83838329;
-//     color: #ffffff;
-//     font-weight: bold;
-// }
-
-.app-profile-avatar-container{
-    position: relative;
-    z-index: 1;
-    margin-top: -15%;
-
-    -moz-user-select: -moz-none;    
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     
-    .app-profile-avatar{
-        border-radius: 50%;
-        border: 4px solid black;
-        box-shadow: rgb(255 255 255 / 3%) 0px 0px 2px inset;
-        max-width: 141.25px;
-        max-height: 141.25px;
-        min-width: 141.25px;
-        min-height: 141.25px;
+    .app-post-file-preview-remove{
+        position: absolute;
+        margin-top: 5px;
+        left: 20px;
     }
-}
-
-
-
-// .app-profile-avatar-container:hover:before{
-//     content: "Add Icon";
-//     position: absolute;
-//     width: 141px;
-//     height: 141px;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     border-radius: 50%;
-//     background-color: #83838329;
-//     color: #ffffff;
-//     font-weight: bold;
-// }
-
-.cancel-banner-preview{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background-color: #00000075;
-}
-
-.cancel-icon-preview{
-    position: absolute;
-    right: 0;
-    top: 0;
-    background-color: #00000075;
-}
-
-.mat-accordion .mat-expansion-panel .mat-expansion-panel-header .mat-content{
-    overflow: inherit;
-}
-
-.app-main-navigation-hint{
-    background-color: #000000b0;
-    backdrop-filter: blur(1px);
-}
-
-.org-sns-link{
-    i {
-        font-size: 1.7rem; 
+    
+    .app-user-post{
+        cursor: pointer
     }
-}
+    
+    .app-main-post-attachment{
+        img{
+            max-height: 510px;
+            border-radius: 5px;
+            max-width: 100%;
+        }
+    }
+    
+    .app-main-post-interaction{
+        button{
+            font-size: 20px;
+        }
+    }
+    
+    .app-main-post{
+        .btn-fab-display{
+            transform: scale(.8);
+        }
+    }
+    
+    
+    
+    .app-main-post-description{
+        white-space: pre-wrap;
+    }
+    
+    .app-post-game{
+        font-size: 10px;
+        min-height: 25px;
+        img{
+            width: 19px;
+            height: 19px;
+        }
+    }
+    
+    .app-profile-header-container{
+        height: 200px;
+    }
+    
+    .app-profile-header-banner{
+        height: 200px;
+    }
+    .app-profile-header-container.has-chat{
+        height: 60px;
+    }
+    
+    .app-profile-header-banner.has-chat{
+        height: 60px;
+    }
+    
+    
+    .app-profile-header-banner{
+        background-color: #333;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    
+        -moz-user-select: -moz-none;    
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    // .app-profile-header-banner:hover:before{
+    //     content: "Add Banner";
+    //     position: absolute;
+    //     width: 100%;
+    //     height: 200px;
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     background-color: #83838329;
+    //     color: #ffffff;
+    //     font-weight: bold;
+    // }
+    
+    .app-profile-avatar-container{
+        position: relative;
+        z-index: 1;
+        margin-top: -15%;
+    
+        -moz-user-select: -moz-none;    
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        
+        .app-profile-avatar{
+            border-radius: 50%;
+            border: 4px solid black;
+            box-shadow: rgb(255 255 255 / 3%) 0px 0px 2px inset;
+            width: 141.25px;
+            height: 141.25px;
+        }
+    
+        .app-profile-avatar.has-chat{
+            border: 2px solid black;
+            width: 100px !important;
+            height: 100px !important;
+        }
+    }
+    
+    .app-profile-avatar-container.has-chat{
+        padding-top: 40px;
+    }
+    
+    .org-content .mat-tab-body-wrapper {
+        height: 100%;
+    }
+    
+    .org-content .mat-tab-body.mat-tab-body-active {
+        height: 100%;
+    }
+    
+    .chat-content{
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin-bottom: 85px;
+    }
+    
+    .chat-content::-webkit-scrollbar {
+        width: 7px;
+    }
+      
+    .chat-content::-webkit-scrollbar-track {
+        background: #54535040;
+    }
+    
+    .chat-content::-webkit-scrollbar-thumb {
+        background-color: #444448ab;
+        border-radius: 20px;
+    }
+    
+    .chat-message{
+        width: fit-content;
+    
+        .chat-message-content{
+            font-size: 18px;
+            width: fit-content;
+        }
+    
+        .chat-message-attachment{
+            max-width: 250px;
+            max-height: 100%;
+            border-radius: 20px;
+        }
+    }
+    
+    .chat-input-preview{
+        position: absolute;
+        bottom: 0;
+        background-color: black;
+    
+        .attachment-container{
+            width: 150px;
+            height: 150px;
+            position: relative;
+            
+            .attachment-preview {
+                width: 100%;
+                height: 100%;
+                border-radius: 20px;
+                background-position: center;
+                background-size: cover;
+                background-repeat: no-repeat;
+            }
+    
+            a{
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                transform: scale(.8);
+            }
+        }
+    }
+    
+    // .chat-input {
+    //     height: 120px;
+    // }
+    
+    // .app-profile-avatar-container:hover:before{
+    //     content: "Add Icon";
+    //     position: absolute;
+    //     width: 141px;
+    //     height: 141px;
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     border-radius: 50%;
+    //     background-color: #83838329;
+    //     color: #ffffff;
+    //     font-weight: bold;
+    // }
+    
+    .cancel-banner-preview{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background-color: #00000075;
+    }
+    
+    .cancel-icon-preview{
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: #00000075;
+    }
+    
+    .mat-accordion .mat-expansion-panel .mat-expansion-panel-header .mat-content{
+        overflow: inherit;
+    }
+    
+    .app-main-navigation-hint{
+        background-color: #000000b0;
+        backdrop-filter: blur(1px);
+    }
+    
+    .org-sns-link{
+        i {
+            font-size: 1.7rem; 
+        }
+    }
+    
+    .mat-menu-panel{
+        width: 280px;
+    }
 
-.mat-menu-panel{
-    width: 280px;
+    .member-list-card{
+        &:hover{
+            background-color: #333;
+        }
+    }
+    
+    .show-create-event{
+        cursor: pointer;
+    }
 }

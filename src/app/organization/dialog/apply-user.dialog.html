@@ -1,0 +1,11 @@
+<h2 class="text-capitalize" mat-dialog-title>Application</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Bio</mat-label>
+        <textarea [(ngModel)]="bio" [ngModelOptions]="{standalone: true}" placeholder="Tell us about your experiences, achievements or goal." matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="25"></textarea>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button [disabled]="bio?.length! <= 3" #submit mat-button (click)="submitForm()" color="primary">Submit</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

@@ -5,7 +5,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { NgxTypedJsModule } from "ngx-typed-js";
 
@@ -17,9 +17,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 
 import { AuthService } from './services/auth.service';
-import { RouteReuseStrategy } from '@angular/router';
-import { CustomReuseStrategy } from './app-reuse-strategy';
-import { OrganizationContentComponent } from './organization-content/organization-content.component';
+import { OrganizationSettingsComponent } from './organization-settings/organization-settings.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +34,8 @@ import { OrganizationContentComponent } from './organization-content/organizatio
     AngularFireStorageModule,
     AngularFirestoreModule,
     AngularFireDatabaseModule,
-    NgxTypedJsModule
+    NgxTypedJsModule,
+    MatNativeDateModule
   ],
   providers: [
     AuthService,

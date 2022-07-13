@@ -1,0 +1,10 @@
+position-settings-dialog{
+    .mat-list .mat-list-item{
+        text-transform: capitalize;
+        user-select: none;
+        &>:hover{
+            background: #2826236b;
+            cursor: pointer;
+        }
+    }
+}

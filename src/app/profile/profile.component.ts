@@ -47,13 +47,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     take(1),
                     switchMap(x => of(...x.map(x => x)))
                 ).subscribe(game=> {
-                    console.log(game.id+'_'+this.profile?.uid)
-                    this.db.doc<Profile>('profiles/'+game.id+'_'+this.profile?.uid).valueChanges()
+                    this.db.doc<Profile>('profiles/'+game.baseURL+'_'+this.profile?.uid).valueChanges()
                     .pipe(
                         take(1),
                         switchMap(x => of(x))
                     ).subscribe(gameProfile => {
-                        console.log(gameProfile)
                         this.gameProfile = gameProfile!
                     })
                 })

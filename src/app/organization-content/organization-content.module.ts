@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { OrganizationContentComponent } from './organization-content.component';
+import { InviteMembersDialog, OrganizationContentComponent } from './organization-content.component';
 
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
@@ -17,6 +17,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatChipsModule } from '@angular/material/chips';
 import { NgDatePipesModule } from 'ngx-pipes';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
 	{
@@ -43,7 +47,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [OrganizationContentComponent],
+    declarations: [OrganizationContentComponent, InviteMembersDialog],
     imports: [
       CommonModule,
       RouterModule.forChild(routes),
@@ -60,7 +64,11 @@ const routes: Routes = [
       ReactiveFormsModule,
       ClipboardModule,
       MatChipsModule,
-      NgDatePipesModule
+      NgDatePipesModule,
+      MatDatepickerModule,
+      MatSlideToggleModule,
+      MatRadioModule,
+      MatDialogModule
     ]
 })
 export class OrganizationContentModule { 

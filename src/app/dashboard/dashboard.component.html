@@ -15,52 +15,53 @@
                     </button>
                     <div class="w-100 app-border-bottom my-2"></div>
                     <a [disabled]="!user" routerLink="./home" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <mat-icon class="mb-1 mr-3">home</mat-icon>Home
+                        <mat-icon class="material-symbols-rounded mb-1 mr-3">home</mat-icon>Home
                     </a>
-                    <a *ngIf="$any(hasOrganization$ | async) as org; else hasOrg" [disabled]="!user" [routerLink]="'./organization/'+org.oid" routerLinkActive="btn-danger pink darken-1" 
+                    <ng-container *ngIf="(member$ | async) as member; else hasOrg">
+                        <a *ngIf="$any(member.organizationRef$ | async) as org" [disabled]="!user" [routerLink]="'./organization/'+org.oid" routerLinkActive="btn-danger pink darken-1" 
                     class="org-button w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <img width="30" height="30" *ngIf="org.icon; else orgIcon" [src]="org.icon!" 
-                        class="rounded-circle mb-1 mr-2">{{org.name}}
-                        <ng-template #orgIcon>
-                            <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>
-                        </ng-template>
-                    </a>
+                            <img width="30" height="30" *ngIf="org.icon; else orgIcon" [src]="org.icon!" 
+                            class="rounded-circle mb-1 mr-2">{{org.name}}
+                            <ng-template #orgIcon>
+                                <mat-icon class="material-symbols-rounded mb-1 mr-3">supervised_user_circle</mat-icon>
+                            </ng-template>
+                        </a>
+                    </ng-container>
                     <ng-template #hasOrg>
                         <a [disabled]="!user" routerLink="./organization" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                            <mat-icon class="mb-1 mr-3">supervised_user_circle</mat-icon>Organization
+                            <mat-icon class="material-symbols-rounded mb-1 mr-3">supervised_user_circle</mat-icon>Organization
                         </a>
                     </ng-template>
                     <a [disabled]="!user" routerLink="./jobs" routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <mat-icon class="mb-1 mr-3">work</mat-icon>Jobs
+                        <mat-icon class="material-symbols-rounded mb-1 mr-3">work</mat-icon>Jobs
                     </a>    
                     <a [disabled]="!user" routerLink="./teams"  routerLinkActive="btn-danger pink darken-1" class="w-100 rounded-pill py-2 my-1" type="button" mat-button>
-                        <mat-icon class="mb-1 mr-3">handshake</mat-icon>Teams
+                        <mat-icon class="material-symbols-rounded mb-1 mr-3">handshake</mat-icon>Scout
                     </a>
                 </div>
                 <div class="w-100 app-border-bottom"></div>
                 <div class="app-additional-navs py-2">
-                    <mat-expansion-panel class="bg-transparent py-1" [expanded]="_routeURL !== 'game'">
-                        <mat-expansion-panel-header class="px-1">
-                          Your Teams
-                        </mat-expansion-panel-header>
-                      
-                        <ng-template matExpansionPanelContent>
-                            <div class="row w-100">
-                                <div class="col-10"><span>You don't have a team yet.<br> Create or Join one!</span></div>
-                                <div class="col-2">
-                                    <button mat-mini-fab color="secondary">
-                                        <mat-icon>add</mat-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </mat-expansion-panel>
+                    <button class="morpheus-den w-100 rounded-pill py-2 my-1" mat-raised-button>
+                        <mat-icon class="material-symbols-rounded">swords</mat-icon> Scrimmages
+                    </button>
+                    <button class="peach-gradient w-100 rounded-pill py-2 my-1" mat-raised-button>
+                        <mat-icon class="material-symbols-rounded">event_note</mat-icon> Events
+                    </button>
                 </div>
-                <div class="w-100 app-border-bottom"></div>
+                <!-- <div class="w-100 app-border-bottom"></div> -->
                 <div class='app-profile-logged-in mt-auto my-3'>
                     <button routerLink="/" *ngIf="!(user$ | async)" class="btn-danger pink darken-1 w-100 p-2 m-0 rounded-pill" mat-stroked-button>SIGN-IN | SIGN-UP</button>
                     <div *ngIf="(user$ | async) as user" role="button" matRipple [matMenuTriggerFor]="profileMenu" class="app-profile-button row align-item-center w-100 p-1 m-0 rounded-pill">
-                        <div class="col-2 app-profile-img m-0 p-0" matTooltip="You have 9 Notification" matTooltipClass="btn-danger pink darken-1" matBadge="8" matBadgeSize="medium" matBadgePosition="after" matBadgeColor="primary" matBadgeOverlap="true">
+                        <div class="col-2 app-profile-img m-0 p-0" 
+                        matTooltipDisabled="true" 
+                        matTooltip="You have 9 Notification" 
+                        matTooltipClass="btn-danger pink darken-1" 
+                        matBadge="8" 
+                        matBadgeSize="medium" 
+                        matBadgePosition="after" 
+                        matBadgeColor="primary" 
+                        matBadgeHidden="true"
+                        matBadgeOverlap="true">
                             <img class="rounded-circle" [src]="user.avatar ? user.avatar : user.defaultAvatar" width="40">
                         </div>
                         <div class="col-8 d-flex flex-column app-profile-data pr-0">
@@ -68,24 +69,24 @@
                             <div class="text-muted">@{{user.username}}</div>
                         </div>
                         <div class="col-2 d-flex app-profile-option">
-                            <mat-icon class="align-self-center">more_vert</mat-icon>
+                            <mat-icon class="material-symbols-rounded align-self-center">more_vert</mat-icon>
                         </div>
                     </div>
                     <mat-menu #profileMenu="matMenu" yPosition="above" class="bg-dark profile-menu">
                         <a [routerLink]="'./'+user?.username" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
-                            <mat-icon class="mb-1 mr-3" matPrefix>person</mat-icon>Profile
+                            <mat-icon class="material-symbols-rounded mb-1 mr-3" matPrefix>person</mat-icon>Profile
                         </a>
                         <a routerLink="./notifications" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
-                            <mat-icon class="mb-1 mr-3" matPrefix>notifications</mat-icon>Notification
+                            <mat-icon class="material-symbols-rounded mb-1 mr-3" matPrefix>notifications</mat-icon>Notification
                         </a>
                         <a routerLink="./messsages" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
-                            <mat-icon class="mb-1 mr-3" matPrefix>email</mat-icon>Messages
+                            <mat-icon class="material-symbols-rounded mb-1 mr-3" matPrefix>email</mat-icon>Messages
                         </a>
                         <a routerLink="./settings" routerLinkActive="btn-danger pink darken-1" type="button" mat-menu-item>
-                            <mat-icon class="mb-1 mr-3" matPrefix>settings</mat-icon>Settings
+                            <mat-icon class="material-symbols-rounded mb-1 mr-3" matPrefix>settings</mat-icon>Settings
                         </a>
                         <button (click)="onLogout()" type="button" mat-menu-item>
-                            <mat-icon class="mb-1 mr-3" matPrefix>logout</mat-icon>Log out
+                            <mat-icon class="material-symbols-rounded mb-1 mr-3" matPrefix>logout</mat-icon>Log out
                         </button>
                     </mat-menu>
                 </div>
@@ -94,7 +95,7 @@
     </mat-drawer>
 
     <mat-drawer-content class="app-container-right-content flex-grow-1 ml-0">
-        <div class="app-container-content d-flex justify-content-between h-100">
+        <div class="app-container-content d-flex justify-content-between">
             <!-- <router-outlet name="messages"></router-outlet> -->
             <div class="app-container-main app-border-right">
                 <router-outlet>
@@ -107,7 +108,7 @@
                         <mat-form-field class="mt-2 w-100 search" appearance="fill">
                             <mat-label>Search</mat-label>
                             <input type="text" matInput>
-                            <mat-icon class="mr-2" color="accent" matPrefix>search</mat-icon>
+                            <mat-icon class="material-symbols-rounded mr-2" color="accent" matPrefix>search</mat-icon>
                         </mat-form-field>
                     </div>
                 </div>

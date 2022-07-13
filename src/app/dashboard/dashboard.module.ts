@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { AddProfileDialog, CommentDialog, DashboardComponent, GameListDialog, PostDeleteDialog } from './dashboard.component';
+import { AddProfileDialog, CommentDialog, DashboardComponent, EventCancelDialog, GameListDialog, PostDeleteDialog } from './dashboard.component';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';  
 
@@ -54,7 +54,7 @@ const routes: Routes = [
                             },
                             {
                                 path: 'settings',
-                                pathMatch: 'full'
+                                loadChildren: () => import('../organization-settings/organization-settings.module').then(m => m.OrganizationSettingsModule)
                             },
                         ]
                     }
@@ -90,7 +90,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [DashboardComponent, GameListDialog, PostDeleteDialog, CommentDialog, AddProfileDialog],
+  declarations: [DashboardComponent, GameListDialog, EventCancelDialog, PostDeleteDialog, CommentDialog, AddProfileDialog],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

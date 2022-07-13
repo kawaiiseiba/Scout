@@ -1,0 +1,135 @@
+<div class="app-main-navigation-hint w-100 p-3 d-flex align-items-center app-border-bottom sticky-top">
+    <button (click)="prevLocation()" class="bg-transparent text-light mr-2" mat-mini-fab>
+        <mat-icon class="material-icons-rounded">arrow_back</mat-icon>
+    </button><b>{{organization?.name!}} | Settings</b>
+</div>
+<mat-tab-group [(selectedIndex)]="routeId" animationDuration="0ms">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./">General</div>
+        </ng-template>
+        <div *ngIf="organization as org" class="d-flex flex-column w-100 pb-5">
+            <div class="app-profile-header-container mb-5">
+                <a class="app-profile-header w-100" (click)="banner.click()">
+                    <div class="app-profile-header-container">
+                        <input #banner class="d-none" type="file" accept="image/" (change)="addBannerFile($event)">
+                        <div class="app-profile-header-banner" 
+                        [style.background-image]="bannerPrev ? 'url('+bannerPrev+')' : 'url('+(org.banner ? org.banner : 'https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/users%2Fbanner.png?alt=media&token=23218500-7914-4932-92ce-55fbcf2716eb')+')'"
+                        ></div>
+                    </div>
+                    <a *ngIf="bannerPrev" (click)="$event.stopPropagation(); banner.value=''; bannerPrev=''" class="cancel-banner-preview" mat-icon-button>
+                        <mat-icon class="material-icons-round">close</mat-icon>
+                    </a>
+                </a>
+                <div class="app-profile-content p-3">
+                    <div class="app-profile-field d-flex justify-content-center">
+                        <a class="app-profile-avatar-container w-25" (click)="icon.click()">
+                            <input #icon class="d-none" type="file" accept="image/" (change)="addIconFile($event)">
+                            <img class="app-profile-avatar w-100 h-100" [src]="iconPrev ? iconPrev : org.icon ? org.icon : '../../../assets/placeholders/default.png'" alt="">
+                            <a *ngIf="iconPrev" class="cancel-icon-preview"  (click)="$event.stopPropagation(); icon.value=''; iconPrev='';" mat-icon-button>
+                                <mat-icon class="material-icons-round">close</mat-icon>
+                            </a>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group px-3 mt-5">
+                <mat-form-field class="w-50" appearance="outline">
+                    <mat-label>Organization Name</mat-label>
+                    <input [(ngModel)]="org.name" [ngModelOptions]="{standalone: true}" oninput="this.value = this.value.toUpperCase();" (keyup)="checkOrgName(orgNameRef.value)" #orgNameRef class="font-weight-light" matInput autocomplete="off" required>
+                    <mat-hint *ngIf="!isNameExist && orgNameRef.value.length > 0" align="start" class="text-success">
+                        Available <mat-icon matSuffix>check_circle</mat-icon>
+                    </mat-hint>
+                    <mat-hint *ngIf="isNameExist" align="start" class="text-danger align-middle">
+                        Already exist <mat-icon matSuffix>close</mat-icon>
+                    </mat-hint>
+                </mat-form-field>
+                <div class="org-sns-link d-flex w-50 mt-3 justify-content-between px-3">
+                    <div *ngFor="let link of org.snsLink; index as i">
+                        <a [matMenuTriggerFor]="snsMenu" #trigger="matMenuTrigger" mat-icon-button
+                        [style.background-color]="checkValidUrl(snsInput.value) ? 'white' : ''"> 
+                            <i [attr.class]="link.class" 
+                            [style.color]="checkValidUrl(snsInput.value) ? link.color : ''"></i>
+                        </a>
+                        <mat-menu class="sns-menu px-2" #snsMenu="matMenu" yPosition="above" xPosition="before">
+                            <mat-form-field class="w-100" appearance="fill" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" (keyup.enter)="trigger.closeMenu()">
+                                <mat-label>
+                                    <i [attr.class]="link.class" [style.color]="link.color" matPrefix></i><span class="ml-2">{{link.name}}</span>
+                                </mat-label>
+                                <input [(ngModel)]="link.url" [ngModelOptions]="{standalone: true}" class="text-white font-weight-light" #snsInput type="url" matInput autocomplete="off">
+                                <mat-hint>Ex: https://{{link.name}}.com/yourorgname</mat-hint>
+                            </mat-form-field>
+                        </mat-menu>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group px-3">
+                <mat-form-field class="w-100 post-specific py-1" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea [(ngModel)]="org.description" [ngModelOptions]="{standalone: true}" class="font-weight-light" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="12"></textarea>
+                </mat-form-field>
+            </div>
+            <mat-selection-list #orgSettings class="org-options px-3">
+                <mat-list-option [selected]="org.settings?.['direct-join']" class="px-2" value="direct-join">
+                    <span class="font-weight-light">
+                        <span class="pr-2" matBadge="?" matBadgeSize="small"
+                        #tooltip="matTooltip"
+                        matTooltipClass="btn-danger pink darken-1"
+                        matTooltip="If enabled, it will allow users to join your organization without submitting their application. 
+                        They'll automatically gain the ~Member~ role."
+                        matTooltipPosition="above"><u>Enable direct join</u></span>
+                    </span>
+                </mat-list-option>
+                <mat-list-option [selected]="org.settings?.['lf-player']" class="px-2" value="lf-player">
+                    <span class="font-weight-light">Enable LF Player</span>
+                </mat-list-option>
+                <mat-list-option [selected]="org.settings?.['lf-team']" class="px-2" value="lf-team">
+                    <span class="font-weight-light">Enable LF Team</span>
+                </mat-list-option>
+                <mat-list-option [selected]="org.settings?.['lf-coach']" class="px-2" value="lf-coach">
+                    <span class="font-weight-light">Enable LF Coach</span>
+                </mat-list-option>
+                <mat-list-option [selected]="org.settings?.['lf-manager']" class="px-2" value="lf-manager">
+                    <span class="font-weight-light">Enable LF Manager</span>
+                </mat-list-option>
+            </mat-selection-list>
+            <div class="align-self-end mr-4 mt-5">
+                <button #create (click)="editOrg()" class="btn-large" color="primary" mat-flat-button>Save</button>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./positions">Positions</div>
+        </ng-template>
+        <!-- (cdkDropListDropped)="drop($event)" -->
+        <mat-list cdkDropList role="list" class="pr-2 pl-3">
+            <!-- cdkDrag -->
+            <mat-list-item *ngFor="let position of positions" (click)="openPositionDialog(position)"> 
+                <!-- <mat-icon class="text-muted mr-2" matSuffix>drag_indicator</mat-icon> -->
+                {{position.id}}
+                <button class="ml-auto" mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </mat-list-item>
+        </mat-list>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./roles">Roles</div>
+        </ng-template>
+        <mat-list cdkDropList role="list" class="pr-2 pl-3" (cdkDropListDropped)="drop($event)">
+            <mat-list-item *ngFor="let role of roles" cdkDrag (click)="openRoleDialog(role)"> 
+                <mat-icon class="text-muted mr-2" matSuffix>drag_indicator</mat-icon>
+                {{role.name}}
+                <button class="ml-auto" mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </mat-list-item>
+            <mat-list-item (click)="openCreateRole(roles.length)"> 
+                <mat-icon class="text-muted mr-2" matSuffix>add</mat-icon>
+                Add new role
+            </mat-list-item>
+        </mat-list>
+    </mat-tab>
+  </mat-tab-group>

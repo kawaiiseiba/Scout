@@ -22,12 +22,8 @@ export interface Admins {
     userRef:string 
 }
 
-export interface Chats {
-    messages: Map<string, MessageRef>,
-    users: {
-        fromRef: string,
-        toRef: string  
-    }
+export interface Inbox {
+    cid?: string,
 }
 
 export interface Comments {
@@ -73,16 +69,25 @@ export interface Likes {
 }
 
 export interface Members {
+    id?: string,
     banned: boolean,
-    organizationRef: string,
-    roleRef: string,
-    userRef: string 
+    organization: string,
+    position: string,
+    roles?: [Roles],
+    user: string,
+    userRef: User | undefined,
+    date: number
 }
 
-export interface Messages {
-    dateSent: number,
-    description: string,
-    userRef: string 
+export interface Chat {
+    cid?: string,
+    attachment?: Blob | string | undefined,
+    attachmentType?: string,
+    date?: number,
+    content?: string,
+    user?: string,
+    userRef?: User | undefined,
+    reference?: string
 }
 
 export interface News {
@@ -103,9 +108,11 @@ export interface Notifications {
 
 export interface Organization {
     banner?: Blob | string | undefined,
+    bannerType?: string,
     description?: string,
     gameRef: string,
     icon?: Blob | string | undefined,
+    iconType?: string,
     memberCount?: number,
     name: string,
     owner: string,
@@ -120,13 +127,13 @@ export interface Organization {
     }],
     settings?: {
         'direct-join'?: false,
-        'default-role'?: Roles,
         'lf-player'?: false,
         'lf-team'?: false,
         'lf-coach'?: false,
         'lf-manager'?: false,
     },
-    date?: number
+    date?: number,
+    isApplied?: boolean
 }
 
 export interface Posts {
@@ -142,6 +149,26 @@ export interface Posts {
     likeRef$?: Likes | undefined,
     gameRef$?: Games | undefined,
     date?: number
+}
+
+export interface Events {
+    eid?: string,
+    cover?: Blob | string | undefined,
+    interestedCount?: number,
+    topic?: string,
+    description?: string | undefined,
+    org?: string,
+    host?: string,
+    hostRef$?: User | undefined,
+    orgRef$?: Organization | undefined,
+    interestedRef$: Interested | undefined,
+    startDate?: number,
+    status?: number,
+    date?: number
+}
+
+export interface Interested {
+    user: string | undefined
 }
 
 export interface PostClarity {
@@ -165,7 +192,9 @@ export interface Profile {
     gameRef?: string,
     ign?: string,
     rankRef?: string,
-    user?: string
+    user?: string,
+    userRef?: User | undefined,
+    isMember: boolean
 }
 
 export interface Ranks {
@@ -185,9 +214,30 @@ export interface Divisions {
     tier?: number
 }
 
+export interface Position {
+    id?: string,
+    isAdmin?: boolean,
+    canCreateRoles?: boolean,
+    canRemoveRoles?: boolean,
+    canKickMembers?: boolean,
+    canBanMembers?: boolean,
+    canAddMembers?: boolean,
+    canDeleteChatMessages?: boolean,
+    canChat?: boolean,
+    canDeleteEvent?: boolean,
+    canCreateEvent?: boolean,
+    canDeletePost?: boolean,
+    canCreatePost?: boolean,
+}
+
 export interface Roles {
-    level: number,
-    name: string
+    id?: string,
+    icon?: string,
+    color?: string,
+    name?: string,
+    order?: number,
+    organization?: string,
+    permission?: Position
 }
 
 export interface Shares {
@@ -229,4 +279,12 @@ export interface User {
     selectedGame?: string,
     username?: string,
     uid?: string
+}
+
+export interface Application{
+    id?: string,
+    bio?: string,
+    user?: string,
+    organization?: string,
+    userRef: User
 }

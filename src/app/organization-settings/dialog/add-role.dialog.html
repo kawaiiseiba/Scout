@@ -1,0 +1,22 @@
+<h2 class="text-capitalize" mat-dialog-title>Add {{role.name}} Role</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-form-field appearance="outline">
+        <mat-label>Role Name</mat-label>
+        <input [(ngModel)]="role.name"  [ngModelOptions]="{standalone: true}" matInput placeholder="Role name">
+    </mat-form-field>
+    <mat-list role="list">
+        <mat-list-item>
+            Create Posts <mat-slide-toggle [(ngModel)]="$any(role.permission).canCreatePost" color="primary" class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Chat enabled <mat-slide-toggle [(ngModel)]="$any(role.permission).canChat" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item>
+            Create Event <mat-slide-toggle [(ngModel)]="$any(role.permission).canCreateEvent" color="primary"  class="ml-auto"></mat-slide-toggle>
+        </mat-list-item>
+      </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button [disabled]="role.name!.length < 2" (click)="addRole(role)" mat-button color="primary">Add</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
