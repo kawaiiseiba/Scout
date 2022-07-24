@@ -16,8 +16,8 @@
                 </button>
             </div>
             <ng-container *ngIf="organizations.length > 0; else nodata">
-                <div class="px-2" *ngFor="let organization of organizations">
-                    <div class="d-flex rounded app-border py-2">
+                <div *ngFor="let organization of organizations">
+                    <div class="d-flex app-border-top app-border-bottom py-3">
                         <div class="col-2">
                             <img class="rounded-circle" [src]="organization.icon" width="70" height="70">
                         </div>

@@ -5,12 +5,13 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as firebase from 'firebase/compat';
 import * as moment from 'moment';
-import { Observable, of, switchMap, take } from 'rxjs';
+import { merge, Observable, of, switchMap, take } from 'rxjs';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AuthService } from '../services/auth.service';
 import { ChatService } from '../services/chat.service';
-import { Chat, Events, Likes, Members, Organization, Position, Posts, Profile, User } from '../services/models/data.model';
+import { Chat, Events, Likes, Members, Organization, Position, Posts, Profile, Roles, User } from '../services/models/data.model';
 import { OrganizationService } from '../services/organization.service';
 import { PostsService } from '../services/posts.service';
 
@@ -37,6 +38,7 @@ export class OrganizationContentComponent implements OnInit {
     members$: Observable<Members[]>
 
     positions: Position[]
+    roles: Roles[]
 
     constructor(
         public global: DashboardComponent,
@@ -106,6 +108,11 @@ export class OrganizationContentComponent implements OnInit {
         this.db.collection<Position>('positions').valueChanges({ idField: 'id'})
         .subscribe(data => {
             this.positions = data
+        })
+
+        this.db.collection<Roles>('roles', ref => ref.where('organization', '==', this.route.snapshot.params['organization_id']).orderBy('order', 'asc')).valueChanges({ idField: 'id'})
+        .subscribe(data => {
+            this.roles = data
         })
 
         this.events$ = this.db.collection<Events>('events', ref => ref.where('org', '==', this.route.snapshot.params['organization_id']).orderBy('date', 'desc')).valueChanges()
@@ -357,6 +364,26 @@ export class OrganizationContentComponent implements OnInit {
             },
             data: org
         })
+    }
+
+    changePosition(member: Members){
+        this.db.collection<Members>('members').doc(member.id).update(member)
+    }
+
+    checkHasRole(member: Members, role: Roles){
+        return member.roles?.find(role => role.name === role.name) ? true : false
+    }
+
+    saveRole(member: Members, role: Roles){
+        if(!member.roles?.find(role => role.name === role.name)) {
+            this.db.collection<Members>('members').doc(member.id).set({
+                roles: <Roles>firebase.default.firestore.FieldValue.arrayUnion(role)
+            }, { merge: true } )
+        } else {
+            member.roles?.filter(role => role.name !== role.name)
+        }
+
+        console.log(member.roles)
     }
 
     ngOnInit(): void {

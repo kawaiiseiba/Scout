@@ -381,14 +381,16 @@
                                 </button>
                             </mat-menu>
                             <mat-menu #assignPosition="matMenu">
-                                <mat-radio-group (click)="$event.stopPropagation()" class="d-flex" mat-menu-item [(ngModel)]="account.position">
-                                    <mat-radio-button class="mx-1" *ngFor="let position of positions" [value]="position.id">
-                                        <span class="text-capitalize">{{position.id}}</span>
+                                <mat-radio-group (change)="changePosition(account)" (click)="$event.stopPropagation()" class="d-flex flex-column px-2 align" [(ngModel)]="account.position">
+                                    <mat-radio-button class="mx-1 my-2"  *ngFor="let position of positions" [value]="position.id">
+                                        <span class="text-white text-capitalize">{{position.id}}</span>
                                     </mat-radio-button>
                                 </mat-radio-group>
                             </mat-menu>
                             <mat-menu #assignRoles="matMenu">
-                                <div mat-menu-item (click)="$event.stopPropagation()">Mammals <mat-slide-toggle class="ml-auto"></mat-slide-toggle></div>
+                                <div class="d-flex justify-content-between align-items-center" mat-menu-item *ngFor="let role of roles" (click)="$event.stopPropagation()">
+                                    {{role.name}} 
+                                <mat-slide-toggle (change)="saveRole(account, role)" [checked]="checkHasRole(account, role)" class="ml-2"></mat-slide-toggle></div>
                             </mat-menu>
                         </ng-container>
                     </div>
