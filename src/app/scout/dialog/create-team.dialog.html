@@ -1,0 +1,31 @@
+
+<h2 mat-dialog-title class="text-capitalize">Create Team</h2>
+<mat-dialog-content class="mat-typography py-2">
+    <mat-form-field class="w-50" appearance="outline">
+        <mat-label>Team Name</mat-label>
+        <input oninput="this.value = this.value.toUpperCase();" (keyup)="checkTeamName(teamNameRef.value)" #teamNameRef [(ngModel)]="teamName" [ngModelOptions]="{standalone: true}" class="font-weight-light" matInput autocomplete="off" required>
+        <mat-hint *ngIf="!isNameExist && teamNameRef.value.length > 0" align="start" class="text-success">
+            Available <mat-icon matSuffix>check_circle</mat-icon>
+        </mat-hint>
+        <mat-hint *ngIf="isNameExist" align="start" class="text-danger align-middle">
+            Already exist <mat-icon matSuffix>close</mat-icon>
+        </mat-hint>
+    </mat-form-field>
+    <a (click)="icon.click()" class="ml-5 mr-2 text-danger">Upload Icon</a>
+    <img class="rounded-circle border"
+    [src]="iconPrev ? iconPrev : 'https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/teams%2Ficon.png?alt=media&token=9c3b77f5-e8ac-4282-b53b-136d1722cae6'"
+    width="80" height="80">
+    <input #icon class="d-none" type="file" accept="image/" (change)="addIconFile($event)">
+    <a *ngIf="iconPrev" class="cancel-icon-preview"  (click)="$event.stopPropagation(); icon.value=''; iconPrev='';" mat-icon-button>
+        <mat-icon class="material-icons-round">close</mat-icon>
+    </a>
+    <mat-form-field class="w-100 mt-2" appearance="outline">
+        <mat-label>Description</mat-label>
+        <!-- (keyup)="checkOrgName(orgNameRef.value)" #orgNameRef [(ngModel)]="orgName" [ngModelOptions]="{standalone: true}" -->
+        <textarea [(ngModel)]="teamDescription" [ngModelOptions]="{standalone: true}"  class="font-weight-light" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="12"></textarea>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button (click)="createTeam()" #create [disabled]="(teamNameRef.value === '' || isNameExist)" class="btn-danger" mat-button>Create</button>
+</mat-dialog-actions>

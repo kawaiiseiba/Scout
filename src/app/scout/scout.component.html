@@ -1,0 +1,91 @@
+<div class="app-main-navigation-hint app-border-bottom w-100 p-4 sticky-top">
+    <b>Scout</b>
+</div>
+<mat-tab-group animationDuration="0ms" [(selectedIndex)]="routeId">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./">LFP</div>
+        </ng-template>
+        <ng-container *ngIf="players$ | async as players">
+            <ng-container *ngIf="players.length > 0; else noplayers">
+                <div *ngFor="let player of players" class="d-flex app-border-top app-border-bottom py-3">
+                    <div class="col-2 d-flex justify-content-center">
+                        <img class="rounded-circle" [src]="player.userRef?.avatar ? player.userRef?.avatar : player.userRef?.defaultAvatar" width="50" height="50">
+                    </div>
+                    <div class="col px-2 d-flex align-items-center">
+                        <div>
+                            <div class="font-weight-bold h5">{{player.userRef?.username}}</div>
+                            <span class="text-muted text-truncate">{{player.bio}}</span>
+                        </div>
+                        <button *ngIf="team?.owner! === user?.uid" (click)="$event.stopPropagation()" [matMenuTriggerFor]="recruitOpt" class="ml-auto" mat-icon-button>
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu class="post-menu" #recruitOpt="matMenu" xPosition="before">
+                            <button (click)="addTeamates(player.userRef!)" mat-menu-item>Recruit to Team</button>
+                            <!-- <button mat-menu-item> View</button> -->
+                        </mat-menu>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noplayers>
+                <h1 class="my-2">There's no players in this game yet.</h1>
+            </ng-template>
+            
+        </ng-container>
+        
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./lft">LFT</div>
+        </ng-template>
+        <ng-container *ngIf="team; else noteam">
+            <div class="d-flex app-border-top app-border-bottom py-3">
+                <div class="col-2 d-flex justify-content-center">
+                    <img class="rounded-circle" [src]="team.icon ? team.icon : 'https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/teams%2Ficon.png?alt=media&token=9c3b77f5-e8ac-4282-b53b-136d1722cae6'" width="50" height="50">
+                </div>
+                <div class="col px-2 d-flex align-items-center">
+                    <div>
+                        <div class="font-weight-bold h5">{{team.name}}</div>
+                        <span class="text-muted text-truncate">{{team.description}}</span>
+                    </div>
+                    <a [routerLink]="'./'+team.id" class="ml-auto" mat-raised-button>
+                        View
+                    </a>
+                </div>
+            </div>
+        </ng-container>
+        
+        <ng-template #noteam>
+            <div class="d-flex app-border-top app-border-bottom py-3">
+                <div class="col px-4 d-flex align-items-center">
+                    <span class="h6">You have not joined a team yet. Join or <a (click)="openCreateTeamDialog()" class="text-danger">create</a> one.</span>
+                </div>
+            </div>
+            
+            <div *ngFor="let team of teams$ | async" class="d-flex app-border-top app-border-bottom py-3">
+                <div class="col-2 d-flex justify-content-center">
+                    <img class="rounded-circle" [src]="team.icon ? team.icon : 'https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/teams%2Ficon.png?alt=media&token=9c3b77f5-e8ac-4282-b53b-136d1722cae6'" width="50" height="50">
+                </div>
+                <div class="col px-2 d-flex align-items-center">
+                    <div>
+                        <div class="font-weight-bold h5">{{team.name}}</div>
+                        <span class="text-muted text-truncate">{{team.description}}</span>
+                    </div>
+                    <a *ngIf="team.isApplied; else notapplied" disabled="true" (click)="$event.stopPropagation()" class="ml-auto" mat-raised-button>Applied</a>
+                    <ng-template #notapplied>
+                        <a (click)="openApplyDialog(team)" class="ml-auto" mat-raised-button>
+                            Apply
+                        </a>
+                    </ng-template>
+                    
+                </div>
+            </div>
+        </ng-template>
+        
+    </mat-tab>
+    <mat-tab disabled="true">
+        <ng-template mat-tab-label>
+            <div class="position-absolute h-100 w-100 d-flex justify-content-center align-items-center" routerLink="./lfg">LFG</div>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

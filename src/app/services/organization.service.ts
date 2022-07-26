@@ -247,6 +247,7 @@ export class OrganizationService {
     submitApplication(application: Application){
         const id = application.organization+'_'+this.user?.uid
         application.user = this.user?.uid
+        application.date = Date.now()
 
         return this.db.doc<Application>('applications/'+id).set(application, { merge: true })
     }

@@ -5,16 +5,15 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as firebase from 'firebase/compat';
 import * as moment from 'moment';
 import { merge, Observable, of, switchMap, take } from 'rxjs';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AuthService } from '../services/auth.service';
 import { ChatService } from '../services/chat.service';
-import { Chat, Events, Likes, Members, Organization, Position, Posts, Profile, Roles, User } from '../services/models/data.model';
+import { Application, Chat, Events, Likes, Members, Organization, Position, Posts, Profile, Roles, User } from '../services/models/data.model';
 import { OrganizationService } from '../services/organization.service';
 import { PostsService } from '../services/posts.service';
-
+import { arrayUnion, arrayRemove } from "firebase/firestore";
 
 @Component({
   selector: 'app-organization-content',
@@ -36,6 +35,8 @@ export class OrganizationContentComponent implements OnInit {
 
     member: Members
     members$: Observable<Members[]>
+
+    applications$: Observable<Application[]>
 
     positions: Position[]
     roles: Roles[]
@@ -118,17 +119,29 @@ export class OrganizationContentComponent implements OnInit {
         this.events$ = this.db.collection<Events>('events', ref => ref.where('org', '==', this.route.snapshot.params['organization_id']).orderBy('date', 'desc')).valueChanges()
 
         this.chats$ = this.db.collection<Chat>('chat', ref=> ref.where('reference', '==', this.route.snapshot.params['organization_id']).orderBy('date', 'desc')).valueChanges()
-                    .pipe(
-                        switchMap(x => {
-                            return of(x.map(chat => {
-                                this.db.doc<User>('users/'+chat.user).valueChanges().pipe(take(1)).subscribe(data => {
-                                    chat.userRef = data
-                                })
+        .pipe(
+            switchMap(x => {
+                return of(x.map(chat => {
+                    this.db.doc<User>('users/'+chat.user).valueChanges().pipe(take(1)).subscribe(data => {
+                        chat.userRef = data
+                    })
 
-                                return chat
-                            }))
-                        })
-                    )
+                    return chat
+                }))
+            })
+        )
+
+        this.applications$ = this.db.collection<Application>('applications', ref => ref.where('organization', '==', this.route.snapshot.params['organization_id']).orderBy('date', 'desc')).valueChanges({ idField: 'id' })
+        .pipe(
+            switchMap(x => {
+                return of(x.map(data => {
+                    this.db.doc<User>('users/'+data.user).valueChanges().subscribe(user => {
+                        if(user) data.userRef = user
+                    })
+                    return data
+                }))
+            })
+        )
     }
 
     orgRoutes = [
@@ -354,6 +367,10 @@ export class OrganizationContentComponent implements OnInit {
         })
     }
 
+    kickMember(org: Organization, member: Members){
+        this.org.leaveOrganization(org, member)
+    }
+
     openInviteDialog(org: Organization){
         this.dialog.open(InviteMembersDialog, {
             backdropClass: 'dark-backdrop',
@@ -371,19 +388,37 @@ export class OrganizationContentComponent implements OnInit {
     }
 
     checkHasRole(member: Members, role: Roles){
-        return member.roles?.find(role => role.name === role.name) ? true : false
+        if(member.roles === undefined) return
+        const search = member.roles?.find(data => data.name == role.name!)
+        return search !== undefined ? true : false
     }
 
     saveRole(member: Members, role: Roles){
         if(!member.roles?.find(role => role.name === role.name)) {
-            this.db.collection<Members>('members').doc(member.id).set({
-                roles: <Roles>firebase.default.firestore.FieldValue.arrayUnion(role)
-            }, { merge: true } )
+            this.db.collection<Members>('members').doc(member.id).update({
+                roles: <Roles>arrayUnion(role) as []
+            })
         } else {
-            member.roles?.filter(role => role.name !== role.name)
+            this.db.collection<Members>('members').doc(member.id).update({
+                roles: <Roles>arrayRemove(role) as []
+            })
         }
 
-        console.log(member.roles)
+    }
+
+    openViewDialog(application: Application){
+        this.dialog.open(ViewApplicationDialog, {
+            backdropClass: 'dark-backdrop',
+            panelClass: 'dark-panel',
+            width: '600px',
+            position: {
+                top: '50px'
+            },
+            data: {
+                application: application,
+                organization: this.organization
+            }
+        })
     }
 
     ngOnInit(): void {
@@ -436,5 +471,48 @@ export class InviteMembersDialog {
 
     addMember(org: Organization, user: User){
         this.org.addMember(org, user)
+    }
+}
+
+@Component({
+    selector: 'view-application-dialog',
+    templateUrl: './dialog/view-application.dialog.html',
+    encapsulation: ViewEncapsulation.None
+})
+
+export class ViewApplicationDialog {
+
+    profile: Profile
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: { application: Application, organization: Organization },
+        public org: OrganizationService,
+        private db: AngularFirestore,
+        private auth: AuthService,
+        private dialogRef: MatDialogRef<ViewApplicationDialog>,
+        private global: DashboardComponent
+    ){
+        this.db.collection<Profile>('profiles').doc(data.organization.gameRef+'_'+data.application.user).valueChanges()
+        .pipe(take(1))
+        .subscribe(data => {
+            this.profile = data!
+        })
+    }
+    toRawDate(timestamp: number){
+        return new Date(timestamp)
+    }
+
+    rejectApplication(application: Application){
+        this.db.collection<Application>('applications').doc(application.id).delete().then(() => {
+            this.dialogRef.close()
+        })
+    }
+
+    acceptApplication(){
+        this.org.addMember(this.data.organization, this.data.application.userRef!).then(() => {
+            this.db.collection<Application>('applications').doc(this.data.application.id).delete()
+            .then(() => {
+                this.dialogRef.close()
+            })
+        })
     }
 }

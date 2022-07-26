@@ -18,6 +18,7 @@ import { environment } from '../environments/environment';
 
 import { AuthService } from './services/auth.service';
 import { OrganizationSettingsComponent } from './organization-settings/organization-settings.component';
+import { ScoutComponent } from './scout/scout.component';
 
 @NgModule({
   declarations: [

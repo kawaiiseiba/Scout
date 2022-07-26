@@ -1,1 +1,74 @@
-<p>teams works!</p>
+<div class="app-main-navigation-hint app-border-bottom w-100 px-4 py-3 sticky-top d-flex align-items-center justify-content-between">
+    <div>
+        <img width="30" height="30" class="rounded-circle mr-2" [src]="team.icon ? team.icon : 'https://firebasestorage.googleapis.com/v0/b/scout-6b8bf.appspot.com/o/teams%2Ficon.png?alt=media&token=9c3b77f5-e8ac-4282-b53b-136d1722cae6'" alt="">
+        <b>{{team?.name}}</b>
+    </div>
+    <div>
+        <button (click)="openInviteDialog()" mat-button>
+            <mat-icon matPrefix>add</mat-icon> Add teamates
+        </button>
+        <button *ngIf="team?.owner === user?.uid" (click)="openTeamApplicants()" mat-button>
+            <mat-icon matPrefix>approval</mat-icon> Applicants
+        </button>
+        <button [matMenuTriggerFor]="recruitOpt" mat-icon-button>
+            <mat-icon>settings</mat-icon>
+        </button>
+        <mat-menu class="post-menu" #recruitOpt="matMenu" xPosition="before">
+            <button (click)="openRosterDialog()" mat-menu-item>Rosters</button>
+            <button *ngIf="team?.owner !== user?.uid" (click)="leaveTeam()" mat-menu-item>Leave Team</button>
+        </mat-menu>
+    </div>
+</div>
+<div class="d-flex flex-column w-100 h-100 position-relative" [style.max-height.px]="setChatHeight()">
+    <div class="chat-content d-flex flex-column-reverse flex-grow-1 w-100 px-4">
+        <ng-container *ngIf="(chats$ | async) as chats">
+            <ng-container *ngFor="let chat of chats">
+                <div *ngIf="chat.user === user?.uid; else notyours" class="chat-message ml-auto my-2 d-flex align-items-start">
+                    <div class="d-flex flex-column align-items-end">
+                        <span class="font-weight-light text-muted mr-1">You</span>
+                        <span *ngIf="chat.content" class="chat-message-content rounded-pill  pink darken-1 px-3 py-2 font-weight-light">{{chat.content}}</span>
+                        <img class="chat-message-attachment my-1" [src]="chat.attachment">
+                        <span class="font-weight-light text-muted"><a (click)="deleteChat(chat)" class="text-danger" matPrefix>Delete</a> {{toRawDate(chat.date!) | timeAgo}}</span>
+                    </div>
+                    <img class="rounded-circle ml-2" [src]="chat.userRef?.avatar ? chat.userRef?.avatar : chat.userRef?.defaultAvatar" width="50" height="50">
+                </div>
+                <ng-template #notyours>
+                    <div class="chat-message my-2 d-flex align-items-start">
+                        <img class="rounded-circle mr-2" [src]="chat.userRef?.avatar ? chat.userRef?.avatar : chat.userRef?.defaultAvatar" width="50" height="50">
+                        <div class="d-flex flex-column align-items-start">
+                            <span class="font-weight-light text-muted ml-1">{{chat.userRef?.displayName ? chat.userRef?.displayName : chat.userRef?.username}}</span>
+                            <span *ngIf="chat.content" class="chat-message-content rounded-pill bg-dark px-3 py-2 font-weight-light">{{chat.content}}</span>
+                            <img *ngIf="chat.attachment" class="chat-message-attachment my-1" [src]="chat.attachment">
+                            <span class="font-weight-light text-muted">{{toRawDate(chat.date!) | timeAgo}}</span>
+                        </div>
+                    </div>
+                </ng-template>
+            </ng-container>
+        </ng-container>
+        
+    </div>
+    <div class="chat-input-preview app-border-top w-100 py-2 px-3">
+        <form [formGroup]="chat">
+            <div *ngIf="chatAttachmentPrev" class="attachment-container">
+                <div class="attachment-preview" [style.background-image]="'url('+chatAttachmentPrev+')'"></div>
+                <a (click)="attachment.value=''; chatAttachmentPrev='';" mat-mini-fab>
+                    <mat-icon>close</mat-icon>
+                </a>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+                <input #attachment class="d-none" type="file" (change)="uploadChatAttachment($event)" accept="*.png.jpg">
+                <button (click)="attachment.click()" [disabled]="isPosting" color="accent" mat-mini-fab>
+                    <mat-icon class="material-icons-round">link</mat-icon>
+                </button>
+                <div class="d-flex w-100">
+                    <mat-form-field class="w-100 mx-3" style="height: 68px;" appearance="outline">
+                        <textarea (keydown.enter)="$event.preventDefault(); sendChat()" #chatContent formControlName="content" class="font-weight-light" placeholder="Message"autofocus matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
+                    </mat-form-field>
+                </div>
+                <button #send (click)="sendChat()" [disabled]="checkForWhiteSpace(chatContent.value) && !attachment.value" color="primary" mat-mini-fab>
+                    <mat-icon class="material-icons-round">send</mat-icon>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

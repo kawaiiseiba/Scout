@@ -66,9 +66,17 @@ const routes: Routes = [
                 pathMatch: 'full'
             },
             {
-                path: 'teams',
-                loadChildren: () => import('../teams/teams.module').then(m => m.TeamsModule),
-                pathMatch: 'full'
+                path: 'scout',
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () => import('../scout/scout.module').then(m => m.ScoutModule),
+                    },
+                    {
+                        path: ':team',
+                        loadChildren: () => import('../teams/teams.module').then(m => m.TeamsModule)
+                    }
+                ]
             },
             {
                 path: ':username',

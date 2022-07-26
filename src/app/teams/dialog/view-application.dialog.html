@@ -1,0 +1,13 @@
+
+<h2 mat-dialog-title class="text-capitalize">Applications</h2>
+<mat-dialog-content class="mat-typography py-2">
+    <p>User: <b>{{data.application.userRef?.username}}</b></p>
+    <p>IGN: <b>{{profile?.ign!}}</b></p>
+    <p>Date Submitted: <b>{{toRawDate(data.application.date) | timeAgo}}</b></p>
+    <h3>Bio</h3>
+    <p class="p-2 rounded bg-dark">{{data.application.bio}}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button (click)="rejectApplication(data.application)" class="bg-dark" mat-button>Reject</button>
+    <button (click)="acceptApplication()" class="btn-danger" mat-button>Accept</button>
+</mat-dialog-actions>

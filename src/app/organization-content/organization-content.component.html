@@ -67,10 +67,10 @@
                             <mat-icon>more_horiz</mat-icon>
                         </a>
                         <mat-menu class="post-menu" #settings="matMenu" xPosition="before">
-                            <button *ngIf="member?.position! === 'admin'" [routerLink]="'./settings'" class="text-muted" mat-menu-item>
+                            <button *ngIf="organization.owner === member.user || member?.position! === 'admin'" [routerLink]="'./settings'" class="text-muted" mat-menu-item>
                                 <mat-icon class="material-icons-round" [inline]="true" matPrefix>settings</mat-icon> Settings
                             </button>
-                            <button *ngIf="member?.position! !== 'admin'" (click)="leaveOrg(organization)" class="text-muted" mat-menu-item>
+                            <button *ngIf="organization.owner !== member.user" (click)="leaveOrg(organization)" class="text-muted" mat-menu-item>
                                 <mat-icon class="material-icons-round" [inline]="true" matPrefix>exit_to_app</mat-icon> Leave
                             </button>
                         </mat-menu>
@@ -348,55 +348,187 @@
             <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
                 <mat-tab label="Joined">
                     <div *ngIf="members$ | async as members" class="row w-100 justify-content-center align-items-center py-2">
+                        <h3 class="px-4">Admin(s)</h3>
                         <ng-container *ngFor="let account of members">
-                            <ng-container *ngIf="member?.position! !== 'member'; else noperms">
-                                <a mat-button [matMenuTriggerFor]="menu" class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
-                                    <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
-                                    <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
-                                </a>
+                            <ng-container *ngIf="account.position === 'admin'">
+                                <ng-container *ngIf="member?.position! !== 'member' && member?.position !== 'manager'; else noperms">
+                                    <a mat-button [matMenuTriggerFor]="menu" class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
+                                        <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
+                                        <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
+                                    </a>
+                                </ng-container>
+                                <ng-template #noperms>
+                                    <a mat-button class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
+                                        <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
+                                        <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
+                                    </a>
+                                </ng-template>
+                                
+                                <mat-menu  #menu="matMenu" xPosition="before">
+                                    <a mat-menu-item [href]="organization.gameRef+'/'+account.userRef?.username" target="_blank">
+                                        <mat-icon>person</mat-icon>
+                                        <span>View Profile</span>
+                                    </a>
+                                    <button mat-menu-item [matMenuTriggerFor]="assignPosition">
+                                        <mat-icon>badge</mat-icon>
+                                        <span>Position</span>
+                                    </button>
+                                    <button mat-menu-item [matMenuTriggerFor]="assignRoles">
+                                        <mat-icon>token</mat-icon>
+                                        <span>Roles</span>
+                                    </button>
+                                    <button disabled="true" *ngIf="member?.user! !== account.user" mat-menu-item>
+                                        <mat-icon>lock</mat-icon>
+                                        <span>Ban user</span>
+                                    </button>
+                                    <button (click)="kickMember(organization, account)" *ngIf="member?.user! !== account.user" mat-menu-item>
+                                        <mat-icon>person_remove</mat-icon>
+                                        <span>Kick user</span>
+                                    </button>
+                                </mat-menu>
+                                <mat-menu #assignPosition="matMenu">
+                                    <mat-radio-group (change)="changePosition(account)" (click)="$event.stopPropagation()" class="d-flex flex-column px-2 align" [(ngModel)]="account.position">
+                                        <mat-radio-button class="mx-1 my-2"  *ngFor="let position of positions" [value]="position.id">
+                                            <span class="text-white text-capitalize">{{position.id}}</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </mat-menu>
+                                <mat-menu #assignRoles="matMenu">
+                                    <div class="d-flex justify-content-between align-items-center" mat-menu-item *ngFor="let role of roles" (click)="$event.stopPropagation()">
+                                        {{role.name}} 
+                                    <mat-slide-toggle (change)="saveRole(account, role)" [checked]="checkHasRole(account, role)" class="ml-2"></mat-slide-toggle></div>
+                                </mat-menu>
                             </ng-container>
-                            <ng-template #noperms>
-                                <a mat-button class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
-                                    <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
-                                    <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
-                                </a>
-                            </ng-template>
-                            
-                            <mat-menu  #menu="matMenu" xPosition="before">
-                                <button mat-menu-item [matMenuTriggerFor]="assignPosition">
-                                  <mat-icon>badge</mat-icon>
-                                  <span>Position</span>
-                                </button>
-                                <button mat-menu-item [matMenuTriggerFor]="assignRoles">
-                                  <mat-icon>token</mat-icon>
-                                  <span>Roles</span>
-                                </button>
-                                <button disabled="true" *ngIf="member?.user! !== account.user" mat-menu-item>
-                                  <mat-icon>lock</mat-icon>
-                                  <span>Ban user</span>
-                                </button>
-                                <button *ngIf="member?.user! !== account.user" mat-menu-item>
-                                  <mat-icon>person_remove</mat-icon>
-                                  <span>Kick user</span>
-                                </button>
-                            </mat-menu>
-                            <mat-menu #assignPosition="matMenu">
-                                <mat-radio-group (change)="changePosition(account)" (click)="$event.stopPropagation()" class="d-flex flex-column px-2 align" [(ngModel)]="account.position">
-                                    <mat-radio-button class="mx-1 my-2"  *ngFor="let position of positions" [value]="position.id">
-                                        <span class="text-white text-capitalize">{{position.id}}</span>
-                                    </mat-radio-button>
-                                </mat-radio-group>
-                            </mat-menu>
-                            <mat-menu #assignRoles="matMenu">
-                                <div class="d-flex justify-content-between align-items-center" mat-menu-item *ngFor="let role of roles" (click)="$event.stopPropagation()">
-                                    {{role.name}} 
-                                <mat-slide-toggle (change)="saveRole(account, role)" [checked]="checkHasRole(account, role)" class="ml-2"></mat-slide-toggle></div>
-                            </mat-menu>
+                        </ng-container>
+                        <h3 class="px-4">Manager(s)</h3>
+                        <ng-container *ngFor="let account of members">
+                            <ng-container *ngIf="account.position === 'manager'">
+                                <ng-container *ngIf="member?.position! !== 'member'; else noperms">
+                                    <a mat-button [matMenuTriggerFor]="menu" class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
+                                        <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
+                                        <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
+                                    </a>
+                                </ng-container>
+                                <ng-template #noperms>
+                                    <a mat-button class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
+                                        <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
+                                        <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
+                                    </a>
+                                </ng-template>
+                                
+                                <mat-menu  #menu="matMenu" xPosition="before">
+                                    <a mat-menu-item [href]="organization.gameRef+'/'+account.userRef?.username" target="_blank">
+                                        <mat-icon>person</mat-icon>
+                                        <span>View Profile</span>
+                                    </a>
+                                    <button *ngIf="organization.owner === account.user" mat-menu-item [matMenuTriggerFor]="assignPosition">
+                                        <mat-icon>badge</mat-icon>
+                                        <span>Position</span>
+                                    </button>
+                                    <button mat-menu-item [matMenuTriggerFor]="assignRoles">
+                                        <mat-icon>token</mat-icon>
+                                        <span>Roles</span>
+                                    </button>
+                                    <button disabled="true" *ngIf="member?.user! !== account.user" mat-menu-item>
+                                        <mat-icon>lock</mat-icon>
+                                        <span>Ban user</span>
+                                    </button>
+                                    <button (click)="kickMember(organization, account)" *ngIf="member?.user! !== account.user" mat-menu-item>
+                                        <mat-icon>person_remove</mat-icon>
+                                        <span>Kick user</span>
+                                    </button>
+                                </mat-menu>
+                                <mat-menu #assignPosition="matMenu">
+                                    <mat-radio-group (change)="changePosition(account)" (click)="$event.stopPropagation()" class="d-flex flex-column px-2 align" [(ngModel)]="account.position">
+                                        <mat-radio-button class="mx-1 my-2"  *ngFor="let position of positions" [value]="position.id">
+                                            <span class="text-white text-capitalize">{{position.id}}</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </mat-menu>
+                                <mat-menu #assignRoles="matMenu">
+                                    <div class="d-flex justify-content-between align-items-center" mat-menu-item *ngFor="let role of roles" (click)="$event.stopPropagation()">
+                                        {{role.name}} 
+                                    <mat-slide-toggle (change)="saveRole(account, role)" [checked]="checkHasRole(account, role)" class="ml-2"></mat-slide-toggle></div>
+                                </mat-menu>
+                            </ng-container>
+                        </ng-container>
+                        <h3 class="px-4">Member(s)</h3>
+                        <ng-container *ngFor="let account of members">
+                            <ng-container *ngIf="account.position === 'member'">
+                                <ng-container *ngIf="member?.position! !== 'member'; else noperms">
+                                    <a mat-button [matMenuTriggerFor]="menu" class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
+                                        <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
+                                        <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
+                                    </a>
+                                </ng-container>
+                                <ng-template #noperms>
+                                    <a mat-button class="member-list-card col-3 py-3 rounded px-2 d-flex flex-column justify-content-center align-items-center ng-star-inserted">
+                                        <img width="80" height="80" class="rounded-circle mb-2" [src]="account.userRef?.avatar ? account.userRef?.avatar : account.userRef?.defaultAvatar" alt="">
+                                        <p style="max-width: 110px;" class="text-truncate">{{account.userRef?.displayName ? account.userRef?.displayName : account.userRef?.username}}</p>
+                                    </a>
+                                </ng-template>
+                                
+                                <mat-menu  #menu="matMenu" xPosition="before">
+                                    <a mat-menu-item [href]="organization.gameRef+'/'+account.userRef?.username" target="_blank">
+                                        <mat-icon>person</mat-icon>
+                                        <span>View Profile</span>
+                                    </a>
+                                    <button mat-menu-item [matMenuTriggerFor]="assignPosition">
+                                        <mat-icon>badge</mat-icon>
+                                        <span>Position</span>
+                                    </button>
+                                    <button mat-menu-item [matMenuTriggerFor]="assignRoles">
+                                        <mat-icon>token</mat-icon>
+                                        <span>Roles</span>
+                                    </button>
+                                    <button disabled="true" *ngIf="member?.user! !== account.user" mat-menu-item>
+                                        <mat-icon>lock</mat-icon>
+                                        <span>Ban user</span>
+                                    </button>
+                                    <button (click)="kickMember(organization, account)" *ngIf="member?.user! !== account.user" mat-menu-item>
+                                        <mat-icon>person_remove</mat-icon>
+                                        <span>Kick user</span>
+                                    </button>
+                                </mat-menu>
+                                <mat-menu #assignPosition="matMenu">
+                                    <mat-radio-group (change)="changePosition(account)" (click)="$event.stopPropagation()" class="d-flex flex-column px-2 align" [(ngModel)]="account.position">
+                                        <mat-radio-button class="mx-1 my-2"  *ngFor="let position of positions" [value]="position.id">
+                                            <span class="text-white text-capitalize">{{position.id}}</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </mat-menu>
+                                <mat-menu #assignRoles="matMenu">
+                                    <div class="d-flex justify-content-between align-items-center" mat-menu-item *ngFor="let role of roles" (click)="$event.stopPropagation()">
+                                        {{role.name}} 
+                                    <mat-slide-toggle (change)="saveRole(account, role)" [checked]="checkHasRole(account, role)" class="ml-2"></mat-slide-toggle></div>
+                                </mat-menu>
+                            </ng-container>
                         </ng-container>
                     </div>
                 </mat-tab>
-                <mat-tab label="Pending" *ngIf="member?.user!">
-                    pending...
+                <mat-tab label="Pending" *ngIf="member?.user! && member.position !== 'member'">
+                    <ng-container *ngIf="applications$ | async as applications">
+                        <div *ngIf="applications.length > 0; else noapplications">
+                            <div *ngFor="let application of applications" class="d-flex app-border-top app-border-bottom py-3">
+                                <div class="col-2 d-flex justify-content-center">
+                                    <img class="rounded-circle" [src]="application.userRef?.avatar ? application.userRef?.avatar : application.userRef?.defaultAvatar" width="50" height="50">
+                                </div>
+                                <div class="col px-2 d-flex align-items-center">
+                                    <div>
+                                        <div class="font-weight-bold h5">{{application.userRef?.username}}</div>
+                                        <span class="text-muted text-truncate">Submitted - {{toRawDate(application.date) | timeAgo}}</span>
+                                    </div>
+                                    <a (click)="openViewDialog(application)" class="ml-auto" mat-raised-button>
+                                        <mat-icon class="material-icon-round mr-1" matPrefix>visibility</mat-icon>
+                                        View
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #noapplications>
+                            <h1 class=" my-3 text-center">No application received at the moment.</h1>
+                        </ng-template>
+                    </ng-container>
                 </mat-tab>
             </mat-tab-group>
         </mat-tab>

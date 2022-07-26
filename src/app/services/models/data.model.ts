@@ -73,7 +73,7 @@ export interface Members {
     banned: boolean,
     organization: string,
     position: string,
-    roles?: [Roles],
+    roles?: Roles[],
     user: string,
     userRef: User | undefined,
     date: number
@@ -187,6 +187,7 @@ export interface PostClarity {
 }
 
 export interface Profile {
+    id?: string,
     bio?: string,
     date?: number,
     gameRef?: string,
@@ -194,7 +195,8 @@ export interface Profile {
     rankRef?: string,
     user?: string,
     userRef?: User | undefined,
-    isMember: boolean
+    isMember: boolean,
+    hasTeam?: boolean
 }
 
 export interface Ranks {
@@ -245,21 +247,28 @@ export interface Shares {
 }
 
 export interface Teamates {
-    dateJoined: number,
-    teamRef: string,
-    userRef: string
+    id?: string,
+    date: number,
+    team?: string,
+    user?: string,
+    userRef?: User,
+    game?: string
 }
 
 export interface Teams {
+    id?: string,
     bio?: string,
-    createdAt: number,
+    createdAt?: number,
     description?: string,
-    gameRef: string,
-    icon?: string,
-    owner: string,
-    rankRef: string,
-    size: number,
-    teamates?: Map<string, TeamRef>
+    name?: string,
+    game?: string,
+    icon?: Blob | string | undefined,
+    iconType?: string,
+    owner?: string,
+    rank?: string,
+    size?: number,
+    count?: number,
+    isApplied?: boolean
 }
 
 export interface User {
@@ -286,5 +295,7 @@ export interface Application{
     bio?: string,
     user?: string,
     organization?: string,
-    userRef: User
+    team?: string,
+    userRef?: User,
+    date: number
 }

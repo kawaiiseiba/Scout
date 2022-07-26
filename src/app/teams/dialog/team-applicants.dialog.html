@@ -1,0 +1,28 @@
+<h2 class="text-capitalize" mat-dialog-title>Applicants</h2>
+<mat-dialog-content class="mat-typography">
+    <ng-container *ngIf="applications$ | async as applications">
+        <div *ngIf="applications.length > 0; else noapplications">
+            <div *ngFor="let application of applications" class="d-flex app-border-top app-border-bottom py-3">
+                <div class="col-2 d-flex justify-content-center">
+                    <img class="rounded-circle" [src]="application.userRef?.avatar ? application.userRef?.avatar : application.userRef?.defaultAvatar" width="50" height="50">
+                </div>
+                <div class="col px-2 d-flex align-items-center">
+                    <div>
+                        <div class="font-weight-bold h5">{{application.userRef?.username}}</div>
+                        <span class="text-muted text-truncate">Submitted - {{toRawDate(application.date) | timeAgo}}</span>
+                    </div>
+                    <a (click)="openViewDialog(application)" mat-dialog-close class="ml-auto" mat-raised-button>
+                        <mat-icon class="material-icon-round mr-1" matPrefix>visibility</mat-icon>
+                        View
+                    </a>
+                </div>
+            </div>
+        </div>
+        <ng-template #noapplications>
+            <h1 class=" my-3 text-center">No application received at the moment.</h1>
+        </ng-template>
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
