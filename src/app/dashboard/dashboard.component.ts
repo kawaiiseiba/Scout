@@ -202,7 +202,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     onLogout(){
         this.authRef.logout()
-        this.router.navigateByUrl('/')
+        window.location.href = "/"
     }
 
     abbrNum(number: any, decPlaces: number) {
@@ -308,7 +308,8 @@ export class GameListDialog {
             rankRef: rank,
             user: this.activeUser,
             date: Date.now(),
-            gameRef: this.stepperGameSelectUrl
+            gameRef: this.stepperGameSelectUrl,
+            hasTeam: false
         }
         this.gameRef.saveProfile(data)
         .then(() => {

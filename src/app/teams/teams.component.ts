@@ -361,6 +361,7 @@ export class ViewApplicationDialog {
     }
 
     acceptApplication(){
+        if(this.data.team.count! >= 5) return console.log('too much players')
         this.teams.addTeamate(this.data.team, this.data.application.userRef!).then(() => {
             this.db.collection<Application>('applications').doc(this.data.application.id).delete()
             .then(() => {

@@ -33,7 +33,7 @@ export class ScoutComponent implements OnInit {
         this.auth.user$.subscribe(user => {
             this.user = user!
 
-            this.players$ = this.db.collection<Profile>('profiles', ref => ref.where('gameRef', '==', global._routeURL)).valueChanges({ idField: 'id' })
+            this.players$ = this.db.collection<Profile>('profiles', ref => ref.where('gameRef', '==', global._routeURL).where('hasTeam', '==', false)).valueChanges({ idField: 'id' })
             .pipe(
                 switchMap(x => {
                     return of(x.filter(profile => {
@@ -42,14 +42,6 @@ export class ScoutComponent implements OnInit {
                         this.db.collection<User>('users').doc(profile.user).valueChanges().subscribe(user => {
                             profile.userRef = user
                         })
-
-                        this.db.collection<Teamates>('teamates', ref => ref.where('game', '==', global._routeURL).limit(1)).valueChanges()
-                        .subscribe(teamate => {
-                            if(teamate.length > 1) profile.hasTeam = true
-                        })
-
-                        if(profile.hasTeam) return
-
                         return profile
                     }))
                 })
@@ -66,7 +58,7 @@ export class ScoutComponent implements OnInit {
                 
             })
 
-            this.teams$ =this.db.collection<Teams>('teams', ref => ref.where('game', '==', global._routeURL)).valueChanges({ idField: 'id' })
+            this.teams$ =this.db.collection<Teams>('teams', ref => ref.where('game', '==', global._routeURL).where('count', '<', 5)).valueChanges({ idField: 'id' })
             .pipe(
                 switchMap(x => {
                     return of(x.map(v => {

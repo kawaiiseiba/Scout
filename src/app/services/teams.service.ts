@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AuthService } from './auth.service';
-import { Application, Teamates, Teams, User } from './models/data.model';
+import { Application, Profile, Teamates, Teams, User } from './models/data.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,12 @@ export class TeamsService {
             game: team.game
         }
 
+        const profile = <Profile>{
+            hasTeam: true
+        }
+        
+        this.db.collection<Profile>('profiles').doc(team.game+'_'+this.user.uid).set(profile, { merge: true })
+
         return this.db.collection<Teams>('teams').doc(teamId).set(team, { merge: true }).then(() => {
             return this.db.collection<Teamates>('teamates').doc(teamId+'_'+this.user.uid).set(teamate, { merge: true})
         })
@@ -43,6 +49,7 @@ export class TeamsService {
     }
 
     async addTeamate(team: Teams, user: User){
+        if(team.count! >= 5) return
         const data = <Teams>{
             count: team.count! + 1
         }
@@ -52,6 +59,13 @@ export class TeamsService {
             user: user.uid,
             game: team.game
         }
+
+        const profile = <Profile>{
+            hasTeam: true
+        }
+
+        this.db.collection<Profile>('profiles').doc(team.game+'_'+user.uid).set(profile, { merge: true })
+
         return this.db.collection<Teams>('teams').doc(team.id).set(data, { merge: true}).then(() => {
             return this.db.collection<Teamates>('teamates').doc(team.id+'_'+user.uid).set(teamate, { merge: true})
         })
@@ -61,6 +75,13 @@ export class TeamsService {
         const data = <Teams>{
             count: team.count! - 1
         }
+
+        const profile = <Profile>{
+            hasTeam: false
+        }
+        
+        this.db.collection<Profile>('profiles').doc(team.game+'_'+user.uid).set(profile, { merge: true })
+
         return this.db.collection<Teams>('teams').doc(team.id).set(data, { merge: true}).then(() => {
             
             return this.db.collection<Teamates>('teamates').doc(team.id+'_'+user.uid).delete()
